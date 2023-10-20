@@ -39,6 +39,7 @@ import VerifyCardChckoutScreen from '../screen/Shopping/VerfiyCardScreen';
 import AddCardChekoutScreen from '../screen/Shopping/AddCardScreen';
 import ProductList from '../screen/Shopping/ProductList';
 import SignUpScreen from '../screen/Login/SignUpScreen';
+import AddAdressScreen from '../screen/Profile/AddAdressScreen';
 
 
 const Home = createNativeStackNavigator();
@@ -190,6 +191,7 @@ const AppNavigation = () => {
                 <Profile.Screen name='LanguageScreen' component={LanguageScreen}/>
                 <Profile.Screen name='CommandeScreen' component={CommandScreen}/>
                 <Profile.Screen name='AdresseScreen' component={AdresseScreen}/>
+                <Profile.Screen name='AddAdresseScreen' component={AddAdressScreen}/>
               </Profile.Navigator>
             )
           }

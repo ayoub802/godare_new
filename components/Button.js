@@ -11,7 +11,7 @@ const Button = ({ title, navigation, width }) => {
 export const ButtonPrix = ({ title, navigation }) => {
   return (
     <TouchableOpacity onPress={navigation} style={{ width: 93,height: 42 ,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#2BA6E9", borderRadius: 25}}>
-      <Text style={{fontFamily:"Poppins-Medium", fontSize: 17, color:"#fff"}}>{title}</Text>
+      <Text style={{fontFamily:"Poppins-Medium", fontSize: 17, color:"#fff"}}>{title}€</Text>
     </TouchableOpacity>
   )
 }

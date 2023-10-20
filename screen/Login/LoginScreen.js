@@ -5,6 +5,7 @@ import {
   TextInput,
   StatusBar,
   TouchableOpacity,
+  ToastAndroid
 } from 'react-native';
 import React, { useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient';
@@ -13,9 +14,12 @@ import { saveAuthentificationData } from '../../modules/GestionStorage';
 import {Controller, useForm} from 'react-hook-form';
 import {useTranslation} from 'react-i18next';
 import styles from './style';
-import auth from '@react-native-firebase/auth';
 import Lock from 'react-native-vector-icons/Fontisto';
 import Eye from 'react-native-vector-icons/Entypo';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../modules/FirebaseConfig';
+import Logo from "../../assets/images/LOGO_GS.png"
+import user from "../../assets/images/profil.png"
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const LoginScreen = (props) => {
@@ -51,7 +55,7 @@ const LoginScreen = (props) => {
       return;
     }
     
-    props.navigation.push('Tab');
+    // props.navigation.push('HomeScreen');
   };
 
 
@@ -59,19 +63,19 @@ const LoginScreen = (props) => {
   const handleSignin = async () => {
   
     try {
-      auth()
-        .signInWithEmailAndPassword(Email, Password)
+        await signInWithEmailAndPassword(auth ,Email, Password)
         .then(() => {
           
           // Sauvegarder l'email
           saveAuthentificationData(Email);
 
           console.log("Connexion réussie");
+          ToastAndroid.show('Connexion réussie', ToastAndroid.SHORT)
           setTimeout(() => 
           {
             // Aller sur la page d'accueil
             NavigateToMain();
-          }, 3000);
+          }, 1500);
 
         })
         .catch(error => {
@@ -79,23 +83,27 @@ const LoginScreen = (props) => {
           if (error.code === 'auth/wrong-password') {
             
             console.log("Le mot de passe que vous saisissez est erroné !");
-
+            ToastAndroid.show('Le mot de passe que vous saisissez est erroné ', ToastAndroid.SHORT)
           }
 
           if (error.code === 'auth/user-not-found') {
            
             console.log("Il n'y a pas d'utilisateur existant correspondant aux informations d'identification !");
+            ToastAndroid.show("Il n'y a pas d'utilisateur existant correspondant aux informations d'identification !", ToastAndroid.SHORT)
+
           }
 
           if (error.code === 'auth/invalid-email') {
             
             console.log("L'e-mail fourni n'est pas valide !");
+            ToastAndroid.show("L'e-mail fourni n'est pas valide !", ToastAndroid.SHORT)
 
           }
 
           if (error.code === 'auth/invalid-password') {
 
             console.log("Le mot de passe fourni n'est pas valide !");
+            ToastAndroid.show("Le mot de passe fourni n'est pas valide !", ToastAndroid.SHORT)
 
           }
      
@@ -108,11 +116,11 @@ const LoginScreen = (props) => {
     colors={['#3885DA', '#29A9EA', '#3A7FD8']}
     style={styles.container}>
 
+      <StatusBar backgroundColor="#3885DA" barStyle="auto" />
     <View style={styles.INContainer}>
 
-      <StatusBar backgroundColor="#3885DA" barStyle="auto" />
 
-      {/* <Image style={styles.imageStyler} source={sd} resizeMode="center" /> */}
+      <Image style={styles.imageStyler} source={Logo} resizeMode="center" />
 
       <Text style={styles.mainTextStyle}>GS</Text>
     </View>
@@ -134,7 +142,7 @@ const LoginScreen = (props) => {
                     borderWidth: error ? 1 : 0,
                   },
                 ]}>
-                {/* <Image style={styles.profileLogo} source={profileLogo} /> */}
+                <Image style={styles.profileLogo} source={user} />
                 <TextInput
                   placeholder={t('E-mail')}
                   style={styles.inputNumbStyled}
@@ -197,7 +205,7 @@ const LoginScreen = (props) => {
                   onChangeText={onChange}
                 />
                 <Eye
-                  name={showPass}
+                  name={showPass} 
                   color={'#042C5C'}
                   size={20}
                   onPress={() => {

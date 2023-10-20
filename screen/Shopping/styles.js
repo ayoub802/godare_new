@@ -112,6 +112,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     // backgroundColor: 'green',
   },
+  textActive:{
+    color: "#376AED"
+  },
+  text: {
+    color: "#616162"
+},
   imageTextContainer: {
     flexDirection: 'row',
     height: windowHeight * 0.035,

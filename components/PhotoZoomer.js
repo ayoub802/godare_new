@@ -7,7 +7,7 @@ import {
     Text
 } from 'react-native';
 import Modal from 'react-native-modal';
-
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 class PhotoZoomer extends React.Component {
     constructor(props){
@@ -34,11 +34,7 @@ class PhotoZoomer extends React.Component {
                 <TouchableOpacity onPress={this.openModal} key={index}>
                     <Image
                         source={{ uri: image.url }}
-                        style={{
-                            width: windowWidth * 0.4,
-                            height: windowHeight * 0.25,
-                            borderRadius: 10,
-                        }}
+                        style={{height: hp(22), borderRadius: 22, width: wp(29)}}
                         resizeMode={ 'contain'}
                     />
                 </TouchableOpacity>

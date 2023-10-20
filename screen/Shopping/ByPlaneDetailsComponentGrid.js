@@ -11,8 +11,7 @@ import {
   TextInput,
   Alert,
   Image,
-  FlatList,
-  ToastAndroid
+  FlatList
 } from 'react-native';
 
 import {Dropdown} from 'react-native-element-dropdown';
@@ -29,12 +28,12 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nati
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import Button, { ButtonIcon } from '../../components/Button';
 import ListCard from '../../components/ListCard';
-import ByPlaneDetailsComponentGrid from "./ByPlaneDetailsComponentGrid"
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 // create a component
-const ByPlaneDetailsComponent = (props) => {
+const ByPlaneDetailsComponentGrid = (props) => {
 
   // Donnée statique
   const navigation = props.navigation
@@ -91,7 +90,14 @@ const ByPlaneDetailsComponent = (props) => {
     
     if (Product.unite && Product.unite.valeur.toLowerCase() != 'unité')
     {
+      if (label > 1)
+      {
+        label = label + ' ' + Product.unite.valeur + '(s)';
+      }
+      else 
+      {
         label = label + ' '  + Product.unite.valeur;
+      }
     }
     
     return {label: label, value: (arrayOFF + 1)};
@@ -111,7 +117,12 @@ const ByPlaneDetailsComponent = (props) => {
     }).then(image => {
       setUserImage(image.path);
 
-      ToastAndroid.show("Image ajoutée",ToastAndroid.SHORT)
+      Toast.show({
+        type: 'success',
+        text1: t('Image'),
+        text2: t('Image ajoutée'),
+      });
+
       setModalVisible(!isModalVisible);
     });
   };
@@ -125,8 +136,11 @@ const ByPlaneDetailsComponent = (props) => {
     }).then(image => {
       setUserImage(image.path);
 
-      ToastAndroid.show("Image ajoutée",ToastAndroid.SHORT)
-
+      Toast.show({
+        type: 'success',
+        text1: t('Image'),
+        text2: t('Image ajoutée'),
+      });
 
       setModalVisible(!isModalVisible);
     });
@@ -139,8 +153,11 @@ const ByPlaneDetailsComponent = (props) => {
     afficherMessageDouane(item, douane).then(message => {
       if (message)
       {
-        ToastAndroid.show("success Duoane",ToastAndroid.SHORT)
-
+        Toast.show({
+          type: 'success',
+          text1: t('Douane'),
+          text2: message,
+        });
       }
     });
   }
@@ -161,15 +178,22 @@ const ByPlaneDetailsComponent = (props) => {
 
     if (!QuantitySelected)
     {
-      ToastAndroid.show("La quantité est obligatoire !",ToastAndroid.SHORT)
+      Toast.show({
+        type: 'error',
+        text1: t('Quantité'),
+        text2: t('La quantité est obligatoire !'),
+      });
 
       return;
     }
 
     if (!StateValue)
     {
-
-      ToastAndroid.show("L'état du produit est obligatoire !",ToastAndroid.SHORT)
+      Toast.show({
+        type: 'error',
+        text1: t('Etat'),
+        text2: t("L'état du produit est obligatoire !"),
+      });
 
       return;
     }
@@ -180,9 +204,12 @@ const ByPlaneDetailsComponent = (props) => {
 
       if (coefficientDouane && !productValue)
       {
-
-        ToastAndroid.show("La valeur est obligatoire !",ToastAndroid.SHORT)
-
+        Toast.show({
+          type: 'error',
+          text1: t('Valeur'),
+          text2: t('La valeur est obligatoire !'),
+        });
+  
         return;
       }
     }
@@ -223,6 +250,7 @@ const ByPlaneDetailsComponent = (props) => {
 
   // Ajout au panier
   const handleCart = async () => {
+    navigation.navigate("Login", {fromCart: 'cart'});
 
     let authStatus = await getAuthUserEmail();
 
@@ -234,7 +262,6 @@ const ByPlaneDetailsComponent = (props) => {
         ID: (Math.random() + 1).toString(36).substring(7),
         product: Product,
         ProductId: Product.id,
-        ProductImage: Product.productImages,
         discount: Product.discount,
         stateValue: StateValue,
         quantiteMax: quantiteMax,
@@ -258,8 +285,11 @@ const ByPlaneDetailsComponent = (props) => {
     {
       await savePanier(CatProducts);
 
-      ToastAndroid.show("Ajouter au panier avec succès",ToastAndroid.SHORT)
-
+      Toast.show({
+        type: 'success',
+        text1: t('Succès'),
+        text2: t('Ajouter au panier avec succès'),
+      });
 
       success = true;
     }
@@ -273,8 +303,11 @@ const ByPlaneDetailsComponent = (props) => {
   
       if (match === true) 
       {
-        ToastAndroid.show("Ce produit a déjà été ajouté",ToastAndroid.SHORT)
-
+        Toast.show({
+          type: 'error',
+          text1: t('Il y a un problème !'),
+          text2: t('Ce produit a déjà été ajouté'),
+        });
       }
       else 
       {
@@ -282,8 +315,12 @@ const ByPlaneDetailsComponent = (props) => {
 
         await savePanier(basketData);
                 
-        
-        ToastAndroid.show("Ajouter au panier avec succès",ToastAndroid.SHORT)
+        Toast.show({
+          type: 'success',
+          text1: t('Succès'),
+          text2: t('Ajouter au panier avec succès'),
+        });
+    
         success = true;
       } 
     }
@@ -298,175 +335,68 @@ const ByPlaneDetailsComponent = (props) => {
       } 
     }
   };
- 
+
   return (
     <>
-   {
-    activeChange === 0 ? 
-    <>
-    <View style={{ backgroundColor: "#fff", margin: 5}}>
-      <View style={{flexDirection: "row", alignItems: "flex-start", gap: 10, paddingVertical: 12, paddingLeft: 22}}>
-        <View>
-        <ScrollView
-            pagingEnabled
-            horizontal
-            onScroll={({nativeEvent}) => Change(nativeEvent)}
-            showsHorizontalScrollIndicator={false}
-            style={styles.imageSwiper}>
-            {Images.map((image, index) => (
-              
-              <PhotoZoomer key={index} image={image} windowWidth={windowWidth} windowHeight={windowHeight} />
-             
-            ))}
-          </ScrollView>
-          <View style={styles.dotStyle}>
-            {Images.map((i, k) => (
-              <Text
-                key={k}
-                style={
-                  k == active ? styles.pagingActiveText : styles.pagingText
-                }>
-                ⬤
-              </Text>
-            ))}
-          </View>
-        </View>
-            <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
-                <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
-                  <Text style={{fontFamily: "Poppins-Medium", fontSize: 10,textAlign: "center", maxWidth: 180}}>{'fr' == Language ? Product.name : Product.nameEN}</Text>
-                </View>
+    <ScrollView
+    nestedScrollEnabled={true}
+    showsVerticalScrollIndicator={false}
+    style={{marginBottom: 50}}>
+     <View style={{ 
+      backgroundColor: "#fff", 
+      margin: 4.5, 
+      borderRadius: 10,    
+      }}>
 
-                <View style={{flexDirection: "row", alignItems: "center", gap: 5, marginTop: 8}}>
-                    <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
-                       {productSpecificites ? productSpecificites.prix  : 0}€/{Product.unite ? Product.unite.valeur : ''}
-                    </Text>
-                    {productSpecificites && productSpecificites.prixAncien ? 
-                        <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
-                        {productSpecificites.prixAncien}€/{Product.unite ? Product.unite.valeur : ''}
-                      </Text>
-                      :
-                      <></>
-                    }
-                </View>
-                
-                <View style={styles.safeContainerStyle}>
-                  <Dropdown
-                    style={[styles.dropdown]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    autoScroll
-                    iconStyle={styles.iconStyle}
-                    containerStyle={styles.containerStyle}
-                    data={data}
-                    maxHeight={100}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={t('Etat')}
-                    searchPlaceholder="Search..."
-                    value={StateValue}
-                    showsVerticalScrollIndicator={false}
-                    onChange={item => {
-                      setStateValue(item.value);
-                      showDouaneMessage(item.value);
-                    }}
-                  />
-                </View>
-                <View style={styles.safeContainerStyle}>
-                <Dropdown
-                    style={[styles.dropdown]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    autoScroll
-                    iconStyle={styles.iconStyle}
-                    containerStyle={styles.containerStyle}
-                    data={sweeterArray}
-                    maxHeight={200}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={t('Quantité')}
-                    searchPlaceholder="Search..."
-                    value={QuantitySelected}
-                    showsVerticalScrollIndicator={false}
-                    onChange={item => {
-                      setQuantitySelected(item.value);
-                    }}
-                  />
-                  </View>
-
-                <View style={{marginTop: 8, width: "100%"}}>
-                <TouchableOpacity
-                  style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
-                  onPress={toggleModal}>
-                  <View><FontAwesome5 name="file-upload" size={15} color='#4E8FDA'/></View>
-                  <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
-                  {
+          <View style={{flexDirection: "row", alignItems: "center",justifyContent: "space-between" ,gap: 10, paddingTop: 16, paddingLeft: 6, paddingRight: 6}}>
+          <View style={{maxWidth: 130}}>
+      <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 10, color: "#000"}}>
+        {'fr' == Language ? Product.name : Product.nameEN}
+        </Text>
+      </View>
+            <View style={{flexDirection: "column", alignItems: "center", gap: 5}}>
                     <View>
-                      <Modal
-                        isVisible={isModalVisible}
-                        backdropOpacity={0.4}
-                        animationIn={'fadeInUp'}
-                        animationInTiming={600}
-                        animationOut={'fadeOutDown'}
-                        animationOutTiming={600}
-                        useNativeDriver={true}>
-                        <View style={styles.ModalContainer}>
-                          <View style={styles.uploadContainer}>
-                            <Text style={styles.uploadText}>
-                              {t('Télécharger une photo')}
-                            </Text>
-                            <Text style={styles.uploadSubText}>
-                              {t('Choisissez une image')}
-                            </Text>
-                          </View>
-                          <View style={styles.buttonsContainer}>
-                            <TouchableOpacity
-                              style={styles.cameraGallerybuttons}
-                              onPress={() => {
-                                selectImageFromGallery();
-                              }}>
-                              <Text style={styles.buttonText}>
-                                {t('Choisir une image dans la galerie')}
-                              </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              style={styles.cameraGallerybuttons}
-                              onPress={() => {
-                                openCameraForPicture();
-                              }}>
-                              <Text style={styles.buttonText}>
-                                {t('Ouvrir la caméra')}
-                              </Text>
-                            </TouchableOpacity>
-                
-                            
-                            <TouchableOpacity
-                              style={styles.cancelButton}
-                              onPress={toggleModal}>
-                              <Text style={styles.buttonText}>{t('Annuler')}</Text>
-                            </TouchableOpacity>
-                          </View>
+                      <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
+                      {productSpecificites ? productSpecificites.prix  : 0}€/{Product.unite ? Product.unite.valeur : ''}
+                    </Text>
                         </View>
-                      </Modal>
+                    <View>
+                    {productSpecificites && productSpecificites.prixAncien ? 
+                          <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
+                          {productSpecificites.prixAncien}€/{Product.unite ? Product.unite.valeur : ''}
+                        </Text>
+                        :
+                        <></>
+                      }
                     </View>
-                  }
-                </TouchableOpacity>
-                </View>
-
-                <View style={{marginTop: 8, width: "100%"}}>
-                   <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
-                </View>
             </View>
-        </View>
-    </View>
-    </> 
-    : 
-    <FlatList 
-     data={Product}
-     numColumns={2}
-     keyExtractor={item => item.id}
-     renderItem={({item}) => <ByPlaneDetailsComponentGrid service={Service.code} data={item} navigation={navigation} paysLivraison={PaysLivraison} language={Language}/>}
-    />
-   }
+          </View>
+          <View style={{flexDirection: "row", alignItems: "center", gap: 10, paddingBottom: 8, paddingLeft: 6}}>
+              {/* <View style={{backgroundColor: "#F5F5F5", height: hp(14), width: wp(20), borderRadius: 20, paddingTop: 10}}>
+              <Image source={{uri: item.productImages[0].url}} style={{height: hp(12),objectFit: "cover" ,borderRadius: 22, width: wp(19)}}/>
+              </View> */}
+                <ScrollView
+                pagingEnabled
+                horizontal
+                onScroll={({nativeEvent}) => Change(nativeEvent)}
+                showsHorizontalScrollIndicator={false}
+                style={styles.imageSwipergGrid}>
+                {Images.map((image, index) => (
+                      
+                  <PhotoZoomer key={index} image={image} windowWidth={windowWidth} windowHeight={windowHeight} />
+                    
+                ))}
+              </ScrollView>
+              <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", paddingRight: 6}}>
+
+              </View>
+          </View>
+
+          <View style={{justifyContent: "center", alignItems: "center", paddingBottom: 16}}>
+              <Button title="Ajouter au panier"/>
+          </View>
+      </View>
+  </ScrollView>
 
     </>
   );
@@ -751,4 +681,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default ByPlaneDetailsComponent;
+export default ByPlaneDetailsComponentGrid;

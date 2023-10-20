@@ -10,6 +10,9 @@ import PrivateSalesDetailComponent from './PrivateSalesDetailComponent'
 import BuyingDemandDetailComponent from './BuyingDemandDetailComponent'
 import ByPlaneDetailsComponent from './ByPlaneDetailsComponent'
 import ServiceHeader from '../../components/ServiceHeader'
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import Ionicons from "react-native-vector-icons/Ionicons"
+import Octicons from "react-native-vector-icons/Octicons"
 const windowWidth = Dimensions.get('window').width;
 
 
@@ -22,7 +25,8 @@ const ShoppingScreen = ({ navigation, route }) => {
     const [products, setProducts] = useState([]);
     const [CategoriesProducts, setCategoriesProducts] = useState([]);
     const [Language, setLanguage] = useState('fr');
-  
+    const [activeFilter, setActiveFilter] = useState(0);
+
     // Par défaut le service Expéditions par avion sera selectionné (donc les sous categories seront chargées)
     const [Service, setService] = useState(null);
   
@@ -140,13 +144,14 @@ const ShoppingScreen = ({ navigation, route }) => {
 
   // Service display
   const renderByPlaneItem = ({item}) => (
-    <ByPlaneDetailsComponent
-     service={Service.code}
-     data={item}
-     navigation={navigation}
-     paysLivraison={PaysLivraison}
-     language={Language}
-   />
+      <ByPlaneDetailsComponent
+       service={Service.code}
+       data={item}
+       navigation={navigation}
+       paysLivraison={PaysLivraison}
+       language={Language}
+       filter={activeFilter}
+     />
  );
 
  const renderDemandItem = ({item}) => (
@@ -171,153 +176,157 @@ const ShoppingScreen = ({ navigation, route }) => {
     if (!Service || !PaysLivraison || true === ActivityIndicatorVar)
     {
       return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <View style={{flex: 1}}>
   
           <HeaderEarth />
     
-          <View style={styles.tabsContainer}>
-            <View style={{justifyContent: 'center', height: '80%'}}><ActivityIndicator size={'large'} color="#3292E0" /></View>
+          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+            <View style={{justifyContent: 'center'}}><ActivityIndicator size={'large'} color="#3292E0" /></View>
           </View>
   
-        </ScrollView>
+        </View>
       );
     }
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      
-      <HeaderEarth />
-      <ServiceHeader 
-        navigation={navigation}
-        service={Service}
-        paysLivraison={PaysLivraison}
-      />
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <View style={{marginBottom: 85}}>
+        <ServiceHeader 
+          navigation={navigation}
+          service={Service}
+          paysLivraison={PaysLivraison}
+        />
 
-      {
-        Categories.length > 0 ? (
-          <View style={styles.subTabbarContainer}>
-            <ScrollView
-              scrollEnabled
-              horizontal={true}
-              contentContainerStyle={styles.subTabbarScrollContainer}>
+        {
+          Categories.length > 0 ? (
+            <View style={{marginTop: 20}}>
+              <ScrollView
+                scrollEnabled
+                horizontal={false}>
 
-              {Categories.map( (row) => (
-                <TouchableOpacity
-                    key={row.id}
-                    style={[
-                      styles.imageTextContainer,
-                      SelectedCategorieId == row.id
-                        ? {backgroundColor: '#fff', elevation: 3, borderRadius: 5}
-                        : null,
-                    ]}
-                    activeOpacity={0.5}
-                    onPress={() => {
-                      setSelectedCategorieId(row.id);
-                    }}>
-                    <View>
-                      <Image
-                        style={styles.iconStyler}
-                        source={{uri: row.image}}
-                        resizeMode="center"
-                      />
-                    </View>
-                    <Text style={styles.subtabarTextStyle}>
-                      {'fr' == Language ? row.name : row.nameEn}
-                    </Text>
-              </TouchableOpacity>
-              ))}
+                          <FlatList 
+                          horizontal
+                          style={{paddingLeft: 10}}
+                          showsHorizontalScrollIndicator={false}
+                          data={Categories}
+                          keyExtractor={item => item.id}
+                          renderItem={({item}) => (
+                            <TouchableOpacity onPress={() => setSelectedCategorieId(item.id)}  style={{ flexDirection: "row", alignItems: "center", gap: 12, width: 140}}>
+                                    <View>
+                                        <Image source={{ uri: item.image}} style={{width: 22, height: 22, objectFit: "cover"}}/>
+                                    </View>
+                                    <Text style={[SelectedCategorieId === item.id ? styles.textActive : styles.text, {fontFamily: "Poppins-Medium", fontSize: 12}]}>{item.name}</Text>
+                                </TouchableOpacity>
+                              )}
+                          />
+              </ScrollView>
+            </View>
+          ) : (<></>)
+        }
+        
 
-            </ScrollView>
-          </View>
-        ) : (<></>)
-      }
-      
+        {
+          <>
 
-      {
-        <>
-
-          {true === ActivityIndicatorProduct ?
-            <ActivityIndicator size={'large'} color={'#000'} />
-            :
-            (
-              <>
-                <View style={styles.subTabbarContainerFilter}>
-
-                  <TouchableOpacity style={[styles.filterTextContainer]} activeOpacity={0.5}>
-                    <Text style={styles.filterTextStyle}>
-                      Filtrer
-                    </Text>
-                  </TouchableOpacity>
-
-                  { 'ventes-privees' != Service.code ?
-                    (
-                      <>
-                        <TouchableOpacity style={[styles.filterTextContainer]} activeOpacity={0.5}>
-                          <Text style={styles.filterTextStyle}>
+            {true === ActivityIndicatorProduct ?
+              <ActivityIndicator size={'large'} color={'#000'} />
+              :
+              (
+                <>
+                  <View style={{marginTop: 10, paddingHorizontal: 5}}>
+                    <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center",borderTopLeftRadius: 28, borderTopRightRadius: 28 ,backgroundColor: "#fff", paddingVertical: 27, paddingLeft: 15, paddingRight: 23}}>
+                      
+                      <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
+                      <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
+                        <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
+                          Filtrer
+                        </Text>
+                        <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
+                      </TouchableOpacity>
+                        <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
+                          <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
                             Trier
                           </Text>
+                          <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
                         </TouchableOpacity>
+                      </View>
 
-                        <TouchableOpacity  activeOpacity={0.5}>
-                          <Icon name="square" color="#000" size={24} style={{ marginRight: windowWidth * 0.01 }}  />
-                        </TouchableOpacity>
+                      <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
+                      {
+                                  activeFilter === 0 
+                                  ?
+                                  <TouchableOpacity onPress={() => setActiveFilter(1)}>
+                                      <Ionicons name="grid-outline" color="#00000033" size={25}/>
+                                  </TouchableOpacity> 
+                                  :
+                                  <TouchableOpacity onPress={() => setActiveFilter(0)}>
+                                      <Ionicons name="grid-outline" color="#376AED" size={25}/>
+                                  </TouchableOpacity> 
+                                }
+                                {
+                                  activeFilter === 1 
+                                  ?
+                                  <TouchableOpacity onPress={() => setActiveFilter(0)}>
+                                      <Octicons name="list-unordered" color="#00000033" size={25}/>
+                                  </TouchableOpacity> 
+                                  :
+                                  <TouchableOpacity onPress={() => setActiveFilter(1)}>
+                                      <Octicons name="list-unordered" color="#376AED" size={25}/>
+                                  </TouchableOpacity> 
+                                }
+                      </View>
 
-                        <TouchableOpacity  activeOpacity={0.5}>
-                          <Icon name="th-large" color="#000" size={24} style={{ marginRight: windowWidth * 0.01 }}  />
-                        </TouchableOpacity>
-                      </>
-                    )
-                    :
-                    <></>
-                  } 
+                      
+                    </View>
+                  </View>
+
+                  {'fret-par-avion' == Service.code ? (
+
+                    <FlatList
+                      showsVerticalScrollIndicator={false}
+                      data={products}
+                      renderItem={renderByPlaneItem}
+                      keyExtractor={item => item.id}
+                    />
+                  ) : null}
+
+                  {'fret-par-bateau' == Service.code  ? (
+                    <FlatList
+                      showsVerticalScrollIndicator={false}
+                      data={products}
+                      renderItem={renderByPlaneItem}
+                      keyExtractor={item => item.id}
+                    />
+                  ) : null}
+
+                  {'demandes-d-achat' == Service.code   ? (
+                    <FlatList
+                      showsVerticalScrollIndicator={false}
+                      data={products}
+                      renderItem={renderDemandItem}
+                      keyExtractor={item => item.id}
+                    />
+                  ) : null}
+
+                  {'ventes-privees' == Service.code  ? (
+                    <FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={CategoriesProducts}
+                    renderItem={renderByPlaneItem}
+                    keyExtractor={item => item.id}
+                  />
+                  ) 
                   
-                </View>
+                  : null}
+                </>
+              )
+            }
 
-                {'fret-par-avion' == Service.code ? (
-                  <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={products}
-                    renderItem={renderByPlaneItem}
-                    keyExtractor={item => item.id}
-                  />
-                ) : null}
+            
 
-                {'fret-par-bateau' == Service.code  ? (
-                  <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={products}
-                    renderItem={renderByPlaneItem}
-                    keyExtractor={item => item.id}
-                  />
-                ) : null}
-
-                {'demandes-d-achat' == Service.code   ? (
-                  <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={products}
-                    renderItem={renderDemandItem}
-                    keyExtractor={item => item.id}
-                  />
-                ) : null}
-
-                {'ventes-privees' == Service.code  ? (
-                  <FlatList
-                  showsVerticalScrollIndicator={false}
-                  data={CategoriesProducts}
-                  renderItem={renderPrivateSaleItem}
-                  keyExtractor={item => item.id}
-                />
-                ) 
-                
-                : null}
-              </>
-            )
-          }
-
-          
-
-        </>
-      }
+          </>
+        }
+      </View>
     </ScrollView>
   )
 }

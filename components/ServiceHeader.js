@@ -5,9 +5,16 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Dimensions
+  Dimensions,
+  Image
 } from 'react-native';
 import CountryFlag from './CountryFlag';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import France from "../assets/images/france.png"
+import Feather from "react-native-vector-icons/Feather"
+import CoteIvoire from "../assets/images/cote_ivoire.png"
+import SmallEarth from "../assets/images/small_earth.png"
+import Flag from 'react-native-flags';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -21,7 +28,8 @@ const ServiceHeader = props => {
   const Language = props.language;
 
   return (
-    <View style={styles.tabsContainer}>
+    <>
+    {/* <View style={styles.tabsContainer}>
         
         <View style={{ flexDirection: 'row' }}>
 
@@ -40,7 +48,30 @@ const ServiceHeader = props => {
 
         </View>
         
-    </View>
+    </View> */}
+                <View style={{ position: "relative" ,alignItems: "center", backgroundColor: "#2BA6E9", justifyContent: "center", height: hp(12)}}>
+                <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold"}}>
+                  { Service ? ( 'fr' == Language ? Service.nom : Service.nomEN ) : '' }
+                </Text>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 10}}>
+                    <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
+                         <Flag size={24} code={PaysLivraison.drapeauDepart} type='flat' />
+                        <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>{PaysLivraison.depart}</Text>
+                        <Feather name="arrow-up-right" color="#fff" size={22}/>
+                    </View>
+                    <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
+                        <Flag size={24} code={PaysLivraison.drapeauDestination} type='flat' />
+                        <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>{PaysLivraison.destination}</Text>
+                        <Feather name="arrow-down-right" color="#fff" size={22}/>
+                    </View>
+                </View>
+
+                <View style={{ position: "absolute", top: 15, right: 10}}>
+                    <Image source={SmallEarth}/>
+                    <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold", textAlign: "center", marginTop: 4}}>GS</Text>
+                </View>
+            </View>
+    </>
   );
 };
 
