@@ -34,7 +34,7 @@ class PhotoZoomer extends React.Component {
                 <TouchableOpacity onPress={this.openModal} key={index}>
                     <Image
                         source={{ uri: image.url }}
-                        style={{height: hp(22), borderRadius: 22, width: wp(29)}}
+                        style={{height: windowHeight, borderRadius: 22, width: windowWidth}}
                         resizeMode={ 'contain'}
                     />
                 </TouchableOpacity>

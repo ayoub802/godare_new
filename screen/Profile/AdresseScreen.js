@@ -15,6 +15,7 @@ import { HeaderEarth } from '../../components/Header'
 import Ionicons from "react-native-vector-icons/Ionicons"
 import { adress } from '../../constant/data'
 import Icon from 'react-native-vector-icons/Feather';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useTranslation} from 'react-i18next';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -79,47 +80,48 @@ const AdresseScreen = () => {
   };
 
   const Item = ({item}) => (
-    <View style={styles.orderDetailsContainer}>
-      <View style={styles.AllTextContainer}>
-        
-        <View style={styles.TextContainer}>
-          
-          <View style={styles.textRow}> 
-            <Text style={styles.NameTxt}>
+    <View  style={{backgroundColor: "#fff", borderRadius: 10, paddingHorizontal: 20, paddingVertical: 12, marginBottom: 16}}>
+      <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+                  
+            <Text style={{ color: "#000", fontSize: 16, fontFamily: "Poppins-Medium"}}>
               { item.libelle }
             </Text>
-          </View>
-          
-          <Text style={styles.NameTxt}>
-             { item.nom }
-          </Text>
-
-          <Text style={styles.NameTxt}>
-           {t(item.adresse)}
-          </Text>
-
-          <Text style={styles.NameTxt}>
-           { item.codePostal } { item.ville } { item.pays }
-          </Text>
-
-          <Text style={styles.NameTxt}>
-           Tél: { item.telephone }
-          </Text>
-  
-          <View>
-            <View>
-              <TouchableOpacity style={styles.textPrice}>
-                <Text >{t('Modifier')}</Text>
-              </TouchableOpacity>
+            <View style={{flexDirection: "row", alignItems: "center", gap: 5}}>
+            <TouchableOpacity>
+              <MaterialCommunityIcons name='pencil-outline' size={20} color="#000"/>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Icon name='trash-2' size={20} color="#000"/>
+            </TouchableOpacity>
             </View>
-          </View>
-          
+       </View>
+       <View style={{paddingTop: 16, flexDirection: "row", alignItems: "flex-start", gap: 10}}>
+        <View>
+          <Icon name='map-pin' size={20} color="#2BA6E9"/>
         </View>
+          <View style={{maxWidth: "70%"}}>
+              <Text style={{fontFamily: "Poppins-Regular", fontSize: 16, color: "#718096"}}>
+                { item.nom }
+              </Text>
 
-      </View>
+              <Text style={{fontFamily: "Poppins-Regular", fontSize: 16, color: "#718096"}}>
+              {t(item.adresse)}
+              </Text>
 
-     
+              <Text style={{fontFamily: "Poppins-Regular", fontSize: 16, color: "#718096"}}>
+              { item.codePostal } { item.ville } { item.pays }
+              </Text>
 
+              <Text style={{fontFamily: "Poppins-Regular", fontSize: 16, color: "#718096"}}>
+              Tél: { item.telephone }
+              </Text>
+
+          </View>
+
+       </View>
+
+
+          
     </View>
   );
 
@@ -163,6 +165,7 @@ const AdresseScreen = () => {
         
         ?
         <>
+        <View style={{paddingHorizontal: 12, marginTop: 25, paddingBottom: 50}}>
         <FlatList
           showsVerticalScrollIndicator={false}
           scrollEnabled
@@ -171,6 +174,8 @@ const AdresseScreen = () => {
           keyExtractor={item => item.id}
           contentContainerStyle={styles.containerFlatelist}
         />
+
+        </View>
         </>
         :
         <>

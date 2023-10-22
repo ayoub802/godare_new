@@ -41,7 +41,6 @@ const ByPlaneDetailsComponent = (props) => {
   const Service = props.service;
   const PaysLivraison = props.paysLivraison;
   const Language = props.language;
-  const filter = props.filter;
 
   const Product = props.data;
   const Images = Product.productImages;
@@ -68,7 +67,6 @@ const ByPlaneDetailsComponent = (props) => {
   const [userImage, setUserImage] = useState('');
   const [active, setActive] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [activeChange, setActiveChange] = useState(filter)
 
   
   // Gestion du scroll
@@ -301,9 +299,6 @@ const ByPlaneDetailsComponent = (props) => {
  
   return (
     <>
-   {
-    activeChange === 0 ? 
-    <>
     <View style={{ backgroundColor: "#fff", margin: 5}}>
       <View style={{flexDirection: "row", alignItems: "flex-start", gap: 10, paddingVertical: 12, paddingLeft: 22}}>
         <View>
@@ -315,7 +310,7 @@ const ByPlaneDetailsComponent = (props) => {
             style={styles.imageSwiper}>
             {Images.map((image, index) => (
               
-              <PhotoZoomer key={index} image={image} windowWidth={windowWidth} windowHeight={windowHeight} />
+              <PhotoZoomer key={index} image={image} windowWidth={wp(29)} windowHeight={hp(21)} />
              
             ))}
           </ScrollView>
@@ -458,16 +453,6 @@ const ByPlaneDetailsComponent = (props) => {
             </View>
         </View>
     </View>
-    </> 
-    : 
-    <FlatList 
-     data={Product}
-     numColumns={2}
-     keyExtractor={item => item.id}
-     renderItem={({item}) => <ByPlaneDetailsComponentGrid service={Service.code} data={item} navigation={navigation} paysLivraison={PaysLivraison} language={Language}/>}
-    />
-   }
-
     </>
   );
 };

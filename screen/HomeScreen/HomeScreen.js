@@ -95,9 +95,9 @@ const HomeScreen = ({navigation}) => {
   if (Activity)
   {
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <ScrollView>
          <HeaderEarth />
-        <View style={{justifyContent: 'center', height: '80%'}}>
+        <View style={{justifyContent: 'center', flex: 1}}>
           <ActivityIndicator size="large" color="#3292E0" style={{}} />
         </View>
       </ScrollView>

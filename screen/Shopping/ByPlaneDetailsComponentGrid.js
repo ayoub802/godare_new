@@ -13,6 +13,7 @@ import {
   Image,
   FlatList
 } from 'react-native';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 import {Dropdown} from 'react-native-element-dropdown';
 import commonStyle from '../../helper/commonStyle';
@@ -24,7 +25,6 @@ import PhotoZoomer from "../../components/PhotoZoomer"
 import { afficherMessageDouane, afficherMessageProduitServiceDifferent } from '../../modules/RegleGestion';
 import { removePanier, savePanier, getAuthUserEmail, getPanier } from '../../modules/GestionStorage';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
-import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import Button, { ButtonIcon } from '../../components/Button';
 import ListCard from '../../components/ListCard';
@@ -338,10 +338,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
 
   return (
     <>
-    <ScrollView
-    nestedScrollEnabled={true}
-    showsVerticalScrollIndicator={false}
-    style={{marginBottom: 50}}>
+
      <View style={{ 
       backgroundColor: "#fff", 
       margin: 4.5, 
@@ -350,10 +347,10 @@ const ByPlaneDetailsComponentGrid = (props) => {
 
           <View style={{flexDirection: "row", alignItems: "center",justifyContent: "space-between" ,gap: 10, paddingTop: 16, paddingLeft: 6, paddingRight: 6}}>
           <View style={{maxWidth: 130}}>
-      <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 10, color: "#000"}}>
-        {'fr' == Language ? Product.name : Product.nameEN}
-        </Text>
-      </View>
+              <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 10, color: "#000"}}>
+                {'fr' == Language ? Product.name : Product.nameEN}
+                </Text>
+          </View>
             <View style={{flexDirection: "column", alignItems: "center", gap: 5}}>
                     <View>
                       <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
@@ -380,24 +377,53 @@ const ByPlaneDetailsComponentGrid = (props) => {
                 horizontal
                 onScroll={({nativeEvent}) => Change(nativeEvent)}
                 showsHorizontalScrollIndicator={false}
-                style={styles.imageSwipergGrid}>
+                style={styles.imageSwiper}
+                >
                 {Images.map((image, index) => (
                       
-                  <PhotoZoomer key={index} image={image} windowWidth={windowWidth} windowHeight={windowHeight} />
+                  <PhotoZoomer key={index} image={image} windowWidth={wp(19)} windowHeight={hp(21)} />
                     
                 ))}
               </ScrollView>
+              <View style={styles.dotStyle}>
+                  {Images.map((i, k) => (
+                    <Text
+                      key={k}
+                      style={
+                        k == active ? styles.pagingActiveText : styles.pagingText
+                      }>
+                      ⬤
+                    </Text>
+                  ))}
+                </View>
               <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", paddingRight: 6}}>
+                
+              <TouchableOpacity style={{ flexDirection: "row",width: wp(24), backgroundColor: "#F5F5F5", borderRadius: 6, paddingHorizontal: 8,paddingVertical: 8 ,alignItems: "center", justifyContent: "space-between", marginTop: 5}}>
+                    <Text style={{fontFamily: "Poppins-Regular", color: "#04091E", fontSize: 11}}>
+                       Colors
+                    </Text>
+                    <MaterialIcons name="keyboard-arrow-down" size={20} color='#000'/>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ flexDirection: "row",width: wp(24), backgroundColor: "#F5F5F5", borderRadius: 6, paddingHorizontal: 8,paddingVertical: 8 ,alignItems: "center", justifyContent: "space-between", marginTop: 5}}>
+                    <Text style={{fontFamily: "Poppins-Regular", color: "#04091E", fontSize: 11}}>
+                       Stokage
+                    </Text>
+                    <MaterialIcons name="keyboard-arrow-down" size={20} color='#000'/>
+                </TouchableOpacity>
 
+                <TouchableOpacity style={{ flexDirection: "row",width: wp(24), backgroundColor: "#F5F5F5", borderRadius: 6, paddingHorizontal: 8,paddingVertical: 8 ,alignItems: "center", justifyContent: "space-between", marginTop: 5}}>
+                    <Text style={{fontFamily: "Poppins-Regular", color: "#04091E", fontSize: 11}}>
+                    Quantité
+                    </Text>
+                    <MaterialIcons name="keyboard-arrow-down" size={20} color='#000'/>
+                </TouchableOpacity>
               </View>
           </View>
 
           <View style={{justifyContent: "center", alignItems: "center", paddingBottom: 16}}>
-              <Button title="Ajouter au panier"/>
+            <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
           </View>
       </View>
-  </ScrollView>
-
     </>
   );
 };
@@ -495,7 +521,7 @@ const styles = StyleSheet.create({
   },
   imageSwiper: {
     // backgroundColor: 'gold',
-    width: windowWidth * 0.32,
+    width: windowWidth * 0.2,
     height: windowHeight * 0.25,
     borderRadius: 10,
   },

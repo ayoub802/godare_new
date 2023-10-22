@@ -4,10 +4,10 @@ import React from 'react'
 export const RenderItem = ({ data}) => {
   return (
     <View style={{ flexDirection: "row", gap: 15, alignItems: "center",justifyContent: 'space-between' ,backgroundColor: "#EDEDF3",borderBottomWidth: 1, borderBottomColor: "#E2E2E2" ,paddingVertical: 16, paddingHorizontal: 22}}>
-      <Text style={{color: "#000", fontFamily: "Poppins-Regular", fontSize: 13}}>{data.price}</Text>
-      <Text style={{color: "#000", fontFamily: "Poppins-Regular", fontSize: 13}}>{data.restant}</Text>
-      <Text style={{color: "#000", fontFamily: "Poppins-Regular", fontSize: 13}}>{data.date}</Text>
-      <Text style={{color: "#000", fontFamily: "Poppins-Regular", fontSize: 13}}>{data.fin}</Text>
+      <Text style={{color: "#000", fontFamily: "Poppins-Regular", fontSize: 13}}>{data.montant}</Text>
+      <Text style={{color: "#000", fontFamily: "Poppins-Regular", fontSize: 13}}>{data.montant - data.montantConsomme}</Text>
+      <Text style={{color: "#000", fontFamily: "Poppins-Regular", fontSize: 13}}>{data.createdAt}</Text>
+      <Text style={{color: "#000", fontFamily: "Poppins-Regular", fontSize: 13}}>{data.dateExpiration}</Text>
     </View>
   )
 }

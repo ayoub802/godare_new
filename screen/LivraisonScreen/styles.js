@@ -54,7 +54,9 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 8,
     paddingHorizontal: 17,
-    backgroundColor: '#d5d6d7',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: "#2BA6E9", 
     elevation: 1,
     width: windowWidth * 0.8,
   },
@@ -73,9 +75,14 @@ const styles = StyleSheet.create({
     height: 20,
   },
   containerStyle: {
-    backgroundColor: '#d5d6d7',
-    borderRadius: 8,
-    maxHeight: 100,
+    backgroundColor: '#fff',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    maxHeight: 180,
+    marginTop: -1.5,
+    borderLeftWidth:1,
+    borderRightWidth:1,
+    borderColor: "#2BA6E9"
   },
   butnText: {
     fontFamily: 'Roboto-Regular',

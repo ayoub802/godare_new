@@ -13,6 +13,7 @@ import ServiceHeader from '../../components/ServiceHeader'
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import Ionicons from "react-native-vector-icons/Ionicons"
 import Octicons from "react-native-vector-icons/Octicons"
+import ByPlaneDetailsComponentGrid from './ByPlaneDetailsComponentGrid'
 const windowWidth = Dimensions.get('window').width;
 
 
@@ -150,7 +151,15 @@ const ShoppingScreen = ({ navigation, route }) => {
        navigation={navigation}
        paysLivraison={PaysLivraison}
        language={Language}
-       filter={activeFilter}
+     />
+ );
+  const renderByPlaneGridItem = ({item}) => (
+      <ByPlaneDetailsComponentGrid
+       service={Service.code}
+       data={item}
+       navigation={navigation}
+       paysLivraison={PaysLivraison}
+       language={Language}
      />
  );
 
@@ -281,13 +290,28 @@ const ShoppingScreen = ({ navigation, route }) => {
                   </View>
 
                   {'fret-par-avion' == Service.code ? (
-
+                    <>
+                    {
+                      activeFilter === 0 
+                      ?
                     <FlatList
                       showsVerticalScrollIndicator={false}
                       data={products}
                       renderItem={renderByPlaneItem}
                       keyExtractor={item => item.id}
                     />
+                    :
+                    <FlatList
+                      showsVerticalScrollIndicator={false}
+                      data={products}
+                      numColumns={2}
+                      renderItem={renderByPlaneGridItem}
+                      keyExtractor={item => item.id}
+                    />
+
+                    }
+
+                    </>
                   ) : null}
 
                   {'fret-par-bateau' == Service.code  ? (
@@ -312,7 +336,7 @@ const ShoppingScreen = ({ navigation, route }) => {
                     <FlatList
                     showsVerticalScrollIndicator={false}
                     data={CategoriesProducts}
-                    renderItem={renderByPlaneItem}
+                    renderItem={renderPrivateSaleItem}
                     keyExtractor={item => item.id}
                   />
                   ) 

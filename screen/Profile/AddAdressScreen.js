@@ -36,9 +36,7 @@ const AddAdressScreen = (props) => {
     const [AdresseTelephone, setAdresseTelephone] = useState('');
     const [AdressePays, setAdressePays] = useState('');
     
-    useEffect(() => {
-        AddNewAddress();
-    }, [])
+
     async function setStorageAndBackToPreviousPage(adresse)
     {
       await AsyncStorage.setItem('newAddedAdresse', JSON.stringify(adresse));
@@ -72,6 +70,8 @@ const AddAdressScreen = (props) => {
           text1: 'Champs obligatoires',
           text2: t("La ville et l'adresse sont obligatoires !"),
         });
+
+        console.log("La ville et l'adresse sont obligatoires !");
   
         return;
       }
@@ -83,7 +83,8 @@ const AddAdressScreen = (props) => {
           text1: 'Pays',
           text2: t("Le pays est obligatoire"),
         });
-  
+        console.log("Le pays est obligatoire");
+
         return;
       }
       else 
@@ -95,7 +96,8 @@ const AddAdressScreen = (props) => {
             text1: 'Champs obligatoires',
             text2: t("Le pays est obligatoire !"),
           });
-  
+          console.log("Le pays est obligatoire !");
+
           return;
         }
       }
@@ -103,35 +105,62 @@ const AddAdressScreen = (props) => {
       console.log('pays', Pays)
       console.log('AdressePays', AdressePays)
      
-      axiosInstance.post('/adresses/new', {
-        libelle: AdresseLibelle,
-        nom: AdresseNom,
-        telephone: AdresseTelephone,
-        pays: ('carnetAdresse' == pageFrom || 'summary' == pageFrom) ? AdressePays : Pays,
-        ville: Ville,
-        codePostal: CodePostal, 
-        adresse: Adresse, 
-        client: email
-      })
-      .then(function (response) {
-        console.log('adresse add ', response.data)
+      // axiosInstance.post('/adresses/new', {
+      //   libelle: AdresseLibelle,
+      //   nom: AdresseNom,
+      //   telephone: AdresseTelephone,
+      //   pays: AdressePays,
+      //   ville: Ville,
+      //   codePostal: CodePostal, 
+      //   adresse: Adresse, 
+      //   client: email
+      // })
+      // .then(function (response) {
+      //   console.log('adresse add ', response.data)
   
-        Toast.show({
-          type: 'success',
-          text1: t('Succès'),
-          text2: t("Adresse ajoutée"),
-        });
-  
-        setStorageAndBackToPreviousPage(response.data);
+      //   Toast.show({
+      //     type: 'success',
+      //     text1: t('Succès'),
+      //     text2: t("Adresse ajoutée"),
+      //   });
+      //   console.log("Adresse ajoutée");
+
+      //   setStorageAndBackToPreviousPage(response.data);
+      // })
+      // .catch(function (error) {
+      //     Toast.show({
+      //       type: 'error',
+      //       text1: 'Erreur',
+      //       text2: t("Erreur lors de l'enregistrement"),
+      //     });
+      //     console.log("Erreur lors de l'enregistrement", error);
+
+      // });
+      await fetch("https://godaregroup.com/api/adresses/new", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          libelle: AdresseLibelle,
+          nom: AdresseNom,
+          telephone: AdresseTelephone,
+          pays: AdressePays,
+          ville: Ville,
+          codePostal: CodePostal, 
+          adresse: Adresse, 
+          client: email
+        }),
       })
-      .catch(function (error) {
-          Toast.show({
-            type: 'error',
-            text1: 'Erreur',
-            text2: t("Erreur lors de l'enregistrement"),
-          });
-      });
-      
+        .then((response) => response.json())
+        .then((responseData) => {
+          console.log(JSON.stringify(responseData));
+          console.log("Data Added");
+          setStorageAndBackToPreviousPage(responseData);
+        })
+        .catch((err) => console.log('Error:', err))
+        .finally();
     };
   
     const returnPage = () => 
@@ -189,7 +218,12 @@ const AddAdressScreen = (props) => {
                   }}
                 placeholderTextColor="#B0B0C3"
                 keyboardType="ascii-capable"
-                keyboardAppearance={'default'}
+                keyboardAppearance="default"
+                autoCapitalize="none"
+                focusable={true}
+                onChange={valueInput => {
+                   setAdressePays(valueInput.nativeEvent.text.toString());
+                  }}
                 onChangeText={newText => setAdressePays(newText)}
               />
             </View>
@@ -256,7 +290,15 @@ const AddAdressScreen = (props) => {
             onChangeFormattedText={text => {
               setAdresseTelephone(text);
             }}
-            containerStyle={{width: "100%" ,shadowColor: "transparent",height: 48 ,backgroundColor: "#fff", borderWidth: 1, borderColor: "#000", borderRadius: 10}}
+            containerStyle={{
+              width: "100%" ,
+              shadowColor: "transparent",
+              height: 58 ,
+              backgroundColor: "#fff", 
+              borderWidth: 1, 
+              borderColor: "#000", 
+              borderRadius: 10
+              }}
 
           />
         </View>
@@ -325,7 +367,10 @@ const AddAdressScreen = (props) => {
         </View>
 
         <View style={{marginTop: 50, flex: 1, justifyContent: "center", alignItems: "center",}}>
-            <Button title={t("Ajouter l'adresse")} onPress={() => {AddNewAddress}}/>
+            {/* <Button title={t("Ajouter l'adresse")} onPress={AddNewAddress}/> */}
+            <TouchableOpacity onPress={AddNewAddress}>
+              <Text>Ajouter Address</Text>
+            </TouchableOpacity>
         </View>
       </ScrollView>
 

@@ -24,142 +24,6 @@ const PaysLivraison = ({navigation, route}) => {
   const [data, setData] = useState([]);
   const [ActivityIndicatorVar, setActivityIndicatorVar] = useState(false);
 
-  const items = [
-    {
-      label: '',
-      value: 'france',
-      icon: () => {
-        return (
-          <>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 30,
-              }}>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                <Image source={require('../../assets/images/france.png')} />
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#000',
-                    fontFamily: 'Roboto-Medium',
-                  }}>
-                  France
-                </Text>
-                <Feather name="arrow-up-right" size={22} color="#000" />
-              </View>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                <Image
-                  source={require('../../assets/images/cote_ivoire.png')}
-                />
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#000',
-                    fontFamily: 'Roboto-Medium',
-                  }}>
-                  Côte d'ivoire
-                </Text>
-                <Feather name="arrow-down-right" size={22} color="#000" />
-              </View>
-            </View>
-          </>
-        );
-      },
-    },
-    {
-      label: '',
-      value: 'germany',
-      icon: () => {
-        return (
-          <>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 30,
-              }}>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                <Image source={require('../../assets/images/france.png')} />
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#000',
-                    fontFamily: 'Roboto-Medium',
-                  }}>
-                  France
-                </Text>
-                <Feather name="arrow-up-right" size={22} color="#000" />
-              </View>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                <Image source={require('../../assets/images/mali.png')} />
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#000',
-                    fontFamily: 'Roboto-Medium',
-                  }}>
-                  Mali
-                </Text>
-                <Feather name="arrow-down-right" size={22} color="#000" />
-              </View>
-            </View>
-          </>
-        );
-      },
-    },
-    {
-      label: '',
-      value: 'italy',
-      icon: () => {
-        return (
-          <>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 30,
-              }}>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                <Image source={require('../../assets/images/france.png')} />
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#000',
-                    fontFamily: 'Roboto-Medium',
-                  }}>
-                  France
-                </Text>
-                <Feather name="arrow-up-right" size={22} color="#000" />
-              </View>
-              <View
-                style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                <Image source={require('../../assets/images/congo.png')} />
-                <Text
-                  style={{
-                    fontSize: 14,
-                    color: '#000',
-                    fontFamily: 'Roboto-Medium',
-                  }}>
-                  Congo
-                </Text>
-                <Feather name="arrow-down-right" size={22} color="#000" />
-              </View>
-            </View>
-          </>
-        );
-      },
-    },
-  ];
 
 
   useEffect(() => {
@@ -193,7 +57,7 @@ const PaysLivraison = ({navigation, route}) => {
             if (item.libelle)
             {
               let obj = {id: item.id, value: item.id, drapeauDepart: item.drapeauDepart,depart: item.depart ,drapeauDestination: item.drapeauDestination };
-              obj.label = item.libelle;
+              obj.label = item.destination;
               obj.depart = item.depart;
               obj.destination = item.destination;
               formatted.push(obj);
@@ -266,11 +130,44 @@ const PaysLivraison = ({navigation, route}) => {
     }
 
     return (
-      <View style={styles.item}>
-        <Flag size={32} code={item.drapeauDepart} type='flat' />
-        <Text style={styles.textItem}>{item.label}</Text>
-        <Flag size={32} code={item.drapeauDestination} type='flat' />
+      <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        gap: 40,
+      }} key={item.id}>
+      <View
+        style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+        <View>
+          <Flag code={item.drapeauDepart} size={32}/>
+        </View>
+        <Text
+          style={{
+            fontSize: 14,
+            color: '#000',
+            fontFamily: 'Roboto-Medium',
+          }}>
+          {item.depart}
+        </Text>
+        <Feather name="arrow-up-right" size={22} color="#000" />
       </View>
+      <View
+        style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+        <View>
+          <Flag code={item.drapeauDestination} size={32}/>
+        </View>
+        <Text
+          style={{
+            fontSize: 14,
+            color: '#000',
+            fontFamily: 'Roboto-Medium',
+          }}>
+          {item.destination}
+        </Text>
+        <Feather name="arrow-down-right" size={22} color="#000" />
+      </View>
+    </View>
     );
   };
 
@@ -300,11 +197,12 @@ const PaysLivraison = ({navigation, route}) => {
       </View>
 
       <View style={styles.safeContainerStyle}>
-        {/* <Dropdown
-          style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+        <Dropdown
+          style={[styles.dropdown, isFocus && { borderBottomLeftRadius: 0,borderBottomRightRadius: 0,}]}
           placeholderStyle={styles.placeholderStyle}
           selectedTextStyle={styles.selectedTextStyle}
           autoScroll
+          itemContainerStyle={{borderBottomWidth: 1,borderColor: "#2BA6E9", padding: 10}}
           iconStyle={styles.iconStyle}
           containerStyle={styles.containerStyle}
           data={data}
@@ -319,111 +217,24 @@ const PaysLivraison = ({navigation, route}) => {
             setValue(item.value);
             setIsFocus(false);
           }}
-          
+           
+          searchField={true}
           renderItem={renderItem}
-        /> */}
-            <DropDownPicker
-              items={
-                data.map(item => (
-                  {
-                    label: '',
-                    value: item,
-                    icon: () => {
-                      return (
-                        <>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              gap: 30,
-                            }} key={item.id}>
-                            <View
-                              style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                              <View>
-                                <Flag code={item.drapeauDepart} size={32}/>
-                              </View>
-                              <Text
-                                style={{
-                                  fontSize: 14,
-                                  color: '#000',
-                                  fontFamily: 'Roboto-Medium',
-                                }}>
-                                {item.depart}
-                              </Text>
-                              <Feather name="arrow-up-right" size={22} color="#000" />
-                            </View>
-                            <View
-                              style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                              <View>
-                                <Flag code={item.drapeauDestination} size={32}/>
-                              </View>
-                              <Text
-                                style={{
-                                  fontSize: 14,
-                                  color: '#000',
-                                  fontFamily: 'Roboto-Medium',
-                                }}>
-                                {item.destination}
-                              </Text>
-                              <Feather name="arrow-down-right" size={22} color="#000" />
-                            </View>
-                          </View>
-                        </>
-                      );
-                    },
-                  }))
-              } 
-              open={isOpen}
-              setOpen={() => setIsOpen(!isOpen)}
-              value={current}
-              setValue={val => setCurrent(val)}
-              onChangeValue={item => setCurrent(item)}
-              dropDownContainerStyle={{
-                backgroundColor: '#fff',
-                borderColor: '#2BA6E9',
-                fontSize: 54,
-              }}
-              style={{
-                backgroundColor: '#fff',
-                borderColor: '#2BA6E9',
-                fontSize: 54,
-              }}
-              placeholder="Pays de Livraison"
-              placeholderStyle={{
-                color: '#86909C',
-                fontFamily: 'Roboto-Regular',
-                fontSize: 14,
-              }}
-              textStyle={{fontFamily: 'Roboto-Regular', fontSize: 14}}
-              searchable={true}
-              searchContainerStyle={{borderBottomWidth: 0}}
-              searchTextInputStyle={{borderColor: '#2BA6E9'}}
-              searchPlaceholder="Recherche Pays..."
-              onSelectItem={async (value, index) => {
-                navigateToReturnByServiceScreen();
-                navigation.navigate('ShoppingScreen');
-              }}
-            />
+          />
+
       </View>
 
-      {/* <TouchableOpacity
-        onPress={() => {
-          navigateToReturnByServiceScreen();
-        }}
-        style={{
-          backgroundColor: '#3885DA',
-          width: '80%',
-          height: 50,
-          borderRadius: 50,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 30,
-        }}>
+     <View style={{justifyContent: "center", alignItems: "center", marginTop: 30}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigateToReturnByServiceScreen();
+          }}
+          style={{ paddingVertical: 8,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}}>
 
-        <Text style={styles.butnText}>{'Valider'}</Text>
+          <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>{'Valider'}</Text>
 
-      </TouchableOpacity> */}
+        </TouchableOpacity>
+     </View>
 
       
     </View>

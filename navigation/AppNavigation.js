@@ -40,6 +40,7 @@ import AddCardChekoutScreen from '../screen/Shopping/AddCardScreen';
 import ProductList from '../screen/Shopping/ProductList';
 import SignUpScreen from '../screen/Login/SignUpScreen';
 import AddAdressScreen from '../screen/Profile/AddAdressScreen';
+import TermsConditions from '../screen/Terms&Condition';
 
 
 const Home = createNativeStackNavigator();
@@ -103,6 +104,7 @@ const AppNavigation = () => {
                 <Home.Screen name="ColiScreen" component={ColiSuivi} />
                 <Home.Screen name="VerifyCardChckoutScreen" component={VerifyCardChckoutScreen} />
                 <Home.Screen name="AddCardChckoutScreen" component={AddCardChekoutScreen} />
+                <Home.Screen name='AddAdresse' component={AddAdressScreen}/>
               </Home.Navigator>
             )
           }
@@ -192,6 +194,7 @@ const AppNavigation = () => {
                 <Profile.Screen name='CommandeScreen' component={CommandScreen}/>
                 <Profile.Screen name='AdresseScreen' component={AdresseScreen}/>
                 <Profile.Screen name='AddAdresseScreen' component={AddAdressScreen}/>
+                <Profile.Screen name='TermsAndConditionsScreen' component={TermsConditions}/>
               </Profile.Navigator>
             )
           }
