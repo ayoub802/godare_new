@@ -41,6 +41,10 @@ import ProductList from '../screen/Shopping/ProductList';
 import SignUpScreen from '../screen/Login/SignUpScreen';
 import AddAdressScreen from '../screen/Profile/AddAdressScreen';
 import TermsConditions from '../screen/Terms&Condition';
+import CommandeDetail from '../screen/CommandCours/CommandeDetail';
+import PaymentMethods from '../screen/Payment/PaymentMethod';
+import PaymentDetails from '../screen/Payment/PaymentDetail';
+import PaymentWaveDetails from '../screen/Payment/PaymentWaveDetails';
 
 
 const Home = createNativeStackNavigator();
@@ -105,6 +109,9 @@ const AppNavigation = () => {
                 <Home.Screen name="VerifyCardChckoutScreen" component={VerifyCardChckoutScreen} />
                 <Home.Screen name="AddCardChckoutScreen" component={AddCardChekoutScreen} />
                 <Home.Screen name='AddAdresse' component={AddAdressScreen}/>
+                <Home.Screen name='PaymentMethod' component={PaymentMethods}/>
+                <Home.Screen name='PaymentDetail' component={PaymentDetails}/>
+                <Home.Screen name='PaymentWaveDetails' component={PaymentWaveDetails}/>
               </Home.Navigator>
             )
           }
@@ -192,6 +199,7 @@ const AppNavigation = () => {
                 <Profile.Screen name='MessageScreen' component={MessageScreen}/>
                 <Profile.Screen name='LanguageScreen' component={LanguageScreen}/>
                 <Profile.Screen name='CommandeScreen' component={CommandScreen}/>
+                <Profile.Screen name='DetailCommandeScreen' component={CommandeDetail}/>
                 <Profile.Screen name='AdresseScreen' component={AdresseScreen}/>
                 <Profile.Screen name='AddAdresseScreen' component={AddAdressScreen}/>
                 <Profile.Screen name='TermsAndConditionsScreen' component={TermsConditions}/>

@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import France from "../../assets/images/france.png"
@@ -9,144 +9,234 @@ import SmallEarth from "../../assets/images/small_earth.png"
 import { commandeCours, commandePrecendent } from '../../constant/data'
 import Button from '../../components/Button'
 import SteperCounter from '../SteperCounter'
+import { HeaderEarth } from '../../components/Header'
+import { getAuthUserEmail } from '../../modules/GestionStorage'
+import { useTranslation } from 'react-i18next'
 
-const CommandCours = () => {
+const CommandCours = ({ navigation, route }) => {
+
+  const { commandeId } = route.params;
+  const [Commande, setCommande] = useState(null);
+  const [Loader, setLoader] = useState(true);
+
+  const {t} = useTranslation();
+  useEffect(() => {
+    fetchCommande();
+  }, []);
+
+  const fetchCommande = async () => 
+  {
+      setLoader(true);
+
+      try 
+      {
+        const email = await getAuthUserEmail();
+
+        const response = await axiosInstance.get('/commandes/' + commandeId + '/' + email);
+
+        setCommande(response.data);
+
+        console.log('commande', response.data)
+      }
+      catch (erreur)
+      {
+        console.log('commande error', erreur);
+      }
+
+      setLoader(false);
+  };
+
+  const imprimerFacture = () => 
+  {
+      // call backoffice to generate pdf et show it
+  };
+
+
+  if (true === Loader)
+  {
+      return (
+      <View style={{justifyContent: 'center', height: '80%'}}><ActivityIndicator size={'large'} color="#3292E0" /></View>
+      );
+  }
   return (
-    <SafeAreaView style={{flex: 1}}>
-       <ScrollView showsVerticalScrollIndicator={false} nestedScrollEnabled={true} style={{paddingBottom: 150}}>
-          <View style={{flex: 1}}>
 
-                <View style={{ position: "relative" ,alignItems: "center", backgroundColor: "#2BA6E9", justifyContent: "center", height: hp(12)}}>
-                    <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold"}}>Fret par avoin</Text>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 10}}>
-                        <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
-                            <Image source={France}/>
-                            <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>France</Text>
-                            <Feather name="arrow-up-right" color="#fff" size={22}/>
-                        </View>
-                        <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
-                            <Image source={CoteIvoire}/>
-                            <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>Côte d'ivoire</Text>
-                            <Feather name="arrow-down-right" color="#fff" size={22}/>
-                        </View>
-                    </View>
 
-                    <View style={{ position: "absolute", top: 15, right: 10}}>
-                        <Image source={SmallEarth}/>
-                        <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold", textAlign: "center", marginTop: 4}}>GS</Text>
-                    </View>
-                </View>
-                            
-                <View style={{marginTop: 24, marginBottom: 12}}>
-                    <Text
-                        style={{
-                        fontFamily: 'Poppins-SemiBold',
-                        fontSize: 16,
-                        color: '#000',
-                        textAlign: 'center',
-                        }}>
-                        Vos commandes en cours
+    <View style={styles.container}>
+       <HeaderEarth />
+    <ScrollView>
+
+    <Button title="Retour" onPress={() => navigation.goBack()} />
+
+      <View> 
+        <Text style={styles.NameTxt}>
+          {t('Service')} : { Commande.service ? Commande.service : 'Fret par avion' }
+        </Text>
+
+        <Text style={styles.textPrice}>
+        {t('Prix total')} : €{Commande.totalPrice}
+        </Text>
+
+        <Text style={styles.textPrice}>
+          {t('Numéro de la commande')} : { Commande.uuid ? Commande.uuid : 222222 }
+        </Text>
+
+        <Text style={styles.NameTxt}>
+        {t('Date de la commande')} : { Commande.createdAt }
+        </Text>
+
+        <Text style={styles.NameTxt}>
+          {t('Statut')} : {Commande.statut}
+        </Text>
+
+        <Text style={styles.NameTxt}>
+          {t('Mode paiement')} : {Commande.modePaiement}
+        </Text>
+
+        {Commande.avoir && Commande.avoir > 0 && (
+            <Text style={styles.NameTxt}>
+            {t('Avoir')} : {Commande.avoir}
+            </Text>
+          )
+        }
+
+        {Commande.remise && Commande.remise > 0 && (
+            <Text style={styles.NameTxt}>
+            {t('Remise')} : {Commande.remise}
+            </Text>
+          )
+        }
+
+        <View>
+          <Text style={styles.titleText}>
+            { t('Produit(s)') }
+          </Text>
+        </View>
+
+        <View>
+          {
+            Commande.commandeProducts.map(commandeProduct => (
+              <View style={{ marginBottom:20 }}>
+                <Text style={styles.NameTxt}>
+                  {t('Nom')} : {commandeProduct.product.name} - { t('Quantité') } : { commandeProduct.quantite }
+                </Text>
+
+                {Object.values(commandeProduct.attributs).length > 0 && (
+                  <Text style={styles.NameTxt}>
+                    {t('Attributs')} : { Object.values(commandeProduct.attributs).join(', ') }
+                  </Text>
+                )
+                }
+
+                {commandeProduct.prixAchat && (
+                  <Text style={styles.NameTxt}>
+                  {t("Prix d'achat")} : { commandeProduct.prixAchat}
+                  </Text>
+                )
+                }
+
+                {commandeProduct.url && (
+                  <Text style={styles.NameTxt}>
+                  {t('URL')} : { commandeProduct.url}
+                  </Text>
+                )
+                }
+
+                {commandeProduct.informationComplementaire && (
+                  <Text style={styles.NameTxt}>
+                  {t('Information(s) complémentaire(s)')} : { commandeProduct.informationComplementaire}
+                  </Text>
+                )
+                }
+
+                {commandeProduct.photo && (
+                  <Image
+                  source={{uri: commandeProduct.photo}}
+                  resizeMode="contain"
+                  style={{ width: 70, height: 50, }}
+                />
+                )
+                }
+              </View>
+            ))
+          }
+        </View>
+
+        {(Commande.service == 'Fret par avion' || Commande.service == 'Fret par bateau') && Commande.depot ?
+            (
+                <>
+                  <View>
+                    <Text style={styles.titleText}>
+                     {'enlevement' == Commande.depot.mode ? t('Enlèvement à domicile') : t('Dépôt au magasin')}
                     </Text>
-                </View>
-
-                <View style={{paddingHorizontal: 8}}>
-                  <View style={{flexDirection: "column", gap: 20}}>
-                     {
-                        commandeCours.map((item, index) => (
-                            <View style={{ backgroundColor: "#fff", borderRadius: 10, paddingTop: 14, paddingBottom: 25, paddingRight: 8, paddingLeft: 14}} key={index}>
-                               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                                   <View style={{ flexDirection: "row", alignItems: "center", gap: 12}}>
-                                       <View style={{ padding: 15, backgroundColor: "#FFF3F3", borderRadius: 10}}>
-                                         {item.img}
-                                        </View>
-                                        <View>
-                                          <Text style={{fontSize: 13, color: "#000", fontFamily: "Poppins-SemiBold", letterSpacing: 1}}>{item.title}</Text>
-                                          <Text style={{fontSize: 14, color: "#292625", fontFamily: "Poppins-Medium", letterSpacing: 1}}>{item.date}</Text>
-                                        </View>
-                                   </View>
-
-                                   <View style={{ paddingRight: 22}}> 
-                                      <Text style={{fontSize: 14, fontFamily: "Poppins-SemiBold", color: "#498BF0"}}>{item.parice}€</Text>
-                                    </View>
-                                </View>
-                                <View style={{marginTop: 17}}>
-                                    {item.step}
-                                </View>
-                                <View style={{marginTop: 27}}>
-                                    <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                                      <TouchableOpacity>
-                                        <Text style={{ fontSize: 14, color: "#292625", fontFamily: "Poppins-Medium"}}>{item.status}</Text>
-                                      </TouchableOpacity>
-                                      <TouchableOpacity>
-                                        <Button title="commander à nouveau"/>
-                                      </TouchableOpacity>
-                                      <TouchableOpacity>
-                                        <Text style={{ fontSize: 14, color: "#292625", fontFamily: "Poppins-Regular", textDecorationLine: "underline"}}>Suivis colis</Text>
-                                      </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        ))
-                     }
                   </View>
-                </View>
 
-                <View style={{marginTop: 24, marginBottom: 12}}>
-                    <Text
-                        style={{
-                        fontFamily: 'Poppins-SemiBold',
-                        fontSize: 16,
-                        color: '#000',
-                        textAlign: 'center',
-                        }}>
-                        Vos commandes précédentes
+                  <View>
+
+                    {Commande.depot.nom && (
+                        <Text style={styles.NameTxt}>
+                        { Commande.depot.nom }
+                        </Text>
+                      )
+                    }
+
+                    <Text style={styles.NameTxt}>
+                      {t('Adresse')} : {Commande.depot.adresse}
                     </Text>
-                </View>
 
-                <View style={{paddingHorizontal: 8, paddingBottom: 70}}>
-                <View style={{flexDirection: "column", gap: 20}}>
-                     {
-                        commandePrecendent.map((item, index) => (
-                            <View style={{ backgroundColor: "#fff", borderRadius: 10, paddingTop: 14, paddingBottom: 25, paddingRight: 8, paddingLeft: 14}} key={index}>
-                               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                                   <View style={{ flexDirection: "row", alignItems: "center", gap: 12}}>
-                                       <View style={{ padding: 15, backgroundColor: "#FFF3F3", borderRadius: 10}}>
-                                         {item.img}
-                                        </View>
-                                        <View>
-                                          <Text style={{fontSize: 13, color: "#000", fontFamily: "Poppins-SemiBold", letterSpacing: 1}}>{item.title}</Text>
-                                          <Text style={{fontSize: 14, color: "#292625", fontFamily: "Poppins-Medium", letterSpacing: 1}}>{item.date}</Text>
-                                        </View>
-                                   </View>
+                    {Commande.depot.telephone && (
+                        <Text style={styles.NameTxt}>
+                        { Commande.depot.telephone }
+                        </Text>
+                      )
+                    }
 
-                                   <View style={{ paddingRight: 22}}> 
-                                      <Text style={{fontSize: 14, fontFamily: "Poppins-SemiBold", color: "#498BF0"}}>{item.parice}€</Text>
-                                    </View>
-                                </View>
-                                <View style={{marginTop: 17}}>
-                                    {item.step}
-                                </View>
-                                <View style={{marginTop: 27}}>
-                                    <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                                      <TouchableOpacity>
-                                        <Text style={{ fontSize: 14, color: "#292625", fontFamily: "Poppins-Medium"}}>{item.status}</Text>
-                                      </TouchableOpacity>
-                                      <TouchableOpacity>
-                                        <Button title="commander à nouveau"/>
-                                      </TouchableOpacity>
-                                      <TouchableOpacity>
-                                        <Text style={{ fontSize: 14, color: "#292625", fontFamily: "Poppins-Regular", textDecorationLine: "underline"}}>Suivis colis</Text>
-                                      </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        ))
-                     }
+                    {Commande.depot.creneauEnlevementPlage && (
+                        <Text style={styles.NameTxt}>
+                        { t("Date d'enlèvement") } : { Commande.depot.creneauEnlevementPlage.date + t(' entre ') + Commande.depot.creneauEnlevementPlage.horaireDebut + t(' et ') + Commande.depot.creneauEnlevementPlage.horaireFin }
+                        </Text>
+                      )
+                    }
+
+                    
                   </View>
-                </View>
+                </>
+            )
+            : 
+            <></>
+          }
+
+          <View>
+            <Text style={styles.titleText}>
+                { 'relais' == Commande.livraison.mode ? t('Retrait en point relais') : t('Livraison à domicile')}
+            </Text>
           </View>
-        </ScrollView>
-    </SafeAreaView>
+
+          <View>
+            <Text style={styles.NameTxt}>
+              {Commande.livraison.nom}
+            </Text>
+
+            <Text style={styles.NameTxt}>
+              {Commande.livraison.adresse}
+            </Text>
+
+            <Text style={styles.NameTxt}>
+              {Commande.livraison.telephone}
+            </Text>
+          </View>
+
+          
+
+          <View>
+            <Button title="Imprimer la facture" onPress={() => imprimerFacture()} />
+          </View>
+
+      </View>
+
+    </ScrollView>
+
+  </View>
+
   )
 }
 

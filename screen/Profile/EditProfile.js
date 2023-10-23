@@ -6,22 +6,25 @@ import PhoneInput from 'react-native-phone-number-input'
 import Button from '../../components/Button'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import { auth } from '../../modules/FirebaseConfig'
-import { onAuthStateChanged } from 'firebase/auth'
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import { getAuthentificationData } from '../../modules/GestionStorage'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axiosInstance from '../../axiosInstance'
+
 
 const EditProfile = ({ navigation }) => {
-  const [name, setName] = useState('');
-  const [Email, setEmail] = useState('');
-  const [birthday, setBirthday] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState(undefined);
+  const [prename, setPrename] = useState(undefined);
+  const [Email, setEmail] = useState(undefined);
+  const [birthday, setBirthday] = useState(undefined);
+  const [phoneNumber, setPhoneNumber] = useState(undefined);
   const [Activity, setActivity] = useState(true);
-
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
   const [text, setText] = useState('');
-
-
+  const [initializing, setInitializing] = useState(true);
 
   const phoneInput = useRef(null);
 
@@ -50,21 +53,32 @@ const EditProfile = ({ navigation }) => {
 
   useEffect(() => {
 
+    getDate();
+    fetchValue();
+  }, []);
+  
+  async function fetchValue() {
     setActivity(true);
 
-    const user = onAuthStateChanged(auth, cu);
+  const authStatus = await getAuthentificationData();  
+  if (authStatus)
+  {
+    setEmail(authStatus);
+  }
 
-    if (user)
-    {
-      setEmail(user.email);
-    }
+  setActivity(false);
+}
 
-    console.log('user', user)
-
-    setActivity(false);
-
-
-  }, []);
+async function getDate(){
+  const response = await axiosInstance.get('https://godaregroup.com/api/clients/46/' + Email);
+  let data = response.data;
+  if(response.data){
+    setName(data.nom);
+    setPrename(data.prenom);
+    setPhoneNumber(data.telephone);
+  }
+}
+  
     return (
         <SafeAreaView style={{ flex: 1}}>
           <ScrollView style={{paddingBottom: 50}} showsVerticalScrollIndicator={false}>
@@ -107,6 +121,7 @@ const EditProfile = ({ navigation }) => {
               </View>
               <View style={{marginTop: 12}}>
                   <TextInput 
+                    value={prename}
                     placeholder="Kouadja"
                     placeholderTextColor="#000"
                     style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
@@ -114,6 +129,7 @@ const EditProfile = ({ navigation }) => {
               </View>
               <View style={{}}>
                   <PhoneInput 
+                    value={phoneNumber}
                     placeholder="06 45 12 17 08"
                     placeholderTextColor="#000"
                     defaultCode='FR'
@@ -128,6 +144,7 @@ const EditProfile = ({ navigation }) => {
                   <TextInput 
                     placeholder="e2kouadja@gmail.com"
                     placeholderTextColor="#000"
+                    value={Email}
                     style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
                   />
               </View>

@@ -57,7 +57,7 @@ const AddAdressScreen = (props) => {
         return;
       }
     
-      props.navigation.navigate(Navigationstrings.DeliveryMethodsU, {newAddressAdded: true});
+      props.navigation.navigate('Livraison1', {newAddressAdded: true});
     }
   
   
@@ -368,8 +368,8 @@ const AddAdressScreen = (props) => {
 
         <View style={{marginTop: 50, flex: 1, justifyContent: "center", alignItems: "center",}}>
             {/* <Button title={t("Ajouter l'adresse")} onPress={AddNewAddress}/> */}
-            <TouchableOpacity onPress={AddNewAddress}>
-              <Text>Ajouter Address</Text>
+            <TouchableOpacity style={{ paddingVertical: 8 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}} onPress={AddNewAddress}>
+              <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>Ajouter Address</Text>
             </TouchableOpacity>
         </View>
       </ScrollView>

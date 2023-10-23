@@ -79,7 +79,6 @@ const ByPlaneDetailsComponent = (props) => {
     }
   };
 
-  
   // Build quantity label
 
   const arrayOFF = Array.from(Array(quantiteMax).keys());
@@ -89,7 +88,14 @@ const ByPlaneDetailsComponent = (props) => {
     
     if (Product.unite && Product.unite.valeur.toLowerCase() != 'unité')
     {
+      if (label > 1)
+      {
+        label = label + ' ' + Product.unite.valeur + '(s)';
+      }
+      else 
+      {
         label = label + ' '  + Product.unite.valeur;
+      }
     }
     
     return {label: label, value: (arrayOFF + 1)};
@@ -367,27 +373,40 @@ const ByPlaneDetailsComponent = (props) => {
                   />
                 </View>
                 <View style={styles.safeContainerStyle}>
-                <Dropdown
-                    style={[styles.dropdown]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    autoScroll
-                    iconStyle={styles.iconStyle}
-                    containerStyle={styles.containerStyle}
-                    data={sweeterArray}
-                    maxHeight={200}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={t('Quantité')}
-                    searchPlaceholder="Search..."
-                    value={QuantitySelected}
-                    showsVerticalScrollIndicator={false}
-                    onChange={item => {
-                      setQuantitySelected(item.value);
-                    }}
-                  />
+                    <Dropdown
+                  style={[styles.dropdown]}
+                  placeholderStyle={styles.placeholderStyle}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  autoScroll
+                  iconStyle={styles.iconStyle}
+                  containerStyle={styles.containerStyle}
+                  data={sweeterArray}
+                  maxHeight={200}
+                  labelField="label"
+                  valueField="value"
+                  placeholder={t('Quantité')}
+                  searchPlaceholder="Search..."
+                  value={QuantitySelected}
+                  showsVerticalScrollIndicator={false}
+                  onChange={item => {
+                    setQuantitySelected(item.value);
+                  }}
+                />
                   </View>
 
+            <View style={styles.inputContainer}>
+              <TextInput
+                placeholder={t('Valeur (€)')}
+                keyboardType="ascii-capable"
+                placeholderTextColor={'#14213D'}
+                style={styles.inputStyle}
+                value={productValue}
+                onChangeText={text => {
+                  setProductValue(text);
+                }}
+
+              />
+            </View>
                 <View style={{marginTop: 8, width: "100%"}}>
                 <TouchableOpacity
                   style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}

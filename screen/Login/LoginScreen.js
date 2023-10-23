@@ -16,10 +16,10 @@ import {useTranslation} from 'react-i18next';
 import styles from './style';
 import Lock from 'react-native-vector-icons/Fontisto';
 import Eye from 'react-native-vector-icons/Entypo';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../modules/FirebaseConfig';
 import Logo from "../../assets/images/LOGO_GS.png"
 import user from "../../assets/images/profil.png"
+import auth from '@react-native-firebase/auth';
+
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const LoginScreen = (props) => {
@@ -54,8 +54,10 @@ const LoginScreen = (props) => {
       props.navigation.navigate('CartScreen', {screen: 'WeightCal'});
       return;
     }
-    
-    // props.navigation.push('HomeScreen');
+    else{
+      props.navigation.navigate('HomeScreen');
+      return;
+    }
   };
 
 
@@ -63,7 +65,7 @@ const LoginScreen = (props) => {
   const handleSignin = async () => {
   
     try {
-        await signInWithEmailAndPassword(auth ,Email, Password)
+        auth().signInWithEmailAndPassword(Email, Password)
         .then(() => {
           
           // Sauvegarder l'email

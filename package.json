@@ -22,6 +22,7 @@
     "@react-navigation/bottom-tabs": "^6.5.9",
     "@react-navigation/native": "^6.1.8",
     "@react-navigation/native-stack": "^6.9.14",
+    "@stripe/stripe-react-native": "^0.33.0",
     "axios": "^1.5.1",
     "expo-checkbox": "^2.5.0",
     "firebase": "^10.5.0",

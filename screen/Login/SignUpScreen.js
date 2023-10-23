@@ -14,18 +14,16 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import PhoneInput from 'react-native-phone-number-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import firestore from '@react-native-firebase/firestore';
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTranslation} from 'react-i18next';
 import {useForm, Controller} from 'react-hook-form';
 import axiosInstance from '../../axiosInstance';
 import styles from "./SignUpStyle"
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../modules/FirebaseConfig';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HeaderEarth } from '../../components/Header';
 import Button from '../../components/Button';
+import auth from '@react-native-firebase/auth';
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -116,7 +114,7 @@ const SignUpScreen = (props) => {
     
 
     try {
-      await createUserWithEmailAndPassword(auth, Email, Password).then(() => {
+      auth().createUserWithEmailAndPassword(Email, Password).then(() => {
           try {
             AsyncStorage.setItem('authStatusChecker', 'login');
             console.log('Auth Add Successfully to Storage');

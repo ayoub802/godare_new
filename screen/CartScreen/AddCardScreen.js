@@ -9,12 +9,34 @@ import SmallEarth from "../../assets/images/small_earth.png"
 import { cardData, card_category } from '../../constant/data'
 import MasterCard from "../../assets/images/masterCard.png"
 import Button from '../../components/Button'
+import { doc, setDoc } from 'firebase/firestore'
+import { db_firesotre } from '../../modules/FirebaseConfig'
+import { firebase } from '@react-native-firebase/firestore'
 
 const AddCardScreen = ({ navigation }) => {
 
     const [isSelected, setIsSelected] = useState(false);
-    const [activeCard, setActiveCard] = useState(0)
+    const [activeCard, setActiveCard] = useState(0);
+    const [numCard, setNumCard] = useState(0);
+    const [year, setYear] = useState(0);
+    const [cvv, setCvv] = useState(0);
+    const [name, setName] = useState('');
 
+
+    const SubmitEvent = async () => {
+      try{
+        firebase.firestore().collection('card').add({
+            name: name,
+            numCard: numCard,
+            year: year,
+            cvv: cvv,
+          });
+          console.log("Success");
+      }
+      catch(error){
+        console.log("Error");
+      }
+    };
   return (
     <SafeAreaView style={{flex: 1}}>
         <ScrollView      showsVerticalScrollIndicator={false}
@@ -78,7 +100,7 @@ const AddCardScreen = ({ navigation }) => {
                                 </View>
             
                                 <View style={{ position: "absolute", bottom: 18, left: 30}}>
-                                    <Text style={{color: "#fff", fontSize: 14, fontFamily: 'Poppins-Medium'}}>{item.card}</Text>
+                                    <Text style={{color: "#fff", fontSize: 14, fontFamily: 'Poppins-Medium'}}>{numCard}</Text>
                                 </View>
                                 <View style={{ position: "absolute", top: 68, right: 40}}>
                                 <Image source={MasterCard}/>
@@ -92,6 +114,8 @@ const AddCardScreen = ({ navigation }) => {
                     <View style={{}}>
                         <Text style={{ fontSize: 14, fontFamily: "Poppins-Medium", color: "#000", marginBottom: 10}}>Nom du titulaire</Text>
                         <TextInput 
+                        value={name}
+                        onChangeText={(name) => setName(name)}
                         placeholder="Samuel Witwicky"
                         placeholderTextColor="#626262"
                         style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 20 ,borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
@@ -100,6 +124,8 @@ const AddCardScreen = ({ navigation }) => {
                     <View style={{marginTop: 20}}>
                         <Text style={{ fontSize: 14, fontFamily: "Poppins-Medium", color: "#000", marginBottom: 10}}>Numéro de carte</Text>
                         <TextInput 
+                        value={numCard}
+                        onChangeText={(numCard) => setNumCard(numCard)}
                         placeholder="6775 2235 5567 1234"
                         placeholderTextColor="#626262"
                         style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 20 ,borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
@@ -110,6 +136,8 @@ const AddCardScreen = ({ navigation }) => {
                             <View>
                                 <Text style={{ fontSize: 14, fontFamily: "Poppins-Medium", color: "#000", marginBottom: 10}}>Mois /année</Text>
                                 <TextInput 
+                                value={year}
+                                onChangeText={(year) => setYear(year)}
                                 placeholder="Enter here"
                                 placeholderTextColor="#626262"
                                 style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 20,width: wp(42), borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
@@ -118,6 +146,8 @@ const AddCardScreen = ({ navigation }) => {
                             <View>
                                 <Text style={{ fontSize: 14, fontFamily: "Poppins-Medium", color: "#000", marginBottom: 10}}>CVV</Text>
                                 <TextInput 
+                                value={cvv}
+                                onChangeText={(cvv) => setCvv(cvv)}
                                 placeholder="Enter here"
                                 placeholderTextColor="#626262"
                                 style={{borderWidth: 1, borderColor: "#AAB0B7",width: wp(42) ,paddingLeft: 20 ,borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
@@ -146,7 +176,7 @@ const AddCardScreen = ({ navigation }) => {
                    </View>
 
                    <View style={{marginTop: 20, flex: 1, justifyContent: "flex-end", alignItems: 'center', paddingBottom: 72}}>
-                     <Button title="Payez maintenant" navigation={() => navigation.navigate('VerifyCardScreen')}/>
+                     <Button title="Payez maintenant" navigation={SubmitEvent}/>
                    </View>
                 </View>
                 

@@ -10,7 +10,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Button, { ButtonIcon } from '../../components/Button';
 import Stepper from '../Stepper';
 import { HeaderActions } from '../../components/Header';
-import { getAuthUserEmail, getDepotModeChoice, getDepotValues, getNewAddedAddress, getPanier, getSelectedCountry, getSelectedService, getServices, saveDepotMagasinId, saveDepotMagasinValues, saveDepotModeChoice, saveDepotValidation, saveSelectedService } from '../../modules/GestionStorage';
+import { getAuthUserEmail, getDepotModeChoice, getDepotValues, getNewAddedAddress, getPanier, getSelectedCountry, getSelectedService, getServices, saveDepotAdresseId, saveDepotMagasinId, saveDepotMagasinValues, saveDepotModeChoice, saveDepotValidation, saveSelectedService } from '../../modules/GestionStorage';
 import axiosInstance from '../../axiosInstance';
 import { useTranslation } from 'react-i18next';
 import { useIsFocused } from '@react-navigation/native';
@@ -645,7 +645,7 @@ const DepotScreen1 = (props) => {
           }
 
 
-          {/* <Modal
+           <Modal
             animationType="slide"
             transparent={true}
             visible={modalVisible}
@@ -660,21 +660,19 @@ const DepotScreen1 = (props) => {
                   {actionTriggered.adresse + ', ' + (actionTriggered.codePostal ? (actionTriggered.codePostal + ' ') : '' ) + actionTriggered.ville + ' ' + actionTriggered.pays  }
                 </Text>
                 
-                <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 25}}>
-                  <Pressable
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    <Button title="Fermer"/>
-                  </Pressable>
-
-                  <Pressable
-                    onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
-                    <ButtonIcon title="Selectionner le magasin"/>
-                  </Pressable>
-                </View>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => ResetChoixMagasin()}>
+                  <Text style={styles.textStyle}>Fermer</Text>
+                </Pressable>
+                <Pressable
+                  style={[styles.button, styles.buttonOpen]}
+                  onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
+                  <Text style={styles.textStyle}>Selectionner le magasin</Text>
+                </Pressable>
               </View>
             </View>
-          </Modal> */}
-
+          </Modal>
           
 
           

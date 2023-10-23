@@ -277,11 +277,11 @@ const CheckoutScreen = (props) => {
       return;
     }
 
-    props.navigation.navigate(Navigationstrings.PaymentMethods);
+    props.navigation.navigate("AddCardScreen");
   };
 
   const NavigateToUserAddress = () => {
-    props.navigation.navigate(Navigationstrings.AddAddress, {pageFrom: 'summary', email: UserEmail});
+  props.navigation.navigate("AddCardScreen", {pageFrom: 'summary', email: UserEmail});
   }
 
 
@@ -374,7 +374,7 @@ const CheckoutScreen = (props) => {
           {
             text: 'OK',
             onPress: () => {
-              props.navigation.navigate(Navigationstrings.WeightCal);
+              props.navigation.navigate("CartScreen");
             },
           },
         ],
