@@ -65,8 +65,6 @@ const CommandCours = ({ navigation, route }) => {
        <HeaderEarth />
     <ScrollView>
 
-    <Button title="Retour" onPress={() => navigation.goBack()} />
-
       <View> 
         <Text style={styles.NameTxt}>
           {t('Service')} : { Commande.service ? Commande.service : 'Fret par avion' }

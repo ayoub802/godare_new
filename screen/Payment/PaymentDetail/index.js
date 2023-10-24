@@ -21,7 +21,7 @@ import { buildCommande } from '../../../modules/GestionFinalisationPanier';
 import { getAuthUserEmail, getCartPrices } from '../../../modules/GestionStorage';
 import { getImageType } from '../../../modules/TraitementImage';
 import { removePanier } from '../../../modules/GestionStorage';
-import {  useConfirmPayment, CardField } from '@stripe/stripe-react-native';
+import {  useConfirmPayment, CardField, CardForm, CardFieldInput } from '@stripe/stripe-react-native';
 import { doPaymentWithSavedCard, fetchPaymentIntentClientSecret, getClientCards } from '../../../modules/GestionStripe';
 import Toast from 'react-native-toast-message';
 import MasterCard from '../../../assets/images/masterCard.png';
@@ -76,9 +76,11 @@ const PaymentDetails = props => {
           const userCards = await getClientCards(email);
   
           setCards(userCards.data);
+          console.log(userCards.data);
         }
         catch (error)
         {
+          console.log("Error:", error);
         }
 
 
@@ -404,15 +406,45 @@ const PaymentDetails = props => {
                   cardStyle={{
                     backgroundColor: '#FFFFFF',
                     textColor: '#000000',
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    borderColor: "#000000",
+                    borderWidth: 1
                   }}
                   style={{
                     width: '100%',
-                    height: 50,
+                    height: 100,
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
                     marginVertical: 30,
                   }}
                   onCardChange={(cardDetails) => setCardDetails(cardDetails)}
+                  
                 />
 
+                <CardField />
+              {/* <CardForm
+                          placeholder={{
+                            number: "4242 4242 4242 4242",
+                          }}
+                          onFormComplete={(cardDetails) => {
+                            console.log("card details", cardDetails)
+                            setCardDetails(cardDetails)
+                          }}
+                          style={{
+                            height: 200,
+                            justifyContent: "center",
+                            alignItems: "center",
+                            textAlign: "center",
+                          }}
+                          cardStyle={{
+                            backgroundColor: "#efefefef",
+                            textAlign: "center",
+                            textColor: "pink",
+                          }}
+              /> */}
 
               <View>
               <Text>{t('Enregistrer la carte')}</Text>
@@ -420,7 +452,6 @@ const PaymentDetails = props => {
                   value={enregistrerCarte}
                   onValueChange={value => setEnregistrerCarte(value)}
                 />
-                
               </View>
             </View>
           </>

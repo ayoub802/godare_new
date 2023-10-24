@@ -24,6 +24,7 @@ import { auth } from '../../modules/FirebaseConfig';
 import { HeaderEarth } from '../../components/Header';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { Header } from 'react-native/Libraries/NewAppScreen';
+import axiosInstance from '../../axiosInstance';
 const ProfileScreen = ({navigation}) => {
   const [LocalStorage, setLocalStorage] = useState(null);
 
@@ -32,6 +33,10 @@ const ProfileScreen = ({navigation}) => {
     async function fetchValue() {
 
       const authStatus = await getAuthentificationData();
+
+      const response = await axiosInstance.get('/clients');
+
+      console.log("clients : ", response.data);
       setLocalStorage(authStatus)
 
         console.log('Your authStatus in local storage is : ', authStatus);
@@ -119,7 +124,7 @@ const ProfileScreen = ({navigation}) => {
                 </Text>
               </TouchableOpacity>
               <View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsScreen")}>
                   <Text
                     style={{
                       color: '#0282C8',
@@ -132,7 +137,7 @@ const ProfileScreen = ({navigation}) => {
                     Conditions générales
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("LegalNotice")}>
                   <Text
                     style={{
                       color: '#0282C8',
@@ -216,7 +221,7 @@ const ProfileScreen = ({navigation}) => {
                 </Text>
               </TouchableOpacity>
               <View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("TermsAndConditionsScreen")}>
                   <Text
                     style={{
                       color: '#0282C8',
@@ -229,7 +234,7 @@ const ProfileScreen = ({navigation}) => {
                     Conditions générales
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("LegalNotice")}>
                   <Text
                     style={{
                       color: '#0282C8',

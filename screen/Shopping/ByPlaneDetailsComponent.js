@@ -50,7 +50,9 @@ const ByPlaneDetailsComponent = (props) => {
   const douane = productSpecificites ? productSpecificites.douane : null;
 
   const quantiteMax = productSpecificites ? productSpecificites.quantiteMax : 400;
+  console.log(Product.name);
 
+  console.log(quantiteMax);
   // Pour la gestion de la langue
   const {t} = useTranslation();
 
@@ -389,7 +391,8 @@ const ByPlaneDetailsComponent = (props) => {
                   value={QuantitySelected}
                   showsVerticalScrollIndicator={false}
                   onChange={item => {
-                    setQuantitySelected(item.value);
+                    // setQuantitySelected(item.value);
+                    console.log(item.value);
                   }}
                 />
                   </View>
@@ -410,7 +413,7 @@ const ByPlaneDetailsComponent = (props) => {
                 <View style={{marginTop: 8, width: "100%"}}>
                 <TouchableOpacity
                   style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
-                  onPress={toggleModal}>
+                  onPress={() => openCameraForPicture()}>
                   <View><FontAwesome5 name="file-upload" size={15} color='#4E8FDA'/></View>
                   <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
                   {
@@ -606,18 +609,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   inputContainer: {
-    backgroundColor: '#d5d6d7',
+    backgroundColor: "#F5F5F5",
     width: windowWidth * 0.4,
-    height: 50,
+    height: 40,
     borderRadius: 10,
-    elevation: 1,
+    marginTop: 8,
   },
   inputStyle: {
     padding: 10,
     color: '#000',
     fontFamily: 'Roboto-Regular',
     marginLeft: 10,
-    fontSize: 16,
+    fontSize: 14,
   },
   buttonContainers: {
     backgroundColor: '#3292E0',

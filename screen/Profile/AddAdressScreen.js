@@ -39,7 +39,10 @@ const AddAdressScreen = (props) => {
 
     async function setStorageAndBackToPreviousPage(adresse)
     {
-      await AsyncStorage.setItem('newAddedAdresse', JSON.stringify(adresse));
+
+        await AsyncStorage.setItem('newAddedAdresse', JSON.stringify(adresse));
+        console.log("AsyncAdded");
+
   
       if ('depot' == pageFrom)
       {
@@ -105,62 +108,52 @@ const AddAdressScreen = (props) => {
       console.log('pays', Pays)
       console.log('AdressePays', AdressePays)
      
-      // axiosInstance.post('/adresses/new', {
-      //   libelle: AdresseLibelle,
-      //   nom: AdresseNom,
-      //   telephone: AdresseTelephone,
-      //   pays: AdressePays,
-      //   ville: Ville,
-      //   codePostal: CodePostal, 
-      //   adresse: Adresse, 
-      //   client: email
-      // })
-      // .then(function (response) {
-      //   console.log('adresse add ', response.data)
-  
-      //   Toast.show({
-      //     type: 'success',
-      //     text1: t('Succès'),
-      //     text2: t("Adresse ajoutée"),
-      //   });
-      //   console.log("Adresse ajoutée");
-
-      //   setStorageAndBackToPreviousPage(response.data);
-      // })
-      // .catch(function (error) {
-      //     Toast.show({
-      //       type: 'error',
-      //       text1: 'Erreur',
-      //       text2: t("Erreur lors de l'enregistrement"),
-      //     });
-      //     console.log("Erreur lors de l'enregistrement", error);
-
-      // });
-      await fetch("https://godaregroup.com/api/adresses/new", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          libelle: AdresseLibelle,
-          nom: AdresseNom,
-          telephone: AdresseTelephone,
-          pays: AdressePays,
-          ville: Ville,
-          codePostal: CodePostal, 
-          adresse: Adresse, 
-          client: email
-        }),
+      axiosInstance.post('/adresses/new', {
+        libelle: AdresseLibelle,
+        nom: AdresseNom,
+        telephone: AdresseTelephone,
+        pays: ('carnetAdresse' == pageFrom || 'summary' == pageFrom) ? AdressePays : Pays,
+        ville: Ville,
+        codePostal: CodePostal, 
+        adresse: Adresse, 
+        client: email
       })
-        .then((response) => response.json())
-        .then((responseData) => {
-          console.log(JSON.stringify(responseData));
-          console.log("Data Added");
-          setStorageAndBackToPreviousPage(responseData);
-        })
-        .catch((err) => console.log('Error:', err))
-        .finally();
+      .then(function (response) {
+        console.log('adresse add ', response.data)
+  
+        console.log("Adresse ajoutée");
+
+        setStorageAndBackToPreviousPage(response.data);
+      })
+      .catch(function (error) {
+          console.log("Erreur lors de l'enregistrement", error);
+
+      });
+      // await fetch("https://godaregroup.com/api/adresses/new", {
+      //   method: "POST",
+      //   headers: {
+      //     Accept: "application/json",
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     libelle: AdresseLibelle,
+      //     nom: AdresseNom,
+      //     telephone: AdresseTelephone,
+      //     pays: AdressePays,
+      //     ville: Ville,
+      //     codePostal: CodePostal, 
+      //     adresse: Adresse, 
+      //     client: email
+      //   }),
+      // })
+      //   .then((response) => response.json())
+      //   .then((responseData) => {
+      //     console.log(JSON.stringify(responseData));
+      //     console.log("Data Added");
+      //     setStorageAndBackToPreviousPage(responseData);
+      //   })
+      //   .catch((err) => console.log('Error:', err))
+      //   .finally();
     };
   
     const returnPage = () => 
@@ -207,23 +200,18 @@ const AddAdressScreen = (props) => {
                 placeholder={t('Pays')}
                 value={AdressePays}
                 style={{
-                    borderWidth: 1,
-                    borderColor: '#AAB0B7',
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: 14,
-                    color: '#000',
-                    paddingLeft: 15,
-                    borderRadius: 8,
-                    backgroundColor: '#fff',
-                  }}
+                  borderWidth: 1,
+                  borderColor: '#AAB0B7',
+                  fontFamily: 'Poppins-Regular',
+                  fontSize: 14,
+                  color: '#000',
+                  paddingLeft: 15,
+                  borderRadius: 8,
+                  backgroundColor: '#fff',
+                }}
                 placeholderTextColor="#B0B0C3"
                 keyboardType="ascii-capable"
-                keyboardAppearance="default"
-                autoCapitalize="none"
-                focusable={true}
-                onChange={valueInput => {
-                   setAdressePays(valueInput.nativeEvent.text.toString());
-                  }}
+                keyboardAppearance={'default'}
                 onChangeText={newText => setAdressePays(newText)}
               />
             </View>
@@ -280,7 +268,7 @@ const AddAdressScreen = (props) => {
         </View>
 
         <View style={styles.inputContainer}>
-          <PhoneInput
+        <PhoneInput
             defaultValue={AdresseTelephone}
             defaultCode="FR"
             layout="first"
@@ -290,16 +278,6 @@ const AddAdressScreen = (props) => {
             onChangeFormattedText={text => {
               setAdresseTelephone(text);
             }}
-            containerStyle={{
-              width: "100%" ,
-              shadowColor: "transparent",
-              height: 58 ,
-              backgroundColor: "#fff", 
-              borderWidth: 1, 
-              borderColor: "#000", 
-              borderRadius: 10
-              }}
-
           />
         </View>
 

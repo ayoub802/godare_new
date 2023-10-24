@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E4EBF9',
   },
   inputStyle: {
-    // backgroundColor: 'gold',
+    backgroundColor: '#000',
     width: windowWidth * 0.6,
     color: '#000',
     fontFamily: 'Roboto-Regular',

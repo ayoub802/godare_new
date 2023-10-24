@@ -10,7 +10,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Button, { ButtonIcon } from '../../components/Button';
 import Stepper from '../Stepper';
 import { HeaderActions } from '../../components/Header';
-import { getAuthUserEmail, getDepotModeChoice, getDepotValues, getNewAddedAddress, getPanier, getSelectedCountry, getSelectedService, getServices, saveDepotAdresseId, saveDepotMagasinId, saveDepotMagasinValues, saveDepotModeChoice, saveDepotValidation, saveSelectedService } from '../../modules/GestionStorage';
+import { getAuthUserEmail, getDepotModeChoice, getDepotValues, getNewAddedAddress, getPanier, getSelectedCountry, getSelectedService, getServices, saveCreneaux, saveDepotAdresseId, saveDepotAdresseValues, saveDepotMagasinId, saveDepotMagasinValues, saveDepotModeChoice, saveDepotValidation, saveSelectedService } from '../../modules/GestionStorage';
 import axiosInstance from '../../axiosInstance';
 import { useTranslation } from 'react-i18next';
 import { useIsFocused } from '@react-navigation/native';
@@ -19,6 +19,7 @@ import PhoneInput from 'react-native-phone-number-input';
 import { Dropdown } from 'react-native-element-dropdown';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/Feather';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DepotScreen1 = (props) => {
 
@@ -55,7 +56,7 @@ const DepotScreen1 = (props) => {
   const [paysLivraisonObject, setPaysLivraisonObject] = useState(null);
   const [Creneaux, setCreneaux] = useState([]);
   const [Language, setLanguage] = useState('fr');
-
+  const [getAdrees, setGetAdrees] = useState([]);
   let isNewAddressAdded = props.route.params;
   isNewAddressAdded = isNewAddressAdded ? isNewAddressAdded.newAddressAdded : false;
 
@@ -81,6 +82,10 @@ const DepotScreen1 = (props) => {
       // Get service
       let service = await getSelectedService();
 
+      let getAdrees = await AsyncStorage.getItem('newAddedAdresse');
+      if (getAdrees) {
+         console.log(getAdrees);
+      }
 
       // Get panier
       let basketData = await getPanier();
@@ -326,6 +331,7 @@ const DepotScreen1 = (props) => {
     if (NomContact === '')
     {
         ToastAndroid.show("Le nom de la personne à contacter est obligatoire", ToastAndroid.SHORT);
+        console.log("Le nom de la personne à contacter est obligatoire");
       return;
     }
 
@@ -333,12 +339,14 @@ const DepotScreen1 = (props) => {
     {
 
       ToastAndroid.show("Le téléphone de la personne à contacter est obligatoire", ToastAndroid.SHORT);
+      console.log("Le téléphone de la personne à contacter est obligatoire");
       return;
     }
 
     if (UserDomicileChoix === '')
     {
       ToastAndroid.show("L'adresse est obligatoire", ToastAndroid.SHORT);
+      console.log("L'adresse est obligatoire");
       return;
     }
 
@@ -359,6 +367,7 @@ const DepotScreen1 = (props) => {
     if (!found)
     {
       ToastAndroid.show("Nous n'avons pas de créneaux disponibles", ToastAndroid.SHORT);
+      console.log("Nous n'avons pas de créneaux disponibles");
       return;
     }
 
@@ -425,6 +434,7 @@ const DepotScreen1 = (props) => {
     setNomContact(adresse.nom);
     setTelContact(adresse.telephone);
   }
+
   if (!Service)
   {
     return (

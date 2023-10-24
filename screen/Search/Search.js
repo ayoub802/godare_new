@@ -1,11 +1,23 @@
 import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { HeaderEarth } from '../../components/Header'
 import Feather from "react-native-vector-icons/Feather"
 
 
 const Search = () => {
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [fullData, setFullData] = useState([]);
+
+  // const fetchData = async () => {
+  //   try{
+  //     const response = 
+  //   }
+  // }
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView style={{flex: 1, paddingBottom: 50}} showsVerticalScrollIndicator={false}>
@@ -35,6 +47,9 @@ const Search = () => {
                    </TouchableOpacity>
 
                    <TextInput 
+                     clearButtonMode='always'
+                     autoComplete={false}
+                     autoCapitalize="none"
                      placeholder='Recherche...'
                      style={{fontFamily: "Poppins-Medium", fontSize: 14, width: "100%", backgroundColor: "transparent", textDecorationLine: "none"}}
                    />

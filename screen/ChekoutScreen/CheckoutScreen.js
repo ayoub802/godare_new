@@ -277,7 +277,7 @@ const CheckoutScreen = (props) => {
       return;
     }
 
-    props.navigation.navigate("AddCardScreen");
+    props.navigation.navigate("PaymentMethod");
   };
 
   const NavigateToUserAddress = () => {

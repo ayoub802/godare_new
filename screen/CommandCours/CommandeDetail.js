@@ -1,10 +1,13 @@
-import { View, Text, ActivityIndicator, ScrollView, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, ActivityIndicator, ScrollView, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { HeaderEarth } from '../../components/Header';
 import { useTranslation } from 'react-i18next';
 import axiosInstance from '../../axiosInstance';
 import { getAuthUserEmail } from '../../modules/GestionStorage';
 import Button from '../../components/Button';
+import Truck from "../../assets/images/truck.png"
+import Feather from "react-native-vector-icons/Feather"
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const CommandeDetail = ({ navigation, route }) => {
@@ -60,171 +63,95 @@ const CommandeDetail = ({ navigation, route }) => {
   
               <ScrollView>
   
-              <Button title="Retour" onPress={() => navigation.goBack()} />
   
                 <View> 
-                  <Text style={styles.NameTxt}>
-                    {t('Service')} : { Commande.service ? Commande.service : 'Fret par avion' }
-                  </Text>
-  
-                  <Text style={styles.textPrice}>
-                  {t('Prix total')} : €{Commande.totalPrice}
-                  </Text>
-  
-                  <Text style={styles.textPrice}>
-                    {t('Numéro de la commande')} : { Commande.uuid ? Commande.uuid : 222222 }
-                  </Text>
-  
-                  <Text style={styles.NameTxt}>
-                  {t('Date de la commande')} : { Commande.createdAt }
-                  </Text>
-  
-                  <Text style={styles.NameTxt}>
-                    {t('Statut')} : {Commande.statut}
-                  </Text>
-  
-                  <Text style={styles.NameTxt}>
-                    {t('Mode paiement')} : {Commande.modePaiement}
-                  </Text>
-  
-                  {Commande.avoir && Commande.avoir > 0 && (
-                      <Text style={styles.NameTxt}>
-                      {t('Avoir')} : {Commande.avoir}
-                      </Text>
-                    )
-                  }
-  
-                  {Commande.remise && Commande.remise > 0 && (
-                      <Text style={styles.NameTxt}>
-                      {t('Remise')} : {Commande.remise}
-                      </Text>
-                    )
-                  }
-  
-                  <View>
-                    <Text style={styles.titleText}>
-                      { t('Produit(s)') }
-                    </Text>
-                  </View>
-  
-                  <View>
-                    {
-                      Commande.commandeProducts.map(commandeProduct => (
-                        <View style={{ marginBottom:20 }}>
-                          <Text style={styles.NameTxt}>
-                            {t('Nom')} : {commandeProduct.product.name} - { t('Quantité') } : { commandeProduct.quantite }
+                <View style={{marginTop: 24, paddingHorizontal: 16}}>
+                     <Text style={{fontSize: 14, color: "#C3BCBC", fontFamily: "Poppins-Regular", letterSpacing: 1}}>Order ID</Text>
+                     <View>
+                       <Text style={{color: "#292625", fontSize: 24, letterSpacing: 1, fontFamily: "Poppins-Medium"}}>{ Commande.uuid ? Commande.uuid : 222222 }</Text>
+                     </View>
+                </View>
+                <View style={{marginTop: 14, paddingHorizontal: 16}}>
+                     <Text style={{fontSize: 16, color: "#292625", fontFamily: "Poppins-Medium", letterSpacing: 1}}>History</Text>
+                    <View style={{backgroundColor: "#fff",padding: 14,borderRadius: 10}}>
+                      <View style={{flexDirection: "row", alignItems: "flex-start", gap: 20}}>
+                           <View style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+                              <View style={{width: 12, height: 12, borderRadius: 50, backgroundColor: "#fff", borderWidth: 4, borderColor: "#EF5448"}}></View>
+                              <View style={{ width: 1, height: 70,justifyContent: "center",alignItems: "center" ,borderWidth: 1, borderStyle: "dashed", borderColor: "#EF5448"}}></View>
+                           </View>
+                           <View>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Commande validée</Text>
+                              <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>{ Commande.createdAt }</Text>
+                           </View>
+                      </View>
+                      <View style={{flexDirection: "row", alignItems: "flex-start", gap: 20}}>
+                           <View style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+                              <View style={{width: 12, height: 12, borderRadius: 50, backgroundColor: "#fff", borderWidth: 4, borderColor: "#EF5448"}}></View>
+                              <View style={{ width: 1, height: 70,justifyContent: "center",alignItems: "center" ,borderWidth: 1, borderStyle: "dashed", borderColor: "#EF5448"}}></View>
+                           </View>
+                           <View>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Produits réceptionnés</Text>
+                              <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>{ Commande.createdAt }</Text>
+                           </View>
+                      </View>
+                      <View style={{flexDirection: "row", alignItems: "flex-start", gap: 20}}>
+                           <View style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+                              <View style={{width: 12, height: 12, borderRadius: 50, backgroundColor: "#fff", borderWidth: 4, borderColor: "#EF5448"}}></View>
+                              <View style={{ width: 1, height: 70,justifyContent: "center",alignItems: "center" ,borderWidth: 1, borderStyle: "dashed", borderColor: "#EF5448"}}></View>
+                           </View>
+                           <View>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Préparée</Text>
+                              <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>{ Commande.createdAt }</Text>
+                           </View>
+                      </View>
+                      <View style={{flexDirection: "row", alignItems: "flex-start", gap: 20}}>
+                           <View style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+                              <View style={{width: 12, height: 12, borderRadius: 50, backgroundColor: "#fff", borderWidth: 4, borderColor: "#EF5448"}}></View>
+                              <View style={{ width: 1, height: 70,justifyContent: "center",alignItems: "center" ,borderWidth: 1, borderStyle: "dashed", borderColor: "#EF5448"}}></View>
+                           </View>
+                           <View>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Expédiée</Text>
+                              <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>{ Commande.createdAt }</Text>
+                           </View>
+                      </View>
+                      <View style={{flexDirection: "row", alignItems: "flex-start", gap: 20}}>
+                           <View style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
+                              <View style={{width: 12, height: 12, borderRadius: 50, backgroundColor: "#fff", borderWidth: 4, borderColor: "#498BF0"}}></View>
+                           </View>
+                           <View>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Commande livrée</Text>
+                              <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>Colis N° { Commande.uuid ? Commande.uuid : 222222 }</Text>
+                           </View>
+                      </View>
+                    </View>
+                </View>
+                <View style={{marginTop: 24, paddingHorizontal: 16}}>
+                  <View style={{backgroundColor: "#fff", paddingTop: 24, paddingBottom: 13, paddingLeft: 13, paddingRight: 10, borderRadius: 10}}>
+                    <View style={{flexDirection: "row", alignItems: "center", justifyContent: "space-between"}}>
+                       <View style={{width: 46, height: 46, backgroundColor: "#498bf04d", borderRadius: 10, justifyContent: "center", alignItems: "center"}}>
+                         <Image source={Truck}/>
+                       </View>
+                       <View>
+                          <Text style={{color: "#292625", fontSize: 14, fontFamily: "Poppins-Medium", letterSpacing: 1}}>Colis livré</Text>
+                          <Text style={{color: "#C3BCBC", fontSize: 13, fontFamily: "Poppins-Regular", letterSpacing: 1}}>
+                             Colis N° { Commande.uuid ? Commande.uuid : 222222 }
                           </Text>
-  
-                          {Object.values(commandeProduct.attributs).length > 0 && (
-                            <Text style={styles.NameTxt}>
-                              {t('Attributs')} : { Object.values(commandeProduct.attributs).join(', ') }
-                            </Text>
-                          )
-                          }
-  
-                          {commandeProduct.prixAchat && (
-                            <Text style={styles.NameTxt}>
-                            {t("Prix d'achat")} : { commandeProduct.prixAchat}
-                            </Text>
-                          )
-                          }
-  
-                          {commandeProduct.url && (
-                            <Text style={styles.NameTxt}>
-                            {t('URL')} : { commandeProduct.url}
-                            </Text>
-                          )
-                          }
-  
-                          {commandeProduct.informationComplementaire && (
-                            <Text style={styles.NameTxt}>
-                            {t('Information(s) complémentaire(s)')} : { commandeProduct.informationComplementaire}
-                            </Text>
-                          )
-                          }
-  
-                          {commandeProduct.photo && (
-                            <Image
-                            source={{uri: commandeProduct.photo}}
-                            resizeMode="contain"
-                            style={{ width: 70, height: 50, }}
-                          />
-                          )
-                          }
-                        </View>
-                      ))
-                    }
+                       </View>
+                       <View>
+                         <TouchableOpacity>
+                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium", textAlign: "center"}}>Suivre le colis</Text>
+                         </TouchableOpacity>
+                         <TouchableOpacity>
+                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium", textAlign: "center"}}>Voir le contenu</Text>
+                         </TouchableOpacity>
+                         <TouchableOpacity onPress={() => imprimerFacture()}>
+                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium",textAlign: "center"}}>Éditer la facture</Text>
+                         </TouchableOpacity>
+                       </View>
+                    </View>
                   </View>
-  
-                  {(Commande.service == 'Fret par avion' || Commande.service == 'Fret par bateau') && Commande.depot ?
-                      (
-                          <>
-                            <View>
-                              <Text style={styles.titleText}>
-                               {'enlevement' == Commande.depot.mode ? t('Enlèvement à domicile') : t('Dépôt au magasin')}
-                              </Text>
-                            </View>
-  
-                            <View>
-  
-                              {Commande.depot.nom && (
-                                  <Text style={styles.NameTxt}>
-                                  { Commande.depot.nom }
-                                  </Text>
-                                )
-                              }
-  
-                              <Text style={styles.NameTxt}>
-                                {t('Adresse')} : {Commande.depot.adresse}
-                              </Text>
-  
-                              {Commande.depot.telephone && (
-                                  <Text style={styles.NameTxt}>
-                                  { Commande.depot.telephone }
-                                  </Text>
-                                )
-                              }
-  
-                              {Commande.depot.creneauEnlevementPlage && (
-                                  <Text style={styles.NameTxt}>
-                                  { t("Date d'enlèvement") } : { Commande.depot.creneauEnlevementPlage.date + t(' entre ') + Commande.depot.creneauEnlevementPlage.horaireDebut + t(' et ') + Commande.depot.creneauEnlevementPlage.horaireFin }
-                                  </Text>
-                                )
-                              }
-  
-                              
-                            </View>
-                          </>
-                      )
-                      : 
-                      <></>
-                    }
-  
-                    <View>
-                      <Text style={styles.titleText}>
-                          { 'relais' == Commande.livraison.mode ? t('Retrait en point relais') : t('Livraison à domicile')}
-                      </Text>
-                    </View>
-  
-                    <View>
-                      <Text style={styles.NameTxt}>
-                        {Commande.livraison.nom}
-                      </Text>
-  
-                      <Text style={styles.NameTxt}>
-                        {Commande.livraison.adresse}
-                      </Text>
-  
-                      <Text style={styles.NameTxt}>
-                        {Commande.livraison.telephone}
-                      </Text>
-                    </View>
-  
-                    
-  
-                    <View>
-                      <Button title="Imprimer la facture" onPress={() => imprimerFacture()} />
-                    </View>
+                </View>
+                  
   
                 </View>
   

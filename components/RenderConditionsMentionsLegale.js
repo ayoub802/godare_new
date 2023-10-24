@@ -1,9 +1,9 @@
 import React from "react";
 
 import {
-  View
+  View, Text
 } from 'react-native';
-// import Pdf from "react-native-pdf";
+import Pdf from "react-native-pdf";
 
 
 class RenderConditionsMentionsLegale extends React.Component {
@@ -20,13 +20,14 @@ class RenderConditionsMentionsLegale extends React.Component {
             
 
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                  {/* <Pdf
+                  <Pdf
                   key={'pdfView'}
-                  source={pdfUrl}
+                  trustAllCerts={false}
+                  source={{uri: pdfUrl}}
                   style={{ flex: 1, width: '100%', height: '100%' }}
                   onLoadComplete={() => console.log('PDF chargé')}
                   onError={(error) => console.log('Erreur de chargement du PDF', error)}
-                 /> */}
+                 />
                  <Text>Nothing</Text>
         </View>
     
