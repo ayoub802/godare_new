@@ -30,6 +30,7 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import Button, { ButtonIcon } from '../../components/Button';
 import ListCard from '../../components/ListCard';
 import ByPlaneDetailsComponentGrid from "./ByPlaneDetailsComponentGrid"
+import DropDownPicker from 'react-native-dropdown-picker';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -69,7 +70,8 @@ const ByPlaneDetailsComponent = (props) => {
   const [userImage, setUserImage] = useState('');
   const [active, setActive] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const [open, setOpen] = useState(false)
+  const [open2, setOpen2] = useState(false)
   
   // Gestion du scroll
   const Change = nativeEvent => {
@@ -353,7 +355,7 @@ const ByPlaneDetailsComponent = (props) => {
                 </View>
                 
                 <View style={styles.safeContainerStyle}>
-                  <Dropdown
+                  {/* <Dropdown
                     style={[styles.dropdown]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
@@ -372,10 +374,25 @@ const ByPlaneDetailsComponent = (props) => {
                       setStateValue(item.value);
                       showDouaneMessage(item.value);
                     }}
-                  />
+                  /> */}
+                                  <DropDownPicker 
+                  items={data}
+                  open={open2}
+                  setOpen={() => setOpen2(!open2)}
+                  value={StateValue}
+                  setValue={val => setStateValue(val)}
+                  placeholder={t('Etat')}
+                  maxHeight={100}
+                  autoScroll
+                  style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                  dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+                  onSelectItem={item => {
+                    setStateValue(item.value)
+                  }}
+                />
                 </View>
                 <View style={styles.safeContainerStyle}>
-                    <Dropdown
+                    {/* <Dropdown
                   style={[styles.dropdown]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
@@ -394,10 +411,22 @@ const ByPlaneDetailsComponent = (props) => {
                     // setQuantitySelected(item.value);
                     console.log(item.value);
                   }}
+                /> */}
+                <DropDownPicker 
+                  items={sweeterArray}
+                  open={open}
+                  setOpen={() => setOpen(!open)}
+                  value={QuantitySelected}
+                  setValue={val => setQuantitySelected(val)}
+                  placeholder={t('Quantité')}
+                  maxHeight={100}
+                  autoScroll
+                  style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                  dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
                 />
                   </View>
 
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, {position: "relative", zIndex: -10}]}>
               <TextInput
                 placeholder={t('Valeur (€)')}
                 keyboardType="ascii-capable"
@@ -410,7 +439,7 @@ const ByPlaneDetailsComponent = (props) => {
 
               />
             </View>
-                <View style={{marginTop: 8, width: "100%"}}>
+                <View style={{marginTop: 8, width: "100%",position: "relative", zIndex: -10}}>
                 <TouchableOpacity
                   style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
                   onPress={() => openCameraForPicture()}>
@@ -469,7 +498,7 @@ const ByPlaneDetailsComponent = (props) => {
                 </TouchableOpacity>
                 </View>
 
-                <View style={{marginTop: 8, width: "100%"}}>
+                <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10}}>
                    <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
                 </View>
             </View>
@@ -493,7 +522,7 @@ const styles = StyleSheet.create({
   safeContainerStyle: {
     justifyContent: 'center',
     // backgroundColor: 'tomato',
-    width: windowWidth * 0.4,
+    width: windowWidth * 0.46,
     // borderRadius:0
     marginTop: 5
   },
@@ -610,7 +639,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: "#F5F5F5",
-    width: windowWidth * 0.4,
+    width: windowWidth * 0.46,
     height: 40,
     borderRadius: 10,
     marginTop: 8,

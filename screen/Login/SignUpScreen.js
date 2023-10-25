@@ -8,9 +8,7 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
-  Modal,
-  ScrollView
-} from 'react-native';
+  Modal} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PhoneInput from 'react-native-phone-number-input';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -23,7 +21,11 @@ import styles from "./SignUpStyle"
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { HeaderEarth } from '../../components/Header';
 import Button from '../../components/Button';
-import auth from '@react-native-firebase/auth';
+import DropDownPicker from 'react-native-dropdown-picker';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, firebase_db } from '../../modules/FirebaseConfig';
+import { addDoc, collection } from 'firebase/firestore';
+import { ScrollView } from 'react-native-virtualized-view';
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -49,7 +51,8 @@ const SignUpScreen = (props) => {
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState();
   const [phoneNumber, setphoneNumber] = useState('');
-
+  const [isOpen, setIsOpen] =useState(false);
+  const [civilite, setCivilite] = useState('') 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -101,6 +104,7 @@ const SignUpScreen = (props) => {
     //   ],
     // });
   };
+
   /* when user click on register it will trigger below function */
   const handleSignup = async () => {
     let Array = {Name:Name,FirstName: FirstName, Email:Email,DateOfBirth:date,Password:Password}
@@ -114,7 +118,7 @@ const SignUpScreen = (props) => {
     
 
     try {
-      auth().createUserWithEmailAndPassword(Email, Password).then(() => {
+      await createUserWithEmailAndPassword(auth ,Email, Password).then(() => {
           try {
             AsyncStorage.setItem('authStatusChecker', 'login');
             console.log('Auth Add Successfully to Storage');
@@ -128,6 +132,14 @@ const SignUpScreen = (props) => {
             text2: t('Compte utilisateur créé et connecté !'),
           });
 
+          addDoc(collection(firebase_db, 'users'), {
+            name: Name,
+            prenom: FirstName,
+            phone: phoneNumber,
+            email: Email,
+            birthday: date.toString(),
+            civilite: civilite
+          })
           axiosInstance.post('/clients/new', {
             nom: Name,
             prenom: FirstName,
@@ -177,6 +189,7 @@ const SignUpScreen = (props) => {
     }
 
   };
+
   async function confirmCode() {
     try {
       const con = await confirm.confirm('123456');
@@ -185,11 +198,27 @@ const SignUpScreen = (props) => {
       console.log('Invalid code.');
     }
   }
+
   const ButtonDate = () => {
     const timestamp = Date.parse(date)
     console.log("timestamptimestamp",timestamp)
     console.log("datedate",date.toString())
   }
+
+  const items = [
+    {
+      label: "Mr",
+      value: "Mr"
+    },
+    {
+      label: "Mme",
+      value: "Mme"
+    },
+    {
+      label: "Autre",
+      value: "Autre"
+    },
+  ]
   return (
     <SafeAreaView style={{flex: 1}}>
             <ScrollView
@@ -210,6 +239,48 @@ const SignUpScreen = (props) => {
             </Text>
           </View>
           <View style={{paddingHorizontal: 28}}>
+          <Controller
+              control={control}
+              name="Name"
+              rules={{
+                required: t('Le nom est requis'),
+                minLength: {
+                  value: 3,
+                  message: t('Le nom doit comporter 3 caractères'),
+                },
+              }}
+              render={({field: {onChange, onBlur, value}, fieldState: {error}}) => {
+                return (
+                  <>
+                    <View
+                      style={
+                        {
+                          borderBottomColor: error ? 'red' : '#E6E6E6',
+                          borderBottomWidth: 1,
+                          marginBottom: 15
+                        }}>
+                      <DropDownPicker 
+                        items={items}
+                        open={isOpen}
+                        setOpen={() => setIsOpen(!isOpen)}
+                        value={civilite}
+                        setValue={val => setCivilite(val)}
+                        placeholder='Civilite'
+                        style={{position: "relative", zIndex: 100}}
+                        onSelectItem={item => {
+                          setCivilite(item.value)
+                        }}
+                      />
+                    </View>
+                    {error && (
+                      <Text style={styles.errorMessageTextStyle}>
+                        {error.message || t('Erreur')}
+                      </Text>
+                    )}
+                  </>
+                );
+              }}
+            />
             <Controller
               control={control}
               name="Name"
@@ -228,6 +299,7 @@ const SignUpScreen = (props) => {
                         {
                           borderBottomColor: error ? 'red' : '#E6E6E6',
                           borderBottomWidth: 1,
+                          position: "relative", zIndex: -100
                         }}>
                       <TextInput
                         placeholder={t('Nom')}
@@ -280,7 +352,8 @@ const SignUpScreen = (props) => {
                         {
                           borderBottomColor: error ? 'red' : '#E6E6E6',
                           borderBottomWidth: 1,
-                          marginTop: 12
+                          marginTop: 12,
+                          position: "relative", zIndex: -100
                         }}>
                       <TextInput
                         placeholder={t('Prénom')}

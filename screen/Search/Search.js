@@ -48,7 +48,6 @@ const Search = () => {
 
                    <TextInput 
                      clearButtonMode='always'
-                     autoComplete={false}
                      autoCapitalize="none"
                      placeholder='Recherche...'
                      style={{fontFamily: "Poppins-Medium", fontSize: 14, width: "100%", backgroundColor: "transparent", textDecorationLine: "none"}}

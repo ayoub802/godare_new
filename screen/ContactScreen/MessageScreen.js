@@ -10,6 +10,7 @@ import { getAuthUserEmail, getConversationMessagesObject, saveConversationMessag
 import axiosInstance from '../../axiosInstance'
 import styles from './styles'
 import { useTranslation } from 'react-i18next'
+import PhoneInput from 'react-native-phone-number-input'
 
 const MessageScreen = ({ navigation }) => {
     const [isOpen2, setIsOpen2] = useState(false);
@@ -236,7 +237,7 @@ const MessageScreen = ({ navigation }) => {
                 </Text>
             </View>
 
-            <View style={{paddingHorizontal: 28}}>
+            <View style={{paddingHorizontal: 28}}>  
 
             <View style={{marginTop: 12}}>
                 <TextInput

@@ -11,10 +11,14 @@ import auth from '@react-native-firebase/auth';
 import { getAuthentificationData } from '../../modules/GestionStorage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axiosInstance from '../../axiosInstance'
+import { getAuth } from 'firebase/auth'
+import { collection, getDocs, query, where } from 'firebase/firestore'
+import { firebase_db } from '../../modules/FirebaseConfig'
 
 
 const EditProfile = ({ navigation }) => {
   const [name, setName] = useState(undefined);
+  const [getData, setGetData] = useState([]);
   const [prename, setPrename] = useState(undefined);
   const [Email, setEmail] = useState(undefined);
   const [birthday, setBirthday] = useState(undefined);
@@ -52,33 +56,54 @@ const EditProfile = ({ navigation }) => {
   };
 
   useEffect(() => {
-
-    getDate();
     fetchValue();
   }, []);
   
   async function fetchValue() {
     setActivity(true);
+    const userEmail = getAuth().currentUser;
+    if(userEmail){
+      setInitializing(true)
+    }
 
+    console.log(userEmail.email);
+    const q = query(collection(firebase_db, "users"), where('email', '==', userEmail.email))
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+      setGetData(doc.data())
+    });
   const authStatus = await getAuthentificationData();  
   if (authStatus)
   {
     setEmail(authStatus);
   }
 
+  setName(getData.name);
+  setPrename(getData.prenom);
+  setBirthday(getData.birthday);
+  setPhoneNumber(getData.phone)
+
   setActivity(false);
 }
 
-async function getDate(){
-  const response = await axiosInstance.get('https://godaregroup.com/api/clients/46/' + Email);
-  let data = response.data;
-  if(response.data){
-    setName(data.nom);
-    setPrename(data.prenom);
-    setPhoneNumber(data.telephone);
+// async function getDate(){
+//   const response = await axiosInstance.get('https://godaregroup.com/api/clients/46/' + Email);
+//   let data = response.data;
+//   if(response.data){
+//     setName(data.nom);
+//     setPrename(data.prenom);
+//     setPhoneNumber(data.telephone);
+//   }
+// }
+  if(initializing === true){
+    return(
+      <View style={{flex: 1, justifyContent: "center"}}>
+         <ActivityIndicator size={'large'} color="#3292E0" />
+      </View>
+    )
   }
-}
-  
     return (
         <SafeAreaView style={{ flex: 1}}>
           <ScrollView style={{paddingBottom: 50}} showsVerticalScrollIndicator={false}>

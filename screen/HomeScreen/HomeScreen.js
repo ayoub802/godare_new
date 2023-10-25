@@ -7,7 +7,7 @@ import CardHome from '../../components/CardHome';
 import {HeaderEarth} from '../../components/Header';
 import axios from 'axios';
 import styles from './styles';
-import { getServices, saveSelectedService, saveServices } from '../../modules/GestionStorage';
+import { getPlatformLanguage, getServices, saveSelectedService, saveServices } from '../../modules/GestionStorage';
 import axiosInstance from '../../axiosInstance';
 import _ from "lodash";
 
@@ -27,6 +27,7 @@ const HomeScreen = ({navigation}) => {
       try 
       {
 
+        const currentLanguage = await getPlatformLanguage();
         let services = await getServices();
 
         if (services.length < 1)
@@ -48,8 +49,17 @@ const HomeScreen = ({navigation}) => {
           obj.image = row.image;
           obj.id = row.id;
           obj.statut = row.statut;
-          obj.nom = row.nom;
-          obj.message = row.message;
+
+          if ('fr' == currentLanguage)
+          {
+            obj.nom = row.nom;
+            obj.message = row.message;
+          }
+          else 
+          {
+            obj.nom = row.nomEN;
+            obj.message = row.messageEN;
+          }
           data.push(obj);
         });
 

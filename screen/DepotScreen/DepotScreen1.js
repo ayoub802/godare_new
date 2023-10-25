@@ -328,6 +328,7 @@ const DepotScreen1 = (props) => {
  
   // Retrait à domicile
   async function NavigateToRetraitDomicile(){
+    console.log("Test");
     if (NomContact === '')
     {
         ToastAndroid.show("Le nom de la personne à contacter est obligatoire", ToastAndroid.SHORT);
@@ -593,11 +594,13 @@ const DepotScreen1 = (props) => {
            </View>
 
             <TouchableOpacity
-              style={{marginTop: 30,flex: 1, justifyContent: "center", alignItems: "center"}}
+              style={[styles.ButtonStyle, {width: '60%', marginTop: 50}]}
               onPress={() => {
                 NavigateToRetraitDomicile();
               }}>
-              <Button title="Valider enlèvement à domicile"/>
+                <Text style={styles.ButtonStyleText}>
+                      {t('Valider enlèvement à domicile')}
+                </Text>
             </TouchableOpacity>
             </>
           }
@@ -647,7 +650,7 @@ const DepotScreen1 = (props) => {
                     NavigateToDepotMagasin();
                   }}>
                     <Text style={styles.ButtonStyleText}>
-                      {t('Valider enlèvement à domicile')}
+                      {t('Valider dépot au magasin')}
                     </Text>
                 </TouchableOpacity>
               </View>

@@ -18,7 +18,8 @@ import Lock from 'react-native-vector-icons/Fontisto';
 import Eye from 'react-native-vector-icons/Entypo';
 import Logo from "../../assets/images/LOGO_GS.png"
 import user from "../../assets/images/profil.png"
-import auth from '@react-native-firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../modules/FirebaseConfig';
 
 const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
@@ -65,7 +66,7 @@ const LoginScreen = (props) => {
   const handleSignin = async () => {
   
     try {
-        auth().signInWithEmailAndPassword(Email, Password)
+        await signInWithEmailAndPassword(auth,Email, Password)
         .then(() => {
           
           // Sauvegarder l'email

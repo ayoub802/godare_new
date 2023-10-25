@@ -39,8 +39,7 @@ const AddCardScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-        <ScrollView      showsVerticalScrollIndicator={false}
-            nestedScrollEnabled={true}>
+
            <View style={{flex: 1}}>
                 <View style={{ position: "relative" ,alignItems: "center", backgroundColor: "#2BA6E9", justifyContent: "center", height: hp(12)}}>
                     <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold"}}>Fret par avoin</Text>
@@ -121,7 +120,6 @@ const AddCardScreen = ({ navigation }) => {
                 }
 
            </View>
-        </ScrollView>
     </SafeAreaView>
   )
 }

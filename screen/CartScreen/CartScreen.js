@@ -86,7 +86,7 @@ const CartScreen = (props) => {
           setLoader(false);
           setRemiseLoader(false);
 
-          props.navigation.navigate(Navigationstrings.Login, {fromCart: 'cart'});
+          props.navigation.navigate("Login", {fromCart: 'cart'});
           return;
         }
 
