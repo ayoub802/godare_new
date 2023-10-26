@@ -1,5 +1,5 @@
 import {View, Text, StatusBar} from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screen/HomeScreen/HomeScreen';
@@ -47,11 +47,21 @@ import PaymentDetails from '../screen/Payment/PaymentDetail';
 import PaymentWaveDetails from '../screen/Payment/PaymentWaveDetails';
 import LegalNotice from '../screen/LegalNotice';
 import SuccessFullyRegOrder from '../screen/SuccessFullyRegOrder';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../modules/FirebaseConfig';
 
 
 const Home = createNativeStackNavigator();
 const Profile = createNativeStackNavigator();
 const AppNavigation = () => {
+
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log('user', user);
+      setUser(user)
+    })
+  }, [])
   return (
     <NavigationContainer>
     <StatusBar backgroundColor="#2BA6E9"/>
@@ -195,7 +205,15 @@ const AppNavigation = () => {
           {
             () => (
               <Profile.Navigator screenOptions={{ headerShown: false}}>
-                <Profile.Screen name='ProfileScreen' component={ProfileScreen}/>
+                {
+                  user ? (
+                    <Profile.Screen name='ProfileScreen' component={ProfileScreen}/>
+                  )
+                  :
+                  (
+                    <Profile.Screen name='LoginScreen' component={LoginScreen}/>
+                  )
+                }
                 <Profile.Screen name='CartBancair' component={CartBancair}/>
                 <Profile.Screen name='EditProfile' component={EditProfile}/>
                 <Profile.Screen name='RemiseAvoir' component={RemiseAvoirScreen}/>

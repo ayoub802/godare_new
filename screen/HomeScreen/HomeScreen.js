@@ -10,8 +10,10 @@ import styles from './styles';
 import { getPlatformLanguage, getServices, saveSelectedService, saveServices } from '../../modules/GestionStorage';
 import axiosInstance from '../../axiosInstance';
 import _ from "lodash";
-
+import { useTranslation } from 'react-i18next';
 const HomeScreen = ({navigation}) => {
+  const { t, i18n } = useTranslation();
+
   const [Services, setServices] = useState([]);
   const [ServicesRaw, setServicesRaw] = useState([]);
   const [Activity, setActivity] = useState(true);
@@ -102,6 +104,8 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+
+
   if (Activity)
   {
     return (
@@ -122,6 +126,7 @@ const HomeScreen = ({navigation}) => {
         <View style={{flex: 1}}>
           <HeaderEarth />
         </View>
+
         <View style={styles.superContainer}>
 
           {Services.map( (row, index) => (

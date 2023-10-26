@@ -28,6 +28,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import Button, { ButtonIcon } from '../../components/Button';
 import ListCard from '../../components/ListCard';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -40,7 +41,6 @@ const ByPlaneDetailsComponentGrid = (props) => {
   const Service = props.service;
   const PaysLivraison = props.paysLivraison;
   const Language = props.language;
-  const filter = props.filter;
 
   const Product = props.data;
   const Images = Product.productImages;
@@ -50,7 +50,9 @@ const ByPlaneDetailsComponentGrid = (props) => {
   const douane = productSpecificites ? productSpecificites.douane : null;
 
   const quantiteMax = productSpecificites ? productSpecificites.quantiteMax : 400;
+  console.log(Product.name);
 
+  console.log(quantiteMax);
   // Pour la gestion de la langue
   const {t} = useTranslation();
 
@@ -67,8 +69,9 @@ const ByPlaneDetailsComponentGrid = (props) => {
   const [userImage, setUserImage] = useState('');
   const [active, setActive] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [activeChange, setActiveChange] = useState(filter)
-
+  const [open, setOpen] = useState(false)
+  const [open2, setOpen2] = useState(false);
+  const [modalVisiblePhoto, setModalVisiblePhoto] = useState(false)
   
   // Gestion du scroll
   const Change = nativeEvent => {
@@ -80,7 +83,6 @@ const ByPlaneDetailsComponentGrid = (props) => {
     }
   };
 
-  
   // Build quantity label
 
   const arrayOFF = Array.from(Array(quantiteMax).keys());
@@ -117,12 +119,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
     }).then(image => {
       setUserImage(image.path);
 
-      Toast.show({
-        type: 'success',
-        text1: t('Image'),
-        text2: t('Image ajoutée'),
-      });
-
+      ToastAndroid.show("Image ajoutée",ToastAndroid.SHORT)
       setModalVisible(!isModalVisible);
     });
   };
@@ -136,30 +133,31 @@ const ByPlaneDetailsComponentGrid = (props) => {
     }).then(image => {
       setUserImage(image.path);
 
-      Toast.show({
-        type: 'success',
-        text1: t('Image'),
-        text2: t('Image ajoutée'),
-      });
+      ToastAndroid.show("Image ajoutée",ToastAndroid.SHORT)
+
 
       setModalVisible(!isModalVisible);
     });
   };
 
 
+    openModal = () => {
+      setModalVisiblePhoto(true);;
+  };
+
+  closeModal = () => {
+    setModalVisiblePhoto(false);
+  };
+
   // Afficher un message des frais de douane à prevoir
   const showDouaneMessage = (item) => {
-    
-    afficherMessageDouane(item, douane).then(message => {
-      if (message)
-      {
-        Toast.show({
-          type: 'success',
-          text1: t('Douane'),
-          text2: message,
-        });
-      }
-    });
+    ToastAndroid.show("success Duoane",ToastAndroid.SHORT);
+    console.log("success Duoane");
+    // afficherMessageDouane(item, douane).then(message => {
+    //   if (message)
+    //   {
+    //   }
+    // });
   }
 
  
@@ -178,22 +176,15 @@ const ByPlaneDetailsComponentGrid = (props) => {
 
     if (!QuantitySelected)
     {
-      Toast.show({
-        type: 'error',
-        text1: t('Quantité'),
-        text2: t('La quantité est obligatoire !'),
-      });
+      ToastAndroid.show("La quantité est obligatoire !",ToastAndroid.SHORT)
 
       return;
     }
 
     if (!StateValue)
     {
-      Toast.show({
-        type: 'error',
-        text1: t('Etat'),
-        text2: t("L'état du produit est obligatoire !"),
-      });
+
+      ToastAndroid.show("L'état du produit est obligatoire !",ToastAndroid.SHORT)
 
       return;
     }
@@ -204,12 +195,9 @@ const ByPlaneDetailsComponentGrid = (props) => {
 
       if (coefficientDouane && !productValue)
       {
-        Toast.show({
-          type: 'error',
-          text1: t('Valeur'),
-          text2: t('La valeur est obligatoire !'),
-        });
-  
+
+        ToastAndroid.show("La valeur est obligatoire !",ToastAndroid.SHORT)
+
         return;
       }
     }
@@ -250,7 +238,6 @@ const ByPlaneDetailsComponentGrid = (props) => {
 
   // Ajout au panier
   const handleCart = async () => {
-    navigation.navigate("Login", {fromCart: 'cart'});
 
     let authStatus = await getAuthUserEmail();
 
@@ -262,6 +249,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
         ID: (Math.random() + 1).toString(36).substring(7),
         product: Product,
         ProductId: Product.id,
+        ProductImage: Product.productImages,
         discount: Product.discount,
         stateValue: StateValue,
         quantiteMax: quantiteMax,
@@ -285,11 +273,8 @@ const ByPlaneDetailsComponentGrid = (props) => {
     {
       await savePanier(CatProducts);
 
-      Toast.show({
-        type: 'success',
-        text1: t('Succès'),
-        text2: t('Ajouter au panier avec succès'),
-      });
+      ToastAndroid.show("Ajouter au panier avec succès",ToastAndroid.SHORT)
+
 
       success = true;
     }
@@ -303,11 +288,8 @@ const ByPlaneDetailsComponentGrid = (props) => {
   
       if (match === true) 
       {
-        Toast.show({
-          type: 'error',
-          text1: t('Il y a un problème !'),
-          text2: t('Ce produit a déjà été ajouté'),
-        });
+        ToastAndroid.show("Ce produit a déjà été ajouté",ToastAndroid.SHORT)
+
       }
       else 
       {
@@ -315,12 +297,8 @@ const ByPlaneDetailsComponentGrid = (props) => {
 
         await savePanier(basketData);
                 
-        Toast.show({
-          type: 'success',
-          text1: t('Succès'),
-          text2: t('Ajouter au panier avec succès'),
-        });
-    
+        
+        ToastAndroid.show("Ajouter au panier avec succès",ToastAndroid.SHORT)
         success = true;
       } 
     }
@@ -398,18 +376,38 @@ const ByPlaneDetailsComponentGrid = (props) => {
                 </View>
               <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", paddingRight: 6}}>
                 
-              <TouchableOpacity style={{ flexDirection: "row",width: wp(24), backgroundColor: "#F5F5F5", borderRadius: 6, paddingHorizontal: 8,paddingVertical: 8 ,alignItems: "center", justifyContent: "space-between", marginTop: 5}}>
-                    <Text style={{fontFamily: "Poppins-Regular", color: "#04091E", fontSize: 11}}>
-                       Colors
-                    </Text>
-                    <MaterialIcons name="keyboard-arrow-down" size={20} color='#000'/>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ flexDirection: "row",width: wp(24), backgroundColor: "#F5F5F5", borderRadius: 6, paddingHorizontal: 8,paddingVertical: 8 ,alignItems: "center", justifyContent: "space-between", marginTop: 5}}>
-                    <Text style={{fontFamily: "Poppins-Regular", color: "#04091E", fontSize: 11}}>
-                       Stokage
-                    </Text>
-                    <MaterialIcons name="keyboard-arrow-down" size={20} color='#000'/>
-                </TouchableOpacity>
+              <View style={styles.safeContainerStyle}>
+                <DropDownPicker 
+                items={data}
+                open={open2}
+                setOpen={() => setOpen2(!open2)}
+                value={StateValue}
+                setValue={val => setStateValue(val)}
+                placeholder={t('Etat')}
+                maxHeight={100}
+                autoScroll
+                style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+                onSelectItem={item => {
+                  showDouaneMessage(item.value);
+                  setStateValue(item.value);
+                }}
+              />
+              </View>
+                <View style={styles.safeContainerStyle}>
+                    <DropDownPicker 
+                      items={sweeterArray}
+                      open={open}
+                      setOpen={() => setOpen(!open)}
+                      value={QuantitySelected}
+                      setValue={val => setQuantitySelected(val)}
+                      placeholder={t('Quantité')}
+                      autoScroll={true}
+                      maxHeight={120}
+                      style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                      dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+                    />
+                </View>
 
                 <TouchableOpacity style={{ flexDirection: "row",width: wp(24), backgroundColor: "#F5F5F5", borderRadius: 6, paddingHorizontal: 8,paddingVertical: 8 ,alignItems: "center", justifyContent: "space-between", marginTop: 5}}>
                     <Text style={{fontFamily: "Poppins-Regular", color: "#04091E", fontSize: 11}}>

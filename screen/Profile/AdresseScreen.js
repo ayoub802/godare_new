@@ -40,7 +40,6 @@ const AdresseScreen = () => {
   const [Adresses, setAdresses] = useState([]);
   const [Loader, setLoader] = useState(true);
   const [UserEmail, setUserEmail] = useState(null);
-
   const navigation = useNavigation();
   useEffect(() => {
 
@@ -72,17 +71,19 @@ const AdresseScreen = () => {
   
   }, []);
 
-  // const DeletePost = async (id) => {
-  //   try{
-  //     const response = await axiosInstance.delete('adresses/' + id);
-  //     if(response){
-  //       ToastAndroid.show("Address été supprié", ToastAndroid.SHORT)
-  //     }
-  //   }
-  //   catch(err){
-  //     console.log("error :", err);
-  //   }
-  // };
+  const DeletePost = async (id) => {
+    try{
+      const response = await axiosInstance.delete('adresses/' + id);
+      if(response){
+        setLoader(true);
+        ToastAndroid.show("Address été supprié", ToastAndroid.SHORT)
+      }
+    }
+    catch(err){
+      console.log("error :", err);
+    }
+    setLoader(false)
+  };
 
   const AddAddress = () => {
   
@@ -98,7 +99,7 @@ const AdresseScreen = () => {
               { item.libelle }
             </Text>
             <View style={{flexDirection: "row", alignItems: "center", gap: 5}}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => DeletePost(item.id)}>
               <Icon name='trash-2' size={20} color="#000"/>
             </TouchableOpacity>
             </View>

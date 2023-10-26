@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   safeContainerStyle: {
     justifyContent: 'center',
     // backgroundColor: 'tomato',
-    width: windowWidth * 0.8,
+    width: windowWidth * 0.85,
     // borderRadius:0
     alignSelf: 'center',
     marginTop: windowHeight * 0.02,

@@ -74,9 +74,6 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.09,
   },
   subTabbarContainer: {
-    backgroundColor: '#DCE5F4',
-    height: windowHeight * 0.055,
-    width: windowWidth * 0.95,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -84,7 +81,6 @@ const styles = StyleSheet.create({
     marginTop: 15,
     alignSelf: 'center',
     // padding: 10,
-    elevation: 5,
     // marginBottom: 10,
   },
   subTabbarContainerFilter: {
@@ -105,6 +101,7 @@ const styles = StyleSheet.create({
     width: 'auto',
     alignItems: 'center',
     justifyContent: 'space-around',
+    marginLeft: 20
   },
   iconStyler: {
     width: 20,
@@ -122,8 +119,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: windowHeight * 0.035,
     alignItems: 'center',
-    justifyContent: 'space-around',
-    width: windowWidth * 0.28,
+    gap: 10,
+    width: windowWidth * 0.25,
     // margin: 5,
   },
   filterTextContainer: {
@@ -150,10 +147,10 @@ const styles = StyleSheet.create({
   },
   subtabarTextStyle: {
     fontFamily: 'Roboto-Regular',
-    fontSize: 7,
+    fontSize: 8.5,
     color: '#000',
     // backgroundColor: 'gold',
-    width: windowWidth * 0.2,
+    width: windowWidth * 0.16,
     height: windowHeight * 0.035,
     textAlign: 'center',
     textAlignVertical: 'center',

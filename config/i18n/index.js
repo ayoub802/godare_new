@@ -21,7 +21,7 @@ i18n
     react: {
       useSuspense: false,
     },
-    resources,
+    resources: resources,
   interpolation: {
     escapeValue: false, // react already safes from xss
   },

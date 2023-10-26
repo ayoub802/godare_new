@@ -197,31 +197,88 @@ const PaysLivraison = ({navigation, route}) => {
       </View>
 
       <View style={styles.safeContainerStyle}>
-        <Dropdown
-          style={[styles.dropdown, isFocus && { borderBottomLeftRadius: 0,borderBottomRightRadius: 0,}]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          autoScroll
-          itemContainerStyle={{borderBottomWidth: 1,borderColor: "#2BA6E9", padding: 10}}
-          iconStyle={styles.iconStyle}
-          containerStyle={styles.containerStyle}
-          data={data}
-          labelField="label"
-          valueField="value"
-          placeholder={'Choisir le pays'}
-          value={value}
-          showsVerticalScrollIndicator={false}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
-          onChange={item => {
-            setValue(item.value);
-            setIsFocus(false);
-          }}
-           
-          searchField={true}
-          renderItem={renderItem}
-          />
 
+        <DropDownPicker
+              items={
+                data.map(item => (
+                  {
+                    label: '',
+                    value: item.id,
+                    icon: () => {
+                      return (
+                        <>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              gap: 30,
+                            }} key={item.id}>
+                            <View
+                              style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                              <View>
+                                <Flag code={item.drapeauDepart} size={32}/>
+                              </View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#000',
+                                  fontFamily: 'Roboto-Medium',
+                                }}>
+                                {item.depart}
+                              </Text>
+                              <Feather name="arrow-up-right" size={22} color="#000" />
+                            </View>
+                            <View
+                              style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                              <View>
+                                <Flag code={item.drapeauDestination} size={32}/>
+                              </View>
+                              <Text
+                                style={{
+                                  fontSize: 14,
+                                  color: '#000',
+                                  fontFamily: 'Roboto-Medium',
+                                }}>
+                                {item.destination}
+                              </Text>
+                              <Feather name="arrow-down-right" size={22} color="#000" />
+                            </View>
+                          </View>
+                        </>
+                      );
+                    },
+                  }))
+              } 
+              open={isOpen}
+              setOpen={() => setIsOpen(!isOpen)}
+              value={value}
+              setValue={val => setValue(val)}
+              dropDownContainerStyle={{
+                backgroundColor: '#fff',
+                borderColor: '#2BA6E9',
+                fontSize: 54,
+              }}
+              style={{
+                backgroundColor: '#fff',
+                borderColor: '#2BA6E9',
+                fontSize: 54,
+              }}
+              placeholder="Pays de Livraison"
+              placeholderStyle={{
+                color: '#86909C',
+                fontFamily: 'Roboto-Regular',
+                fontSize: 14,
+              }}
+              textStyle={{fontFamily: 'Roboto-Regular', fontSize: 14}}
+              searchable={true}
+              searchContainerStyle={{borderBottomWidth: 0}}
+              searchTextInputStyle={{borderColor: '#2BA6E9'}}
+              searchPlaceholder="Recherche Pays..."
+              onSelectItem={(item) => {
+                setValue(item.value)
+              }}
+            />
       </View>
 
      <View style={{justifyContent: "center", alignItems: "center", marginTop: 30}}>

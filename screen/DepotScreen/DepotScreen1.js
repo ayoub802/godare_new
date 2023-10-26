@@ -673,16 +673,21 @@ const DepotScreen1 = (props) => {
                   {actionTriggered.adresse + ', ' + (actionTriggered.codePostal ? (actionTriggered.codePostal + ' ') : '' ) + actionTriggered.ville + ' ' + actionTriggered.pays  }
                 </Text>
                 
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => ResetChoixMagasin()}>
-                  <Text style={styles.textStyle}>Fermer</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.button, styles.buttonOpen]}
-                  onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
-                  <Text style={styles.textStyle}>Selectionner le magasin</Text>
-                </Pressable>
+                <View style={{flexDirection: "row", justifyContent: "space-between", gap: 15}}>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => ResetChoixMagasin()}>
+                    <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>Fermer</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.button, styles.buttonOpen]}
+                    onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
+                    <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>Selectionner le magasin</Text>
+                  </Pressable>
+                </View>
+              </View>
+              <View style={{position: "absolute", width: "100%", height: "100%", backgroundColor: "#000", opacity: 0.5, zIndex: -100}}>
+
               </View>
             </View>
           </Modal>

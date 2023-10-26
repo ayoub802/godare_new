@@ -7,12 +7,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
   TextInput,
   Alert,
   Image,
   FlatList,
-  ToastAndroid
+  ToastAndroid,
+  ScrollView
 } from 'react-native';
 
 import {Dropdown} from 'react-native-element-dropdown';
@@ -71,7 +71,8 @@ const ByPlaneDetailsComponent = (props) => {
   const [active, setActive] = useState(0);
   const [isModalVisible, setModalVisible] = useState(false);
   const [open, setOpen] = useState(false)
-  const [open2, setOpen2] = useState(false)
+  const [open2, setOpen2] = useState(false);
+  const [modalVisiblePhoto, setModalVisiblePhoto] = useState(false)
   
   // Gestion du scroll
   const Change = nativeEvent => {
@@ -141,16 +142,23 @@ const ByPlaneDetailsComponent = (props) => {
   };
 
 
+    openModal = () => {
+      setModalVisiblePhoto(true);;
+  };
+
+  closeModal = () => {
+    setModalVisiblePhoto(false);
+  };
+
   // Afficher un message des frais de douane à prevoir
   const showDouaneMessage = (item) => {
-    
-    afficherMessageDouane(item, douane).then(message => {
-      if (message)
-      {
-        ToastAndroid.show("success Duoane",ToastAndroid.SHORT)
-
-      }
-    });
+    ToastAndroid.show("success Duoane",ToastAndroid.SHORT);
+    console.log("success Duoane");
+    // afficherMessageDouane(item, douane).then(message => {
+    //   if (message)
+    //   {
+    //   }
+    // });
   }
 
  
@@ -310,7 +318,7 @@ const ByPlaneDetailsComponent = (props) => {
   return (
     <>
     <View style={{ backgroundColor: "#fff", margin: 5}}>
-      <View style={{flexDirection: "row", alignItems: "flex-start", gap: 10, paddingVertical: 12, paddingLeft: 22}}>
+      <View style={{flexDirection: "row", alignItems: "center",gap: 10, paddingVertical: 12, paddingLeft: 22}}>
         <View>
         <ScrollView
             pagingEnabled
@@ -320,8 +328,7 @@ const ByPlaneDetailsComponent = (props) => {
             style={styles.imageSwiper}>
             {Images.map((image, index) => (
               
-              <PhotoZoomer key={index} image={image} windowWidth={wp(29)} windowHeight={hp(21)} />
-             
+              <PhotoZoomer key={index} image={image} windowWidth={wp(29)} windowHeight={hp(40)} />
             ))}
           </ScrollView>
           <View style={styles.dotStyle}>
@@ -336,172 +343,133 @@ const ByPlaneDetailsComponent = (props) => {
             ))}
           </View>
         </View>
-            <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
-                <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
-                  <Text style={{fontFamily: "Poppins-Medium", fontSize: 10,textAlign: "center", maxWidth: 180}}>{'fr' == Language ? Product.name : Product.nameEN}</Text>
-                </View>
+          <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
+              <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
+                <Text style={{fontFamily: "Poppins-Medium", fontSize: 12.5,textAlign: "center", maxWidth: 180}}>{'fr' == Language ? Product.name : Product.nameEN}</Text>
+              </View>
 
-                <View style={{flexDirection: "row", alignItems: "center", gap: 5, marginTop: 8}}>
-                    <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
-                       {productSpecificites ? productSpecificites.prix  : 0}€/{Product.unite ? Product.unite.valeur : ''}
+              <View style={{flexDirection: "row", alignItems: "center", gap: 5, marginTop: 8}}>
+                  <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
+                      {productSpecificites ? productSpecificites.prix  : 0}€/{Product.unite ? Product.unite.valeur : ''}
+                  </Text>
+                  {productSpecificites && productSpecificites.prixAncien ? 
+                      <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000", textDecorationLine: "line-through"}}>
+                      {productSpecificites.prixAncien}€/{Product.unite ? Product.unite.valeur : ''}
                     </Text>
-                    {productSpecificites && productSpecificites.prixAncien ? 
-                        <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
-                        {productSpecificites.prixAncien}€/{Product.unite ? Product.unite.valeur : ''}
-                      </Text>
-                      :
-                      <></>
-                    }
-                </View>
-                
-                <View style={styles.safeContainerStyle}>
-                  {/* <Dropdown
-                    style={[styles.dropdown]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    autoScroll
-                    iconStyle={styles.iconStyle}
-                    containerStyle={styles.containerStyle}
-                    data={data}
-                    maxHeight={100}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={t('Etat')}
-                    searchPlaceholder="Search..."
-                    value={StateValue}
-                    showsVerticalScrollIndicator={false}
-                    onChange={item => {
-                      setStateValue(item.value);
-                      showDouaneMessage(item.value);
-                    }}
-                  /> */}
-                                  <DropDownPicker 
-                  items={data}
-                  open={open2}
-                  setOpen={() => setOpen2(!open2)}
-                  value={StateValue}
-                  setValue={val => setStateValue(val)}
-                  placeholder={t('Etat')}
-                  maxHeight={100}
-                  autoScroll
-                  style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
-                  dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
-                  onSelectItem={item => {
-                    setStateValue(item.value)
-                  }}
-                />
-                </View>
-                <View style={styles.safeContainerStyle}>
-                    {/* <Dropdown
-                  style={[styles.dropdown]}
-                  placeholderStyle={styles.placeholderStyle}
-                  selectedTextStyle={styles.selectedTextStyle}
-                  autoScroll
-                  iconStyle={styles.iconStyle}
-                  containerStyle={styles.containerStyle}
-                  data={sweeterArray}
-                  maxHeight={200}
-                  labelField="label"
-                  valueField="value"
-                  placeholder={t('Quantité')}
-                  searchPlaceholder="Search..."
-                  value={QuantitySelected}
-                  showsVerticalScrollIndicator={false}
-                  onChange={item => {
-                    // setQuantitySelected(item.value);
-                    console.log(item.value);
-                  }}
-                /> */}
-                <DropDownPicker 
-                  items={sweeterArray}
-                  open={open}
-                  setOpen={() => setOpen(!open)}
-                  value={QuantitySelected}
-                  setValue={val => setQuantitySelected(val)}
-                  placeholder={t('Quantité')}
-                  maxHeight={100}
-                  autoScroll
-                  style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
-                  dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
-                />
-                  </View>
-
-            <View style={[styles.inputContainer, {position: "relative", zIndex: -10}]}>
-              <TextInput
-                placeholder={t('Valeur (€)')}
-                keyboardType="ascii-capable"
-                placeholderTextColor={'#14213D'}
-                style={styles.inputStyle}
-                value={productValue}
-                onChangeText={text => {
-                  setProductValue(text);
-                }}
-
-              />
-            </View>
-                <View style={{marginTop: 8, width: "100%",position: "relative", zIndex: -10}}>
-                <TouchableOpacity
-                  style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
-                  onPress={() => openCameraForPicture()}>
-                  <View><FontAwesome5 name="file-upload" size={15} color='#4E8FDA'/></View>
-                  <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
-                  {
-                    <View>
-                      <Modal
-                        isVisible={isModalVisible}
-                        backdropOpacity={0.4}
-                        animationIn={'fadeInUp'}
-                        animationInTiming={600}
-                        animationOut={'fadeOutDown'}
-                        animationOutTiming={600}
-                        useNativeDriver={true}>
-                        <View style={styles.ModalContainer}>
-                          <View style={styles.uploadContainer}>
-                            <Text style={styles.uploadText}>
-                              {t('Télécharger une photo')}
-                            </Text>
-                            <Text style={styles.uploadSubText}>
-                              {t('Choisissez une image')}
-                            </Text>
-                          </View>
-                          <View style={styles.buttonsContainer}>
-                            <TouchableOpacity
-                              style={styles.cameraGallerybuttons}
-                              onPress={() => {
-                                selectImageFromGallery();
-                              }}>
-                              <Text style={styles.buttonText}>
-                                {t('Choisir une image dans la galerie')}
-                              </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              style={styles.cameraGallerybuttons}
-                              onPress={() => {
-                                openCameraForPicture();
-                              }}>
-                              <Text style={styles.buttonText}>
-                                {t('Ouvrir la caméra')}
-                              </Text>
-                            </TouchableOpacity>
-                
-                            
-                            <TouchableOpacity
-                              style={styles.cancelButton}
-                              onPress={toggleModal}>
-                              <Text style={styles.buttonText}>{t('Annuler')}</Text>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </Modal>
-                    </View>
+                    :
+                    <></>
                   }
-                </TouchableOpacity>
+              </View>
+              
+              <View style={styles.safeContainerStyle}>
+                <DropDownPicker 
+                items={data}
+                open={open2}
+                setOpen={() => setOpen2(!open2)}
+                value={StateValue}
+                setValue={val => setStateValue(val)}
+                placeholder={t('Etat')}
+                maxHeight={100}
+                autoScroll
+                style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+                onSelectItem={item => {
+                  showDouaneMessage(item.value);
+                  setStateValue(item.value);
+                }}
+              />
+              </View>
+              <View style={styles.safeContainerStyle}>
+              <DropDownPicker 
+                items={sweeterArray}
+                open={open}
+                setOpen={() => setOpen(!open)}
+                value={QuantitySelected}
+                setValue={val => setQuantitySelected(val)}
+                placeholder={t('Quantité')}
+                autoScroll={true}
+                maxHeight={120}
+                style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+              />
                 </View>
 
-                <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10}}>
-                   <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
-                </View>
-            </View>
+          <View style={[styles.inputContainer, {position: "relative", zIndex: -10}]}>
+            <TextInput
+              placeholder={t('Valeur (€)')}
+              keyboardType="ascii-capable"
+              placeholderTextColor={'#14213D'}
+              style={styles.inputStyle}
+              value={productValue}
+              onChangeText={text => {
+                setProductValue(text);
+              }}
+
+            />
+          </View>
+              <View style={{marginTop: 8, width: "100%",position: "relative", zIndex: -10}}>
+              <TouchableOpacity
+                style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
+                onPress={() => openCameraForPicture()}>
+                <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
+                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
+                {
+                  <View>
+                    <Modal
+                      isVisible={isModalVisible}
+                      backdropOpacity={0.4}
+                      animationIn={'fadeInUp'}
+                      animationInTiming={600}
+                      animationOut={'fadeOutDown'}
+                      animationOutTiming={600}
+                      useNativeDriver={true}>
+                      <View style={styles.ModalContainer}>
+                        <View style={styles.uploadContainer}>
+                          <Text style={styles.uploadText}>
+                            {t('Télécharger une photo')}
+                          </Text>
+                          <Text style={styles.uploadSubText}>
+                            {t('Choisissez une image')}
+                          </Text>
+                        </View>
+                        <View style={styles.buttonsContainer}>
+                          <TouchableOpacity
+                            style={styles.cameraGallerybuttons}
+                            onPress={() => {
+                              selectImageFromGallery();
+                            }}>
+                            <Text style={styles.buttonText}>
+                              {t('Choisir une image dans la galerie')}
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.cameraGallerybuttons}
+                            onPress={() => {
+                              openCameraForPicture();
+                            }}>
+                            <Text style={styles.buttonText}>
+                              {t('Ouvrir la caméra')}
+                            </Text>
+                          </TouchableOpacity>
+              
+                          
+                          <TouchableOpacity
+                            style={styles.cancelButton}
+                            onPress={toggleModal}>
+                            <Text style={styles.buttonText}>{t('Annuler')}</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </Modal>
+                  </View>
+                }
+              </TouchableOpacity>
+              </View>
+
+              <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10}}>
+                  <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
+              </View>
+          </View>
         </View>
     </View>
     </>
@@ -783,6 +751,26 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     color: '#000',
     fontFamily: 'Roboto-Regular',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+  modalCloseButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 1,
+  },
+  modalCloseButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  modalImage: {
+    width: '100%',
+    height: '100%',
   },
 });
 

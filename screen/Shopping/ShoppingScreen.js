@@ -1,6 +1,5 @@
-import { View, Text, Image, StyleSheet,Dimensions, TouchableOpacity, FlatList, ActivityIndicator} from 'react-native'
+import { View, Text, Image, StyleSheet,Dimensions, TouchableOpacity, FlatList, ActivityIndicator, ScrollView} from 'react-native'
 import React, {useState, useEffect} from 'react'
-import { ScrollView } from 'react-native-virtualized-view'
 import { HeaderEarth } from '../../components/Header'
 import { getSelectedCountry, getSelectedService } from '../../modules/GestionStorage'
 import axiosInstance from '../../axiosInstance'
@@ -206,7 +205,7 @@ const ShoppingScreen = ({ navigation, route }) => {
           paysLivraison={PaysLivraison}
         />
 
-        {
+        {/* {
           Categories.length > 0 ? (
             <View style={{marginTop: 20}}>
               <ScrollView
@@ -231,8 +230,43 @@ const ShoppingScreen = ({ navigation, route }) => {
               </ScrollView>
             </View>
           ) : (<></>)
-        }
+        } */}
         
+        {Categories.length > 0 ? (
+          <View style={styles.subTabbarContainer}>
+            <ScrollView
+              scrollEnabled
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.subTabbarScrollContainer}>
+
+              {Categories.map( (row) => (
+                <TouchableOpacity
+                    key={row.id}
+                    style={[
+                      styles.imageTextContainer
+                    ]}
+                    activeOpacity={0.5}
+                    onPress={() => {
+                      setSelectedCategorieId(row.id);
+                    }}>
+                    <View>
+                      <Image
+                        style={styles.iconStyler}
+                        source={{uri: row.image}}
+                        resizeMode="center"
+                      />
+                    </View>
+                    <Text style={[styles.subtabarTextStyle, SelectedCategorieId == row.id ? {color: "#376AED"} : {color: "#000"}]}>
+                      {'fr' == Language ? row.name : row.nameEn}
+                    </Text>
+              </TouchableOpacity>
+              ))}
+
+            </ScrollView>
+          </View>
+        ) : (<></>)
+      }
 
         {
           <>
@@ -301,14 +335,7 @@ const ShoppingScreen = ({ navigation, route }) => {
                       keyExtractor={item => item.id}
                     />
                     :
-                    <FlatList
-                      showsVerticalScrollIndicator={false}
-                      data={products}
-                      numColumns={2}
-                      renderItem={renderByPlaneGridItem}
-                      keyExtractor={item => item.id}
-                    />
-
+                     <></>
                     }
 
                     </>

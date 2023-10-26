@@ -455,8 +455,6 @@ const Livraison1 = (props) => {
           language={Language}
         />
 
-
-
       
       {(Activity === true || ActivityMagasin === true) ? (
         <View style={{justifyContent: 'center', height: '80%'}}>

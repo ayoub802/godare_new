@@ -12,12 +12,13 @@ import { getAuthentificationData } from '../../modules/GestionStorage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axiosInstance from '../../axiosInstance'
 import { getAuth } from 'firebase/auth'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { firebase_db } from '../../modules/FirebaseConfig'
 
 
 const EditProfile = ({ navigation }) => {
   const [name, setName] = useState(undefined);
+  const [id, setId] = useState(0);
   const [getData, setGetData] = useState([]);
   const [prename, setPrename] = useState(undefined);
   const [Email, setEmail] = useState(undefined);
@@ -62,10 +63,6 @@ const EditProfile = ({ navigation }) => {
   async function fetchValue() {
     setActivity(true);
     const userEmail = getAuth().currentUser;
-    if(userEmail){
-      setInitializing(true)
-    }
-
     console.log(userEmail.email);
     const q = query(collection(firebase_db, "users"), where('email', '==', userEmail.email))
     const querySnapshot = await getDocs(q);
@@ -73,19 +70,34 @@ const EditProfile = ({ navigation }) => {
     querySnapshot.forEach((doc) => {
       console.log(doc.id, " => ", doc.data());
       setGetData(doc.data())
+      setId(doc.id)
     });
-  const authStatus = await getAuthentificationData();  
-  if (authStatus)
-  {
-    setEmail(authStatus);
-  }
-
+  setEmail(getData.email);
   setName(getData.name);
   setPrename(getData.prenom);
   setBirthday(getData.birthday);
-  setPhoneNumber(getData.phone)
-
+  setPhoneNumber(getData.phone);
   setActivity(false);
+}
+
+console.log("ID:", id);
+
+
+
+async function updateUser(){
+  try{
+    const docRef = doc(firebase_db, 'users', id);
+    await updateDoc(docRef, {
+      name: name,
+      prenom: prename,
+      email: Email,
+      phone: phoneNumber
+    })
+    console.log("Success");
+  }
+  catch(error){
+    console.log("Error:",error);
+  }
 }
 
 // async function getDate(){
@@ -97,13 +109,6 @@ const EditProfile = ({ navigation }) => {
 //     setPhoneNumber(data.telephone);
 //   }
 // }
-  if(initializing === true){
-    return(
-      <View style={{flex: 1, justifyContent: "center"}}>
-         <ActivityIndicator size={'large'} color="#3292E0" />
-      </View>
-    )
-  }
     return (
         <SafeAreaView style={{ flex: 1}}>
           <ScrollView style={{paddingBottom: 50}} showsVerticalScrollIndicator={false}>
@@ -139,7 +144,7 @@ const EditProfile = ({ navigation }) => {
               <View style={{marginTop: 12}}>
                   <TextInput
                     value={name} 
-                    placeholder="Ehouman"
+                    onChangeText={(name) => setName(name)}
                     placeholderTextColor="#000"
                     style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
                   />
@@ -147,15 +152,14 @@ const EditProfile = ({ navigation }) => {
               <View style={{marginTop: 12}}>
                   <TextInput 
                     value={prename}
-                    placeholder="Kouadja"
-                    placeholderTextColor="#000"
+                    onChangeText={(prename) => setPrename(prename)}
                     style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
                   />
               </View>
               <View style={{}}>
                   <PhoneInput 
                     value={phoneNumber}
-                    placeholder="06 45 12 17 08"
+                    onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
                     placeholderTextColor="#000"
                     defaultCode='FR'
                     containerStyle={{flexDirection: "row", alignItems: "center", gap: 5,color: "#000", backgroundColor: "transparent", width: wp(90) }}
@@ -167,9 +171,9 @@ const EditProfile = ({ navigation }) => {
               </View>
               <View style={{marginTop: 2}}>
                   <TextInput 
-                    placeholder="e2kouadja@gmail.com"
                     placeholderTextColor="#000"
                     value={Email}
+                    onChangeText={(Email) => setEmail(Email)}
                     style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
                   />
               </View>
@@ -190,7 +194,7 @@ const EditProfile = ({ navigation }) => {
 
               <View style={{marginTop: 50}}>
                   <View style={{ justifyContent: "flex-end", alignItems: 'center', paddingBottom: 72}}>
-                    <Button title="valider" navigation={navigation}/>
+                    <Button title="valider" navigation={() => updateUser()}/>
                   </View>
               </View>
             </View>
