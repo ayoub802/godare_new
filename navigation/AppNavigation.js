@@ -49,19 +49,170 @@ import LegalNotice from '../screen/LegalNotice';
 import SuccessFullyRegOrder from '../screen/SuccessFullyRegOrder';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../modules/FirebaseConfig';
+import { getAuthUserEmail, getPanier, getSelectedCountry, getSelectedService, getServices, saveSelectedCountry, saveSelectedService } from '../modules/GestionStorage';
 
 
 const Home = createNativeStackNavigator();
 const Profile = createNativeStackNavigator();
-const AppNavigation = () => {
+const Cart = createNativeStackNavigator();
+const AppNavigation = (props) => {
+
 
   const [user, setUser] = useState(null);
+  const [Service, setService] = useState(null);
+  const [Loader,setLoader] = useState(false);
+  const [Remises, setRemises] = useState([]);
+  const [CartProducts, setCartProducts] = useState([]);
+  const [RemiseLoader, setRemiseLoader] = useState(true);
+  const [paysLivraison, setPaysLivraison] = useState('');
+  const [BasketClasseRegroupement, setBasketClasseRegroupement] = useState('');
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       console.log('user', user);
       setUser(user)
     })
   }, [])
+
+  useEffect(() => {
+ 
+    let mounted = true;
+
+    setLoader(true);
+    setRemiseLoader(true);
+    setCartProducts([]);
+
+    async function fetchValue() {
+      try {
+
+
+
+        // Information de connexion
+        const userEmail = await getAuthUserEmail();
+
+
+        // Recuperer le service
+        let service = await getSelectedService();
+        setService(service);
+
+
+        // Recuperer le pays de livraison
+        let selectedPaysLivraison = await getSelectedCountry();
+        setPaysLivraison(selectedPaysLivraison);
+
+
+        // Recuperer le panier
+        let basketData = await getPanier();
+
+
+
+        if (basketData.length > 0)
+        {
+          // Prend tjr le service du panier
+          let cartService = basketData[0].service;
+          if (cartService != service.code)
+          {
+            let services = await getServices();
+ 
+            var newData = services.filter(ls => {
+   
+              if (ls.code == cartService) {
+                return ls;
+              }
+            });
+
+            service = newData[0];
+
+            setService(service);
+
+            await saveSelectedService(service);
+          }
+
+          // prendre tjr le pays de livraison du panier
+          let cartPaysLivraison = basketData[0].paysLivraison;
+          if (selectedPaysLivraison.id != cartPaysLivraison.id)
+          {
+            selectedPaysLivraison = cartPaysLivraison;
+
+            setPaysLivraison(selectedPaysLivraison);
+
+            await saveSelectedCountry(selectedPaysLivraison);
+          }
+          
+
+          // Si vente privées recuperer la classe de regroupement (pour determiner si avion ou bateau)
+          if ('ventes-privees' == service.code)
+          {
+            let classeRegroupement = null;
+
+            basketData.map(ls => {
+
+              let productSpecificites = ls.product.productSpecificites ? ls.product.productSpecificites[0] : null;
+
+              let classeRegroupements = productSpecificites ? (productSpecificites.livraison ? productSpecificites.livraison.classeRegroupement : []) : [];
+
+              if (classeRegroupements && classeRegroupements.length == 1)
+              {
+                classeRegroupement = classeRegroupements[0].type;
+              }
+            });
+
+            // Probablement en face d'un type avec 2 classes de livraison, on ne prend que l'avion
+            if (!classeRegroupement)
+            {
+              basketData.map(ls => {
+                let productSpecificites = ls.product.productSpecificites ? ls.product.productSpecificites[0] : null;
+
+                let classeRegroupements = productSpecificites ? (productSpecificites.livraison ? productSpecificites.livraison.classeRegroupement : []) : [];
+
+                if (classeRegroupements && classeRegroupements.length == 2) // Juste pour s'assurer qu'on a bien defini le type de livraison
+                {
+                  classeRegroupement = 'avion';
+                }
+              });
+            }
+  
+            setBasketClasseRegroupement(classeRegroupement);
+          }
+            
+          setCartProducts(basketData);
+        }
+
+        if (!service)
+        {
+          return;
+        }
+
+        // Recuperer les remises
+        axiosInstance.get('/remises/active/all/' + userEmail + '/' + service.code + '/' + selectedPaysLivraison.id).then((response) => {
+          if (response.data)
+          {
+            setRemises(response.data);
+            setRemiseLoader(false);
+          }
+        })
+        .catch(function (error) {
+          setRemiseLoader(false);
+        });
+
+        setLoader(false)
+
+      } catch (error) {
+        console.log('error', error);
+
+        setLoader(false);
+        setRemiseLoader(false);
+      }
+    }
+
+
+    fetchValue();
+
+    return (mounted) => mounted = false;
+
+  }, []);
+
+
   return (
     <NavigationContainer>
     <StatusBar backgroundColor="#2BA6E9"/>
@@ -167,7 +318,6 @@ const AppNavigation = () => {
         </Tab.Screen>
         <Tab.Screen
         name='Cart'
-        component={CartScreen}
           options={{
             tabBarIcon: ({focused}) => {
               return (
@@ -178,13 +328,26 @@ const AppNavigation = () => {
                     color={focused ? '#fff' : '#ffffffb3'}
                   />
                   <View style={{ position: "absolute", top: -5, right: -5, backgroundColor: '#F4951A', width: 20, height: 20, justifyContent: "center", alignItems: "center", borderRadius: 50}}>
-                    <Text style={{fontSize: 12, fontFamily: "Poppins-Medium", color: "#fff"}}>2</Text>
+                    <Text style={{fontSize: 12, fontFamily: "Poppins-Medium", color: "#fff"}}>{CartProducts.length}</Text>
                   </View>
                 </View>
               );
             },
           }}
         >
+          {
+            () => (
+              <Cart.Navigator screenOptions={{ headerShown: false}}>
+                {
+                  user 
+                  ?
+                  <Cart.Screen name="CartBag" component={CartScreen}/>
+                  :
+                  <Cart.Screen name="Login" component={LoginScreen}/>
+                }
+              </Cart.Navigator>
+            )
+          }
         </Tab.Screen>
         <Tab.Screen
         name='Profile'

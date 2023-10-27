@@ -3,7 +3,7 @@ import {initReactI18next} from 'react-i18next';
 import en from './en.json';
 import fr from './fr.json';
 
-export const resources = {
+const Languageresources = {
   en: {
     translation: en
   },
@@ -17,14 +17,10 @@ i18n
   .use(initReactI18next)
   .init({
     compatibilityJSON: 'v3',
+    debug: true,
+    lng: 'fr',
     fallbackLng: 'fr',
-    react: {
-      useSuspense: false,
-    },
-    resources: resources,
-  interpolation: {
-    escapeValue: false, // react already safes from xss
-  },
+    resources: Languageresources,
 });
 
 

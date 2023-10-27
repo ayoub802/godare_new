@@ -103,6 +103,8 @@ const CartScreen = (props) => {
         // Recuperer le panier
         let basketData = await getPanier();
 
+
+
         if (basketData.length > 0)
         {
           // Prend tjr le service du panier
@@ -314,7 +316,7 @@ const CartScreen = (props) => {
     }
   };
 
-console.log(CartProducts);
+console.log(CartProducts.length);
   // Sauvegarder la nouvelle quantité
   const saveProductNewQuantity = async (item, quantity) => {
 

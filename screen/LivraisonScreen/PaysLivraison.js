@@ -12,10 +12,11 @@ import axiosInstance from '../../axiosInstance';
 import { getSelectedService, saveSelectedCountry } from '../../modules/GestionStorage';
 import styles from './styles';
 import Flag from 'react-native-flags';
+import { useTranslation } from 'react-i18next';
 
 const PaysLivraison = ({navigation, route}) => {
   var isFocused = useIsFocused();
-
+  const { t } = useTranslation();
   const [paysData, setPaysData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [current, setCurrent] = useState();
@@ -249,6 +250,7 @@ const PaysLivraison = ({navigation, route}) => {
                       );
                     },
                   }))
+                
               } 
               open={isOpen}
               setOpen={() => setIsOpen(!isOpen)}
@@ -279,6 +281,29 @@ const PaysLivraison = ({navigation, route}) => {
                 setValue(item.value)
               }}
             />
+{/* 
+        <Dropdown
+          style={[styles.dropdown, isFocus && {borderColor: 'blue'}]}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          autoScroll
+          iconStyle={styles.iconStyle}
+          containerStyle={styles.containerStyle}
+          data={data}
+          labelField="label"
+          valueField="value"
+          placeholder={t('Choisir le pays')}
+          value={value}
+          showsVerticalScrollIndicator={false}
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            setValue(item.value);
+            setIsFocus(false);
+          }}
+          
+          renderItem={renderItem}
+        /> */}
       </View>
 
      <View style={{justifyContent: "center", alignItems: "center", marginTop: 30}}>

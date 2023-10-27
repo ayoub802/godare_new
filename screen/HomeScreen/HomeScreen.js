@@ -11,6 +11,9 @@ import { getPlatformLanguage, getServices, saveSelectedService, saveServices } f
 import axiosInstance from '../../axiosInstance';
 import _ from "lodash";
 import { useTranslation } from 'react-i18next';
+import DropDownPicker from 'react-native-dropdown-picker';
+import i18next from 'i18next';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 const HomeScreen = ({navigation}) => {
   const { t, i18n } = useTranslation();
 
@@ -19,6 +22,8 @@ const HomeScreen = ({navigation}) => {
   const [Activity, setActivity] = useState(true);
   const [ActivityWave, setActivityWave] = useState(false);
   const [WaveSessionID, setWaveSessionID] = useState(null);
+  const [isOpen, setIsOpen] = useState(false)
+  const [current, setCurrent] = useState('')
 
   useEffect(() => {
 
@@ -104,6 +109,16 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+ const items = [
+  {
+    label: "France",
+    value: "fr"
+  },
+  {
+    label: "Anglais",
+    value: "en"
+  },
+ ]
 
 
   if (Activity)

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity,ActivityIndicator,ToastAndroid, Alert ,Image, ScrollView, StyleSheet, Dimensions } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import Checkbox from 'expo-checkbox';
 
@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { CardField, useConfirmPayment } from '@stripe/stripe-react-native'
 import { useTranslation } from 'react-i18next'
 import { doPaymentWithSavedCard, fetchPaymentIntentClientSecret, getClientCards } from '../modules/GestionStripe';
-import { getAuthUserEmail, getCartPrices } from '../modules/GestionStorage';
+import { getAuthUserEmail, getCartPrices, removePanier } from '../modules/GestionStorage';
 import { buildCommande } from '../modules/GestionFinalisationPanier';
 import { getImageType } from '../modules/TraitementImage';
 import axiosInstance from '../axiosInstance';
@@ -52,14 +52,15 @@ const PaymentCard = (props) => {
           // email
           const email = await getAuthUserEmail();
           setUserEmail(email);
-  
+          
+          console.log(email);
           // Fetch cards
           try
           {
             const userCards = await getClientCards(email);
     
+            console.log(userCards.created);
             setCards(userCards.data);
-            console.log(userCards.data);
           }
           catch (error)
           {
@@ -125,12 +126,8 @@ const PaymentCard = (props) => {
         {
             if (!SelectedCardCVC)
             {
-              Toast.show({
-                type: 'error',
-                text1: t('Carte'),
-                text2: t("Le CVC est obligatoire !"),
-              });
-    
+
+              ToastAndroid.show('Le CVC est obligatoire !',ToastAndroid.SHORT);
               return;
             }
     
@@ -146,12 +143,8 @@ const PaymentCard = (props) => {
         else 
         {
           if (!cardDetails.complete) {
-            Toast.show({
-              type: 'error',
-              text1: t('Carte'),
-              text2: t("La carte n'est pas valide !"),
-            });
-      
+
+            ToastAndroid.show("La carte n'est pas valide !",ToastAndroid.SHORT);
             console.log("La carte n'est pas valide !");
             return;
           }
@@ -199,12 +192,8 @@ const PaymentCard = (props) => {
     
           if (responseError) 
           {
-            Toast.show({
-              type: 'error',
-              text1: t('Erreur confirmation'),
-              text2: t("Erreur lors de la confirmation de paiement !"),
-            });
-    
+
+            ToastAndroid.show("Payment confirmation error",ToastAndroid.SHORT);
             console.log('Payment confirmation error', responseError);
     
             return;
@@ -286,11 +275,7 @@ const PaymentCard = (props) => {
           }
           console.log(error.config);
           
-          Toast.show({
-            type: 'error',
-            text1: t('Commande'),
-            text2: t("Erreur lors de la sauvegarde de la commande !"),
-          });
+          ToastAndroid.show("Erreur lors de la sauvegarde de la commande !",ToastAndroid.SHORT);
           console.log("Erreur lors de la sauvegarde de la commande !");
         }
     
@@ -298,12 +283,7 @@ const PaymentCard = (props) => {
       catch(error)
       {
         console.log('error', error);
-  
-        Toast.show({
-          type: 'error',
-          text1: t('Paiement'),
-          text2: t("Erreur lors du paiement !"),
-        });
+        ToastAndroid.show("Erreur lors du paiement !",ToastAndroid.SHORT);
         console.log("Erreur lors du paiement !");
       }
       
@@ -334,24 +314,15 @@ const PaymentCard = (props) => {
             <>
               <View style={styles.PaymentInputsContainer}>
   
-                <Text style={{ marginBottom: 20, marginTop: 20 }}>
-                  {t('Ou saisir les informations de la nouvelle carte')}
-                </Text>
-  
-                <View style={styles.inputContainer}>
+                <View style={{width: "100%"}}>
                   
-                  <View>
-
                     <TextInput 
                         value={name}
                         onChangeText={text => setName(text)}
                         placeholder="Samuel Witwicky"
                         placeholderTextColor="#626262"
-                        style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 20 ,borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                        style={{borderWidth: 1,width: "100%" ,borderColor: "#AAB0B7", paddingLeft: 20 ,borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
                         />
-                  </View>
-  
-                
                 </View>
   
                 <CardField
@@ -365,44 +336,24 @@ const PaymentCard = (props) => {
                       flexDirection: "column",
                       justifyContent: "center",
                       alignItems: "center",
-                      borderColor: "#000000",
+                      borderColor: "#AAB0B7",
                       borderWidth: 1,
-                      borderRadius: 20
+                      borderRadius: 8
                     }}
                     style={{
                       width: '100%',
-                      height: 80,
+                      height: 60,
                       flexDirection: "column",
                       justifyContent: "center",
                       alignItems: "center",
-                      marginVertical: 30,
+                      marginVertical: 20,
                     }}
                     onCardChange={(cardDetails) => setCardDetails(cardDetails)}
                     
                   />
   
-                {/* <CardForm
-                            placeholder={{
-                              number: "4242 4242 4242 4242",
-                            }}
-                            onFormComplete={(cardDetails) => {
-                              console.log("card details", cardDetails)
-                              setCardDetails(cardDetails)
-                            }}
-                            style={{
-                              height: 200,
-                              justifyContent: "center",
-                              alignItems: "center",
-                              textAlign: "center",
-                            }}
-                            cardStyle={{
-                              backgroundColor: "#efefefef",
-                              textAlign: "center",
-                              textColor: "pink",
-                            }}
-                /> */}
   
-                <View style={{flexDirection: "row", gap: 2}}>
+                <View style={{flexDirection: "row-reverse",gap: 4}}>
                 <Text>{t('Enregistrer la carte')}</Text>
                   <Checkbox
                     value={enregistrerCarte}
@@ -418,17 +369,14 @@ const PaymentCard = (props) => {
           
   
           
-          <View style={{flex: 1, alignItems: "center", justifyContent: "flex-end", paddingBottom: 80}}>
+          <View style={{flex: 1, paddingTop: 120}}>
             <TouchableOpacity
-                style={[
-                styles.btnContainer,
-                {marginTop: 10, backgroundColor: '#3292E0'},
-                ]}
+                style={{marginTop: 10, backgroundColor: '#3292E0',paddingVertical: 12 ,paddingHorizontal: 32,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}}
                 //onPress={handleConfirmation}// stripe Payment Button
                 onPress={validatePayment}// stripe Payment Button
                 disabled={LoadingPayment}
             >
-                <Text style={styles.btnText}>{t('Valider le paiement')}</Text>
+                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>{t('Valider le paiement')}</Text>
             </TouchableOpacity>
           </View>
   
@@ -442,7 +390,9 @@ const PaymentCard = (props) => {
 const styles = StyleSheet.create({
     container: { 
       height: "70%",
-      alignItems: "center"
+      alignItems: "center",
+      width: "100%",
+      justifyContent: "center"
     },
     PaymentInputsContainer: {
       // backgroundColor: 'tomato',
@@ -453,7 +403,6 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
       // backgroundColor: 'green',
-      flexDirection: 'row',
       borderBottomWidth: 1,
       borderBottomColor: '#E4EBF9',
     },

@@ -201,6 +201,7 @@ const Livraison1 = (props) => {
           return {id:ls.id, label:(ls.adresse + ' ' + ls.codePostal + ' ' + ls.ville + ' ' + ls.pays), value:ls.id, nom: ls.nom, telephone: ls.telephone}
         });
 
+        console.log(userEmail);
         setAdresses(formattedUserAdresses);
       }
       catch (error)
@@ -269,8 +270,8 @@ const Livraison1 = (props) => {
 
             setUserDomicileChoix(newData[0]);
             setUserLivraisonDomicileChoix(adresseId);
-            setNomContact(newData[0].nom);
-            setTelContact(newData[0].telephone);
+            // setNomContact(newData[0].nom);
+            // setTelContact(newData[0].telephone);
           }
         }
       }
@@ -291,8 +292,8 @@ const Livraison1 = (props) => {
             setUserDomicileChoix(newData[0]);
             setUserLivraisonDomicileChoix(adresse.id);
             setStorageLIvraisonChoiceAdresse(adresse);
-            setNomContact(adresse.nom);
-            setTelContact(adresse.telephone);
+            // setNomContact(adresse.nom);
+            // setTelContact(adresse.telephone);
          }
        }
 
@@ -445,7 +446,7 @@ const Livraison1 = (props) => {
     );
   }
   return (
-    <View style={{flex: 1, marginBottom: 50}}>
+    <View style={{flex: 1, marginBottom: 50,position: "relative",}}>
       
 
         <ServiceHeader 
@@ -650,69 +651,6 @@ const Livraison1 = (props) => {
             showLivraisonDomicile &&
             <>
 
-            <View style={{ marginTop: 10, paddingHorizontal: 16}}>
-                <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
-                    <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
-                       Choix de dépot
-                    </Text>
-                    <View style={{marginTop: 10, position: "relative", zIndex: 1000}}>
-                    <Dropdown
-                    style={[styles.dropdown]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    autoScroll
-                    iconStyle={styles.iconStyle}
-                    containerStyle={styles.containerrrrStyle}
-                    data={MagasinsLivraison}
-                    value={magasinLivraisonUserChoix}
-                    maxHeight={220}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={MagasinsLivraison.length > 0 ? t('Choisir le point relais') : t('Pas de points relais disponible')}
-                    showsVerticalScrollIndicator={false}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                      OnChangeMagasinValue(item);
-                      setIsFocus(false);
-                    }}
-                
-                  />
-                    </View>
-                </View>
-            </View>
-            
-            <View style={{ marginTop: 10, paddingHorizontal: 16, position: "relative", zIndex: -100}}>
-                <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
-                    <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
-                       Choix de livrasion et facturation
-                    </Text>
-                    <View style={{marginTop: 10, position: "relative", zIndex: 1000}}>
-                    <Dropdown
-                    style={[styles.dropdown]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    autoScroll
-                    iconStyle={styles.iconStyle}
-                    containerStyle={styles.containerrrrStyle}
-                    data={MagasinsLivraison}
-                    value={magasinLivraisonUserChoix}
-                    maxHeight={220}
-                    labelField="label"
-                    valueField="value"
-                    placeholder={MagasinsLivraison.length > 0 ? t('Choisir le point relais') : t('Pas de points relais disponible')}
-                    showsVerticalScrollIndicator={false}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={item => {
-                      OnChangeMagasinValue(item);
-                      setIsFocus(false);
-                    }}
-                
-                  />
-                    </View>
-                </View>
-            </View>
               {'demandes-d-achat' == Service.code ?
                 (
                   <View style={styles.TotalContainer}>
@@ -775,17 +713,20 @@ const Livraison1 = (props) => {
                 <Text style={styles.modalText}>
                 {actionTriggered.adresse + ', ' + (actionTriggered.codePostal ? (actionTriggered.codePostal + ' ') : '' ) + actionTriggered.ville + ' ' + actionTriggered.pays  }
                 </Text>
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => unSetChoixRelais()}>
-                  <Text style={styles.textStyle}>{t('Fermer')}</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.button, styles.buttonOpen]}
-                  onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
-                  <Text style={styles.textStyle}>{t('Sélectionner le magasin')}</Text>
-                </Pressable>
+                <View style={{flexDirection: "row", justifyContent: "space-between", gap: 15}}>
+                  <Pressable
+                    style={[styles.button, styles.buttonClose]}
+                    onPress={() => unSetChoixRelais()}>
+                    <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>Fermer</Text>
+                  </Pressable>
+                  <Pressable
+                    style={[styles.button, styles.buttonOpen]}
+                    onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
+                    <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>Selectionner le magasin</Text>
+                  </Pressable>
+                </View>
               </View>
+                <View style={{position: "absolute", width: "100%", height: "100%", backgroundColor: "#000", opacity: 0.5, zIndex: -100}}></View>
             </View>
           </Modal>
 
@@ -1053,7 +994,16 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
+    paddingVertical: 8, 
+    paddingHorizontal: 22,
+    flexDirection: "row", 
+    alignItems: "center",
+    justifyContent: "center" ,
+    gap: 10, 
+    backgroundColor: "#fff",
+    borderWidth: 1,borderColor: "#4E8FDA",
+    color: "#4E8FDA" ,
+    borderRadius: 25,
   },
   buttonClose: {
     backgroundColor: '#2196F3',

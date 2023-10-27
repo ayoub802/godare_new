@@ -62,25 +62,31 @@ const EditProfile = ({ navigation }) => {
   
   async function fetchValue() {
     setActivity(true);
-    const userEmail = getAuth().currentUser;
-    console.log(userEmail.email);
-    const q = query(collection(firebase_db, "users"), where('email', '==', userEmail.email))
-    const querySnapshot = await getDocs(q);
-
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-      setGetData(doc.data())
-      setId(doc.id)
-    });
-  setEmail(getData.email);
-  setName(getData.name);
-  setPrename(getData.prenom);
-  setBirthday(getData.birthday);
-  setPhoneNumber(getData.phone);
+    setInitializing(true)
+    try{
+      const userEmail = getAuth().currentUser;
+      const q = query(collection(firebase_db, "users"), where('email', '==', 'hamid@gmail.com'))
+      const querySnapshot = await getDocs(q);
+  
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, " => ", doc.data());
+        setGetData(doc.data())
+        setId(doc.id)
+      });
+      if(getData){
+        setInitializing(false)
+      }
+    setEmail(getData.email);
+    setName(getData.name);
+    setPrename(getData.prenom);
+    setBirthday(getData.birthday);
+    setPhoneNumber(getData.phone);
+    }
+    catch(error){
+      console.log("Error", error);
+    }
   setActivity(false);
 }
-
-console.log("ID:", id);
 
 
 
@@ -109,99 +115,102 @@ async function updateUser(){
 //     setPhoneNumber(data.telephone);
 //   }
 // }
-    return (
+
+if(true == initializing){
+  return(
+    <View style={{justifyContent: 'center', height: '80%'}}>
+      <ActivityIndicator size="large" color="#3292E0" style={{}} />
+  </View>
+  )
+}
+
+return (
         <SafeAreaView style={{ flex: 1}}>
           <ScrollView style={{paddingBottom: 50}} showsVerticalScrollIndicator={false}>
              <View style={{flex: 1}}>
                  <HeaderEarth />
     
-    {
-      Activity === true ? (
-        <View style={{justifyContent: 'center', height: '80%'}}>
-          <ActivityIndicator size="large" color="#3292E0" style={{}} />
-        </View>
-      ) : (
-        <>
-            <View style={{ marginTop: 30, marginBottom: 12,paddingHorizontal: 28 ,flexDirection: "row" ,alignItems: "center", justifyContent: "space-between"}}>
-                <View style={{marginLeft: "auto"}}>
-                  <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16, color: "#000", textAlign: "center"}}>Mon profil</Text>
+
+                <View style={{ marginTop: 30, marginBottom: 12,paddingHorizontal: 28 ,flexDirection: "row" ,alignItems: "center", justifyContent: "space-between"}}>
+                    <View style={{marginLeft: "auto"}}>
+                      <Text style={{ fontFamily: "Poppins-SemiBold", fontSize: 16, color: "#000", textAlign: "center"}}>Mon profil</Text>
+                    </View>
+                    <View style={{ marginLeft: 'auto'}}>
+                          <TouchableOpacity>
+                              <MaterialCommunityIcons name="pencil-outline" size={18} color="#000"/>
+                          </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={{ marginLeft: 'auto'}}>
-                      <TouchableOpacity>
-                          <MaterialCommunityIcons name="pencil-outline" size={18} color="#000"/>
-                      </TouchableOpacity>
-                </View>
-            </View>
-
-            <View style={{paddingHorizontal: 28}}>
-
-              <View style={{marginTop: 12}}>
-                  <TextInput 
-                    placeholder="Civilité"
-                    style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
-                  />
-              </View>
-              <View style={{marginTop: 12}}>
-                  <TextInput
-                    value={name} 
-                    onChangeText={(name) => setName(name)}
-                    placeholderTextColor="#000"
-                    style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
-                  />
-              </View>
-              <View style={{marginTop: 12}}>
-                  <TextInput 
-                    value={prename}
-                    onChangeText={(prename) => setPrename(prename)}
-                    style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
-                  />
-              </View>
-              <View style={{}}>
-                  <PhoneInput 
-                    value={phoneNumber}
-                    onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
-                    placeholderTextColor="#000"
-                    defaultCode='FR'
-                    containerStyle={{flexDirection: "row", alignItems: "center", gap: 5,color: "#000", backgroundColor: "transparent", width: wp(90) }}
-                    codeTextStyle={{ display: "none"}}
-                    textContainerStyle={{backgroundColor: "transparent" , padding: 0, color: "#000",fontFamily: "Poppins-Regular", fontSize: 14 }}
-                    textInputStyle={{borderWidth: 1, height: 60,paddingLeft: 16 ,borderColor: "#AAB0B7",color: "#000" ,borderRadius: 8, backgroundColor: "#fff"}}
-                    flagButtonStyle={{borderWidth: 1, height: 60 ,borderColor: "#AAB0B7" ,borderRadius: 8, backgroundColor: "#fff"}}
-                  />
-              </View>
-              <View style={{marginTop: 2}}>
-                  <TextInput 
-                    placeholderTextColor="#000"
-                    value={Email}
-                    onChangeText={(Email) => setEmail(Email)}
-                    style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
-                  />
-              </View>
-              <View style={{marginTop: 12}}>
-                  <TextInput 
-                    placeholder="*********"
-                    placeholderTextColor="#000"
-                    style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
-                  />
-              </View>
-              <View style={{marginTop: 12}}>
-                  <TextInput 
-                    placeholder="04/10/1981"
-                    placeholderTextColor="#000"
-                    style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
-                  />
-              </View>
-
-              <View style={{marginTop: 50}}>
-                  <View style={{ justifyContent: "flex-end", alignItems: 'center', paddingBottom: 72}}>
-                    <Button title="valider" navigation={() => updateUser()}/>
+    
+                <View style={{paddingHorizontal: 28}}>
+    
+                  <View style={{marginTop: 12}}>
+                      <TextInput 
+                        placeholder="Civilité"
+                        style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                      />
                   </View>
-              </View>
-            </View>
-        </>
-
-      )
-    }
+                  <View style={{marginTop: 12}}>
+                      <TextInput
+                        value={name} 
+                        placeholder={name}
+                        onChangeText={(name) => setName(name)}
+                        placeholderTextColor="#000"
+                        style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{marginTop: 12}}>
+                      <TextInput 
+                        value={prename}
+                        placeholder={prename}
+                        onChangeText={(prename) => setPrename(prename)}
+                        style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{}}>
+                      <PhoneInput 
+                        value={phoneNumber}
+                        placeholder={phoneNumber}
+                        onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
+                        placeholderTextColor="#000"
+                        defaultCode='FR'
+                        containerStyle={{flexDirection: "row", alignItems: "center", gap: 5,color: "#000", backgroundColor: "transparent", width: wp(90) }}
+                        codeTextStyle={{ display: "none"}}
+                        textContainerStyle={{backgroundColor: "transparent" , padding: 0, color: "#000",fontFamily: "Poppins-Regular", fontSize: 14 }}
+                        textInputStyle={{borderWidth: 1, height: 60,paddingLeft: 16 ,borderColor: "#AAB0B7",color: "#000" ,borderRadius: 8, backgroundColor: "#fff"}}
+                        flagButtonStyle={{borderWidth: 1, height: 60 ,borderColor: "#AAB0B7" ,borderRadius: 8, backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{marginTop: 2}}>
+                      <TextInput 
+                        placeholderTextColor="#000"
+                        value={Email}
+                        placeholder={Email}
+                        onChangeText={(Email) => setEmail(Email)}
+                        style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{marginTop: 12}}>
+                      <TextInput 
+                        placeholder="*********"
+                        placeholderTextColor="#000"
+                        style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{marginTop: 12}}>
+                      <TextInput 
+                        placeholder="04/10/1981"
+                        placeholderTextColor="#000"
+                        style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
+                      />
+                  </View>
+    
+                  <View style={{marginTop: 50}}>
+                      <View style={{ justifyContent: "flex-end", alignItems: 'center', paddingBottom: 72}}>
+                        <Button title="valider" navigation={() => updateUser()}/>
+                      </View>
+                  </View>
+                </View>
 
                  
              </View>

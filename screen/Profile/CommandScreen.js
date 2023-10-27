@@ -33,7 +33,7 @@ const CommandScreen = (props) => {
     
             try 
             {
-              const response = await axiosInstance.get('commandes/khalildonald%40yahoo.fr');
+              const response = await axiosInstance.get('commandes/' + userEmail);
     
               let dataEnCours = [];
               let dataPrecedents = [];
