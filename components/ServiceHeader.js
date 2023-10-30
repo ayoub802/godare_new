@@ -55,7 +55,7 @@ const ServiceHeader = props => {
                 </Text>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 10}}>
                     <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
-                         <Flag size={24} code={PaysLivraison.drapeauDepart} type='flat' />
+                         <Flag size={24} code={'FR'} type='flat' />
                         <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>{PaysLivraison.depart}</Text>
                         <Feather name="arrow-up-right" color="#fff" size={22}/>
                     </View>

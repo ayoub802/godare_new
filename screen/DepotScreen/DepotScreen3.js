@@ -1,5 +1,5 @@
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context';
 import France from "../../assets/images/france.png"
 import CoteIvoire from "../../assets/images/cote_ivoire.png"
@@ -11,11 +11,136 @@ import { TimeDatePicker } from "react-native-time-date-picker";
 import moment from 'moment';
 import Button from '../../components/Button';
 import { ScrollView } from 'react-native-virtualized-view';
+import { getCreneaux, getDepotValues, getSelectedCountry, getSelectedService, saveDepotCreneau } from '../../modules/GestionStorage';
+import { useIsFocused } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
+import ServiceHeader from '../../components/ServiceHeader';
 
-const DepotScreen3 = ({ navigation }) => {
+const DepotScreen3 = (props) => {
   const now = moment().valueOf();
-  
+  var isFocused = useIsFocused();
+  const {t} = useTranslation();
   const [activeHour, setActiveHour] = useState(0);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [Horaires, setHoraires] = useState([]);
+  const [Creneaux, setCreneaux] = useState([]);
+  const [Activity, setActivity] = useState(true);
+  const [availableDates, setAvailableDates] = useState({});
+  const [Service, setService] = useState(null);
+  const [paysLivraisonObject, setPaysLivraisonObject] = useState(null);
+  const [Language, setLanguage] = useState('fr');
+
+  
+  // async function navigateToDelivery()
+  // {
+  //   if (selectedDate === '')
+  //   {
+  //     Toast.show({
+  //       type: 'error',
+  //       text1: 'Créneau',
+  //       text2: t('Vous devez choisir un créneau'),
+  //     });
+
+  //     return;
+  //   }
+
+  //   props.navigation.navigate("Livraison1");
+  // }
+
+  // useEffect(() => {
+
+  //   async function getCreneauxValues()
+  //   {
+  //     const depotValues = await getDepotValues();
+
+
+  //     let departement = depotValues.depotDepartement;
+   
+  //     let ville = depotValues.depotVille;
+  
+  //     let creneaux = await getCreneaux();
+  //     creneaux = creneaux ? creneaux : [];
+
+  //     let service = await getSelectedService();
+  //     setService(service);
+
+  //     // Get pays de livraison
+  //     let paysLivraisonObject = await getSelectedCountry();
+  //     setPaysLivraisonObject(paysLivraisonObject);
+
+  //     let data = [];
+  //     creneaux.forEach((creneau) => {
+  //       if (creneau.departement == departement || creneau.ville.toLowerCase() == ville)
+  //       {
+  //         data.push(creneau);
+  //       }
+  //     });
+
+  //     let formatted = [];
+  //     let dates = {};
+  //     data.forEach((creneau) => {
+  //       let plages = creneau.creneauEnlevementPlages;
+        
+  //       plages.forEach((plage) => {
+
+  //         let date = moment(plage.date, 'DD/MM/YYYY').format('YYYY-MM-DD');
+          
+  //         formatted.push({
+  //           id: plage.id,
+  //           value: plage.id,
+  //           place: plage.quantite,
+  //           date: date,
+  //           horaireDebut: plage.horaireDebut,
+  //           horaireFin: plage.horaireFin,
+  //           label: t("Horaire d'ouverture") + " : " + plage.horaireDebut + ' - ' + plage.horaireFin
+  //         });
+
+  //         dates[date] = {disabled: false}
+          
+  //       });
+  //     });
+
+  //     setAvailableDates(dates);
+  //     setCreneaux(formatted);
+
+  //     setActivity(false);
+  //   }
+
+  //   setActivity(true);
+
+  //   getCreneauxValues();
+
+  // }, [isFocused]);
+
+  // const handleDayPress = (date) => {
+  //   setSelectedDate(date);
+
+  //   let horaires = [];
+  //   Creneaux.forEach((obj) => {
+      
+  //     if (obj.date == date)
+  //     {
+  //       horaires.push(obj);
+  //     }
+  //   });
+
+  //   setHoraires(horaires);
+
+  //   setModalVisible(true);
+  // }
+
+  // async function handleTimeSelect (obj) {
+  //   setModalVisible(false);
+
+  //   await saveDepotCreneau(obj);
+
+  //   navigateToDelivery();
+  // };
+
+  // const closeModal = () => {
+  //   setModalVisible(false);
+  // };
   const hours =[
     {
       id: 1,
@@ -34,30 +159,29 @@ const DepotScreen3 = ({ navigation }) => {
       label: "16h-18h"
     },
   ]
+
+  if (Activity || !Service)
+  {
+    return (
+
+      <View style={{justifyContent: 'center', height: '80%'}}>
+        <ActivityIndicator size="large" color="#3292E0" style={{}} />
+      </View>
+   
+    );
+  }
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView style={{paddingBottom: 50}} showsVerticalScrollIndicator={false}>
         <View style={{ flex: 1}}>
-            <View style={{ position: "relative" ,alignItems: "center", backgroundColor: "#2BA6E9", justifyContent: "center", height: hp(12)}}>
-                <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold"}}>Fret par avoin</Text>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 10}}>
-                    <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
-                        <Image source={France}/>
-                        <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>France</Text>
-                        <Feather name="arrow-up-right" color="#fff" size={22}/>
-                    </View>
-                    <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
-                        <Image source={CoteIvoire}/>
-                        <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>Côte d'ivoire</Text>
-                        <Feather name="arrow-up-right" color="#fff" size={22}/>
-                    </View>
-                </View>
-
-                <View style={{ position: "absolute", top: 15, right: 10}}>
-                  <Image source={SmallEarth}/>
-                  <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold", textAlign: "center", marginTop: 4}}>GS</Text>
-                </View>
-            </View>
+           
+        <ServiceHeader 
+          navigation={props.navigation}
+          service={Service}
+          paysLivraison={paysLivraisonObject}
+          language={Language}
+        />
 
             <View>
               <Stepper position={1}/>
@@ -70,7 +194,8 @@ const DepotScreen3 = ({ navigation }) => {
                 <TimeDatePicker 
                     selectedDate={now}
                     onSelectedChange={(selected) => {
-                      console.log("selected: ", selected);
+                      // handleDayPress(moment(selected).format("YYYY/MM/DD"))
+                      console.log(selected);
                     }}
                   style={{height: 400, paddingTop: 12, borderWidth: 1,borderRadius: 4 ,borderColor: "#E5E5E5"}}
                   options={{ borderColor: "transparent", mainColor: "#2196F3", textSecondaryColor: "#999"}}
@@ -94,7 +219,7 @@ const DepotScreen3 = ({ navigation }) => {
             </View>
 
             <View style={{ flex: 1, justifyContent: "flex-end", alignItems: 'center', paddingBottom: 72}}>
-              <Button title="Valider" navigation={() => navigation.navigate('Livraison1')}/>
+              <Button title="Valider"/>
             </View>
         </View>
       </ScrollView>

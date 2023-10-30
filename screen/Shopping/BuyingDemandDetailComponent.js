@@ -1,5 +1,5 @@
 //import liraries
-import React, {Component, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 
 import {
   View,
@@ -12,9 +12,8 @@ import {
   ScrollView,
   TextInput,
   SafeAreaView,
-  Alert,
-  Button
-} from 'react-native';
+  ToastAndroid,
+  Alert} from 'react-native';
 import {Dropdown} from 'react-native-element-dropdown';
 import commonStyle from '../../helper/commonStyle';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -24,6 +23,12 @@ import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PhotoZoomer from "../../components/PhotoZoomer"
 import { getAuthUserEmail, removePanier, getPanier, savePanier } from '../../modules/GestionStorage';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import DropDownPicker from 'react-native-dropdown-picker';
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+import Button from '../../components/Button';
+import { auth } from '../../modules/FirebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -64,6 +69,9 @@ const BuyingDemandDetailComponent = props =>  {
   const [selectedProductValues, setSelectedProductValues] = useState({});
   const [descriptionModalVisible, setDescriptionModalVisible] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [open, setOpen] = useState(false)
+  const [StateValue, setStateValue] = useState(null);
+  const [user, setUser] = useState([]);
 
 
  
@@ -74,7 +82,14 @@ const BuyingDemandDetailComponent = props =>  {
     return {label: (arrayOFF + 1), value: (arrayOFF + 1 )};
   });
 
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log('user', user);
+      setUser(user)
+    })
+  }, [])
 
+  console.log(user);
 
   // Scroll
   const Change = nativeEvent => {
@@ -250,6 +265,7 @@ const selectImageFromGallery = () => {
       text2: t('Image ajoutée'),
     });
 
+    ToastAndroid.show("Image ajoutée", ToastAndroid.SHORT)
     setModalVisible(!isModalVisible);
   });
 };
@@ -268,6 +284,7 @@ const openCameraForPicture = () => {
       text1: t('Image'),
       text2: t('Image ajoutée'),
     });
+    ToastAndroid.show("Image ajoutée", ToastAndroid.SHORT)
 
     setModalVisible(!isModalVisible);
   });
@@ -287,6 +304,7 @@ const handleCartLogin = async (product) => {
       text1: t('Quantité'),
       text2: t('La quantité est obligatoire !'),
     });
+    ToastAndroid.show("La quantité est obligatoire !", ToastAndroid.SHORT)
 
     return;
   }
@@ -332,7 +350,7 @@ const handleCartLogin = async (product) => {
       if (isSuccess)
       {
         // Not Login
-        if (authStatus === null) 
+        if (user === null) 
         {
           Navigation.navigate('LoginScreen', {fromCart: 'cart'});
           return; //should never reach
@@ -384,6 +402,7 @@ const handleCartLogin = async (product) => {
         product: product,
         ProductId: product.id,
         discount: product.discount,
+        ProductImage: product.productImages,
         quantiteMax: quantiteMax,
         quantite: quantite,
         service: Service,
@@ -410,6 +429,7 @@ const handleCartLogin = async (product) => {
         text1: t('Succès'),
         text2: t('Ajouter au panier avec succès'),
       });
+      ToastAndroid.show("Ajouter au panier avec succès", ToastAndroid.SHORT)
 
       return true;
     }
@@ -424,6 +444,7 @@ const handleCartLogin = async (product) => {
       text1: t('Succès'),
       text2: t('Ajouter au panier avec succès'),
     });
+    ToastAndroid.show("Ajouter au panier avec succès", ToastAndroid.SHORT)
 
     return true;
   };
@@ -432,26 +453,26 @@ const handleCartLogin = async (product) => {
 
   const RenderQuantite = props => {
 
-    const quantiteSelectedValue = selectedProductValues[props.product.id] ? selectedProductValues[props.product.id]['quantite'] : null;
+    const StateValue = selectedProductValues[props.product.id] ? selectedProductValues[props.product.id]['quantite'] : null;
     
     return (
       <View style={styles.safeContainerStyle}>
-        <Dropdown
-          style={[styles.dropdown]}
+        <DropDownPicker
           placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
           autoScroll
+          open={open}
+          setOpen={()=> setOpen(!open)}
           iconStyle={styles.iconStyle}
-          containerStyle={styles.containerStyle}
-          data={sweeterArray}
+          style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+          dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+          items={sweeterArray}
           maxHeight={200}
-          labelField="label"
-          valueField="value"
           placeholder={t('Quantité')}
           searchPlaceholder="Search..."
-          value={quantiteSelectedValue}
+          value={StateValue}
+          setValue={val => setStateValue(val)}
           showsVerticalScrollIndicator={false}
-          onChange={item => {
+          onSelectItem={item => {
             handleQuantiteChange(props.product, item.value);
           }}
 
@@ -461,18 +482,11 @@ const handleCartLogin = async (product) => {
   }
 
   return (
-    <View style={styles.DetailsContainer}>
+    <View style={{ backgroundColor: "#fff", margin: 5}}>
+      <View style={{flexDirection: "row", alignItems: "center",gap: 10, paddingVertical: 12, paddingLeft: 22}}>
 
-      <View style={styles.upperRow}>
-        <View style={styles.detailTextContainer}>
-          <Text style={styles.detailNameText}>
-            {'fr' == Language ? Product.name : Product.nameEN}
-          </Text>
-        </View>
-      </View>
 
-      <View style={styles.downRow}>
-        <View style={styles.dropDowncontainer}>
+        <View>
           <ScrollView
             pagingEnabled
             horizontal
@@ -480,10 +494,10 @@ const handleCartLogin = async (product) => {
             showsHorizontalScrollIndicator={false}
             style={styles.imageSwiper}>
             {Images.map((image, index) => (
-               <PhotoZoomer key={index} image={image} windowWidth={windowWidth} windowHeight={windowHeight} />
+                <PhotoZoomer key={index} image={image} windowWidth={wp(30)} windowHeight={hp(40)} />
+              
             ))}
           </ScrollView>
-
           <View style={styles.dotStyle}>
             {Images.map((i, k) => (
               <Text
@@ -495,169 +509,152 @@ const handleCartLogin = async (product) => {
               </Text>
             ))}
           </View>
-          <TouchableOpacity style={styles.buttonCartContainers}>
-            <Text style={styles.buttonText} onPress={() => { handleCartLogin(Product);}}>{t('Ajouter au panier')}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.dropDownscontainer}>
-
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            key={'url' + Product.id}
-            placeholder="URL"
-            keyboardType="ascii-capable"
-            placeholderTextColor={'#14213D'}
-            style={styles.inputStyle}
-            onChangeText={text => {
-              handleURLChange(Product, text);
-            }}
-          />
         </View>
 
-          {Product.attributs.map((attribute) => {
-
-            const product = Product;
-            let prevChoice = selectedProductValues[product.id];
-     
-            prevChoice = prevChoice ? prevChoice['attributes'] : null;
-            const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null;
-           
-
-            return (
-              <View style={styles.inputContainer}>
-                <TextInput
-                key={attribute.id}
-                placeholder={attribute.attribut.name}
+        <View style={{flexDirection: "column", justifyContent: "center", alignItems: "flex-start"}}>
+            <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
+                <Text style={{fontFamily: "Poppins-Medium", fontSize: 12.5,textAlign: "center", maxWidth: 180}}>{'fr' == Language ? Product.name : Product.nameEN}</Text>
+            </View>
+            <View style={styles.inputContainer}>
+              <TextInput
+                key={'url' + Product.id}
+                placeholder="URL"
                 keyboardType="ascii-capable"
                 placeholderTextColor={'#14213D'}
                 style={styles.inputStyle}
-                value={selectedValue}
                 onChangeText={text => {
-                  handleAttributeChange(product, attribute.attribut.name, text);
+                  handleURLChange(Product, text);
                 }}
+              />
+            </View>
+
+            <View style={styles.dropDownscontainer}>
+
+              {Product.attributs.map((attribute) => {
+
+                const product = Product;
+                let prevChoice = selectedProductValues[product.id];
+        
+                prevChoice = prevChoice ? prevChoice['attributes'] : null;
+                const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null;
+              
+
+                return (
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                    key={attribute.id}
+                    placeholder={attribute.attribut.name}
+                    keyboardType="ascii-capable"
+                    placeholderTextColor={'#14213D'}
+                    style={styles.inputStyle}
+                    value={selectedValue}
+                    onChangeText={text => {
+                      handleAttributeChange(product, attribute.attribut.name, text);
+                    }}
+                    />
+                    </View>
+                )
+          
+              })}
+
+              <RenderQuantite product={Product} />
+
+      
+              <View style={[styles.inputContainer, {marginTop: 10}]}>
+                <TextInput
+                  placeholder={t('Prix d’achat')}
+                  keyboardType="ascii-capable"
+                  placeholderTextColor={'#14213D'}
+                  style={styles.inputStyle}
+                  onChangeText={text => {
+                    handleAchatChange(Product, text);
+                  }}
                 />
-                </View>
-            )
-      
-          })}
-
-          <RenderQuantite product={Product} />
-
-  
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder={t('Prix d’achat')}
-              keyboardType="ascii-capable"
-              placeholderTextColor={'#14213D'}
-              style={styles.inputStyle}
-              onChangeText={text => {
-                handleAchatChange(Product, text);
-              }}
-            />
-          </View>
-
-          <TouchableOpacity
-            style={styles.buttonContainers}
-            onPress={toggleModal}>
-            <Text style={styles.buttonText}>{t('Prendre une photo')}</Text>
-            {
-              <View>
-                <Modal
-                  isVisible={isModalVisible}
-                  backdropOpacity={0.4}
-                  animationIn={'fadeInUp'}
-                  animationInTiming={600}
-                  animationOut={'fadeOutDown'}
-                  animationOutTiming={600}
-                  useNativeDriver={true}>
-                  <View style={styles.ModalContainer}>
-                    <View style={styles.uploadContainer}>
-                      <Text style={styles.uploadText}>
-                        {t('Télécharger une photo')}
-                      </Text>
-                      <Text style={styles.uploadSubText}>
-                        {t('Choisissez une image')}
-                      </Text>
-                    </View>
-                    <View style={styles.buttonsContainer}>
-                      <TouchableOpacity
-                        style={styles.cameraGallerybuttons}
-                        onPress={() => {
-                          selectImageFromGallery();
-                        }}>
-                        <Text style={styles.buttonText}>
-                          {t('Choisir une image dans la galerie')}
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.cameraGallerybuttons}
-                        onPress={() => {
-                          openCameraForPicture();
-                        }}>
-                        <Text style={styles.buttonText}>
-                          {t('Ouvrir la caméra')}
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.cancelButton}
-                        onPress={toggleModal}>
-                        <Text style={styles.buttonText}>{t('Annuler')}</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </Modal>
               </View>
-            }
-          </TouchableOpacity>
-        </View>
-      </View>
 
-      <View style={styles.bottomTextContainer}>
-        
-          <TextInput
-            placeholder={t('Informations complémentaires')}
-            placeholderTextColor={'#BCB8B1'}
-            multiline={true}
-            style={styles.commentInput}
-            value={selectedProductValues[Product.id] ? selectedProductValues[Product.id]['infos'] : null}
-            onFocus={handleModalOpen}
-          />
-        
-      </View>
-
-      
-      <Modal
-        isVisible={descriptionModalVisible}
-        backdropOpacity={0.4}
-        animationIn={'fadeInUp'}
-        animationInTiming={600}
-        animationOut={'fadeOutDown'}
-        animationOutTiming={600}
-        useNativeDriver={true}>
-        <View style={styles.ModalInfosContainer}>
-          <View style={styles.infosComplementaires}>
-          <TextInput
-            style={styles.modalInput}
-            placeholder={ t("Informations complémentaires") }
-            value={selectedProductValues[Product.id] ? selectedProductValues[Product.id]['infos'] : null}
-            onChangeText={text => {
-              handleInfosChange(Product, text);
-            }}
-            multiline
-          />
-           
+              <View style={{marginTop: 12, width: "100%",position: "relative", zIndex: -10}}>
+                <TouchableOpacity
+                  style={{ paddingVertical: 8 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
+                  onPress={toggleModal}>
+                  <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
+                  <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
+                  {
+                    <View>
+                      <Modal
+                        isVisible={isModalVisible}
+                        backdropOpacity={0.4}
+                        animationIn={'fadeInUp'}
+                        animationInTiming={600}
+                        animationOut={'fadeOutDown'}
+                        animationOutTiming={600}
+                        useNativeDriver={true}>
+                        <View style={styles.ModalContainer}>
+                          <View style={styles.uploadContainer}>
+                            <Text style={styles.uploadText}>
+                              {t('Télécharger une photo')}
+                            </Text>
+                            <Text style={styles.uploadSubText}>
+                              {t('Choisissez une image')}
+                            </Text>
+                          </View>
+                          <View style={styles.buttonsContainer}>
+                            <TouchableOpacity
+                              style={styles.cameraGallerybuttons}
+                              onPress={() => {
+                                selectImageFromGallery();
+                              }}>
+                              <Text style={styles.buttonText}>
+                                {t('Choisir une image dans la galerie')}
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={styles.cameraGallerybuttons}
+                              onPress={() => {
+                                openCameraForPicture();
+                              }}>
+                              <Text style={styles.buttonText}>
+                                {t('Ouvrir la caméra')}
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={styles.cancelButton}
+                              onPress={toggleModal}>
+                              <Text style={styles.buttonText}>{t('Annuler')}</Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </Modal>
+                    </View>
+                  }
+                </TouchableOpacity>
+              </View>
+              <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10}}>
+                  <Button title="Ajouter au panier" navigation={() => { handleCartLogin(Product);}}/>
+              </View>
+              {/* <TouchableOpacity style={styles.buttonCartContainers}>
+                 <Text style={styles.buttonText} onPress={() => { handleCartLogin(Product);}}>{t('Ajouter au panier')}</Text>
+              </TouchableOpacity> */}
+            </View>
+          
+            <View style={styles.bottomTextContainer}>
+              
+              <TextInput
+                placeholder={t('Informations complémentaires')}
+                placeholderTextColor={'#BCB8B1'}
+                multiline={true}
+                style={styles.commentInput}
+                value={selectedProductValues[Product.id] ? selectedProductValues[Product.id]['infos'] : null}
+                onFocus={handleModalOpen}
+                onChangeText={text => {
+                  handleInfosChange(Product, text);
+                }}
+              />
+            
           </View>
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              style={styles.cancelButton}
-              onPress={handleModalSave}>
-              <Text style={styles.buttonText}>{t('OK')}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
 
+        </View>
+
+      </View>
 
 
     </View>
@@ -770,14 +767,14 @@ const styles = StyleSheet.create({
   },
   imageSwiper: {
     // backgroundColor: 'gold',
-    width: windowWidth * 0.4,
+    width: windowWidth * 0.32,
     height: windowHeight * 0.25,
     borderRadius: 10,
   },
   dotStyle: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: windowHeight * 0.09,
+    bottom: windowHeight * 0.06,
     alignSelf: 'center',
     justifyContent: 'space-around',
     // backgroundColor: 'tomato',
@@ -795,16 +792,14 @@ const styles = StyleSheet.create({
   dropDownscontainer: {
     // backgroundColor: 'green',
     width: windowWidth * 0.4,
-    height: windowHeight * 0.35,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    marginVertical: 10
   },
   inputContainer: {
-    backgroundColor: '#d5d6d7',
+    backgroundColor: "#F5F5F5",
     width: windowWidth * 0.4,
     height: 50,
     borderRadius: 10,
-    elevation: 1,
   },
   inputStyle: {
     padding: 10,

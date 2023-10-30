@@ -218,7 +218,7 @@ const PaysLivraison = ({navigation, route}) => {
                             <View
                               style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
                               <View>
-                                <Flag code={item.drapeauDepart} size={32}/>
+                                <Flag code={'FR'} size={32}/>
                               </View>
                               <Text
                                 style={{

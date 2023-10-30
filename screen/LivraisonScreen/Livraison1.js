@@ -270,8 +270,8 @@ const Livraison1 = (props) => {
 
             setUserDomicileChoix(newData[0]);
             setUserLivraisonDomicileChoix(adresseId);
-            // setNomContact(newData[0].nom);
-            // setTelContact(newData[0].telephone);
+            setNomContact(newData[0].nom);
+            setTelContact(newData[0].telephone);
           }
         }
       }
@@ -292,8 +292,8 @@ const Livraison1 = (props) => {
             setUserDomicileChoix(newData[0]);
             setUserLivraisonDomicileChoix(adresse.id);
             setStorageLIvraisonChoiceAdresse(adresse);
-            // setNomContact(adresse.nom);
-            // setTelContact(adresse.telephone);
+            setNomContact(adresse.nom);
+            setTelContact(adresse.telephone);
          }
        }
 

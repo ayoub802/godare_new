@@ -15,7 +15,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
 import { getAuthUserEmail, getDepotValues, getLivraisonValues, getPanier, getRemiseUsed, getSelectedCountry, getSelectedService, removePanier, saveAdresseIdFacturation, saveCartAvoir, savePrixFinalPanier, saveSelectedCountry, saveSelectedService } from '../../modules/GestionStorage'
 import axiosInstance from '../../axiosInstance'
-import { calculProductPrices } from '../../modules/CalculPrix'
+import { calculFraisLivraison, calculProductPrices } from '../../modules/CalculPrix'
 import { Dropdown } from 'react-native-element-dropdown'
 import Icon from 'react-native-vector-icons/Feather';
 import { getImageType } from '../../modules/TraitementImage'
@@ -53,7 +53,7 @@ const CheckoutScreen = (props) => {
   const [NomFacturation, setNomFacturation] = useState('');
   const [TVA, setTVA] = useState(0);
   const [LoadingPayment, setLoadingPayment] = useState(false);
-
+  const [prixTotalLivraison, setPrixTotalLivraison] = useState(0);
   
   useEffect(() => {
 
@@ -189,6 +189,11 @@ const CheckoutScreen = (props) => {
           }
         }
 
+        let prixLivraison = calculFraisLivraison(basketData);
+
+        setPrixTotalLivraison(prixLivraison);
+
+        console.log("Prix Total:",prixTotalLivraison);
         setService(service);
 
         // Calcul TVA
@@ -538,7 +543,7 @@ const CheckoutScreen = (props) => {
       saveCartAvoir(AvoirValue);
     }
 
-    let montantApayer = apreRemise + cartLivraisonPrice + sommeFraisDouane;
+    let montantApayer =  parseFloat(TotalWithLivraison) + prixTotalLivraison;
     montantApayer = isNaN(parseFloat(montantApayer)) ? 0 : parseFloat(montantApayer);
     montantApayer = montantApayer.toFixed(2);
     return (
@@ -602,7 +607,7 @@ const CheckoutScreen = (props) => {
                               Frais de livraison
                               </Text>
                               <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#262A2B", letterSpacing: .8}}>
-                                {cartLivraisonPrice}€
+                                {prixTotalLivraison}€
                               </Text>
                         </View>
                         <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingBottom: 15, paddingTop: 19,borderBottomWidth: 1, borderColor: "#E9E9E9"}}>
@@ -727,7 +732,7 @@ const CheckoutScreen = (props) => {
           />
 
               <View>
-                  <Stepper position={2}/>
+                  <Stepper position={3}/>
                 </View>
 
           <View>

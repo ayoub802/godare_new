@@ -338,7 +338,7 @@ const ShoppingScreen = ({ navigation, route }) => {
                     <FlatList
                     showsVerticalScrollIndicator={false}
                     data={products}
-                    renderItem={renderByPlaneItem}
+                    renderItem={renderByPlaneGridItem}
                     keyExtractor={item => item.id}
                   />
                     }

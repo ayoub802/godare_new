@@ -9,7 +9,6 @@ import {
     Dimensions,
     ScrollView,
     Alert,
-    Button,
     Modal
   } from 'react-native';
 import { useRoute } from '@react-navigation/native';
@@ -22,10 +21,17 @@ import Icon  from 'react-native-vector-icons/FontAwesome';
 import { getAuthUserEmail, getPanier, removePanier, savePanier } from '../../modules/GestionStorage';
 import { HeaderEarth } from '../../components/Header';
 import PhotoZoomer from "../../components/PhotoZoomer"
-
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+import Ionicons from "react-native-vector-icons/Ionicons"
+import Octicons from "react-native-vector-icons/Octicons"
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import DropDownPicker from 'react-native-dropdown-picker';
+import Button from '../../components/Button';
 
 const ProductList = ({ navigation }) => {
     const { params } = useRoute();
+    const [activeFilter, setActiveFilter] = useState(0);
     const category = params?.category;
     const PaysLivraison = params?.PaysLivraison;
     const Service = params?.Service;
@@ -619,133 +625,234 @@ const ProductList = ({ navigation }) => {
           <HeaderEarth />
             <View style={styles.containerMarginBottom}>
 
-            <View style={styles.returnButtonContainerFilter}>
+            {/* <View style={styles.returnButtonContainerFilter}>
               <TouchableOpacity onPress={handleReturnPress}>
                 <Button
                         title={"Retourner"}
                         onPress={handleReturnPress}
                     />
               </TouchableOpacity>
-            </View>
+            </View> */}
 
+             <View style={{marginTop: 10, paddingHorizontal: 5}}>
+                    <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center",borderTopLeftRadius: 28, borderTopRightRadius: 28 ,backgroundColor: "#fff", paddingVertical: 27, paddingLeft: 15, paddingRight: 23}}>
+                      
+                      <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
+                      <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
+                        <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
+                          Filtrer
+                        </Text>
+                        <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
+                      </TouchableOpacity>
+                        <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
+                          <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
+                            Trier
+                          </Text>
+                          <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
+                        </TouchableOpacity>
+                      </View>
 
-            <View style={styles.subTabbarContainerFilter}>
+                      <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
+                      {
+                                  activeFilter === 0 
+                                  ?
+                                  <TouchableOpacity onPress={() => setActiveFilter(1)}>
+                                      <Ionicons name="grid-outline" color="#00000033" size={25}/>
+                                  </TouchableOpacity> 
+                                  :
+                                  <TouchableOpacity onPress={() => setActiveFilter(0)}>
+                                      <Ionicons name="grid-outline" color="#376AED" size={25}/>
+                                  </TouchableOpacity> 
+                                }
+                                {
+                                  activeFilter === 1 
+                                  ?
+                                  <TouchableOpacity onPress={() => setActiveFilter(0)}>
+                                      <Octicons name="list-unordered" color="#00000033" size={25}/>
+                                  </TouchableOpacity> 
+                                  :
+                                  <TouchableOpacity onPress={() => setActiveFilter(1)}>
+                                      <Octicons name="list-unordered" color="#376AED" size={25}/>
+                                  </TouchableOpacity> 
+                                }
+                      </View>
 
-              <TouchableOpacity style={[styles.filterTextContainer]} activeOpacity={0.5}>
-                <Text style={styles.filterTextStyle}>
-                  {'Filtrer'}
-                </Text>
-              </TouchableOpacity>
+                      
+                    </View>
+             </View>
 
-              <TouchableOpacity style={[styles.filterTextContainer]} activeOpacity={0.5}>
-                <Text style={styles.filterTextStyle}>
-                  {'Trier'}
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity  activeOpacity={0.5}>
-                <Icon name="square" color="#000" size={24} style={{ marginRight: windowWidth * 0.01 }}  />
-              </TouchableOpacity>
-
-              <TouchableOpacity  activeOpacity={0.5}>
-                <Icon name="th-large" color="#000" size={24} style={{ marginRight: windowWidth * 0.01 }}  />
-              </TouchableOpacity>
-           
-              
-          </View>
 
 
             {products.map((product) => (
-            <View style={styles.DetailsContainer} key={product.id}>
-                <View style={styles.upperRow}>
-                    <View style={styles.detailTextContainer}>
-                        <Text style={styles.detailNameText}>
-                            { 'fr' == Language ? product.name : product.nameEN}
-                        </Text>
-                        <Text style={styles.discountPriceText}>
-                          <RenderPrices product={product} />
-                        </Text>
-                    </View>
-                </View>
-                <View style={styles.downRow}>
-                    <View style={styles.dropDowncontainer}>
-                    <ScrollView
-                        pagingEnabled
-                        horizontal
-                        onScroll={({nativeEvent}) => Change(nativeEvent)}
-                        showsHorizontalScrollIndicator={false}
+            // <View style={styles.DetailsContainer} key={product.id}>
+            //     <View style={styles.upperRow}>
+            //         <View style={styles.detailTextContainer}>
+            //             <Text style={styles.detailNameText}>
+            //                 { 'fr' == Language ? product.name : product.nameEN}
+            //             </Text>
+            //             <Text style={styles.discountPriceText}>
+            //               <RenderPrices product={product} />
+            //             </Text>
+            //         </View>
+            //     </View>
+            //     <View style={styles.downRow}>
+            //         <View style={styles.dropDowncontainer}>
+            //         <ScrollView
+            //             pagingEnabled
+            //             horizontal
+            //             onScroll={({nativeEvent}) => Change(nativeEvent)}
+            //             showsHorizontalScrollIndicator={false}
 
-                        style={styles.imageSwiper}>
-                        {product.productImages.map((image, index) => (
-                           <PhotoZoomer key={index} image={image} windowWidth={windowWidth} windowHeight={windowHeight} />
-                        ))}
-                    </ScrollView>
-                    <View style={styles.dotStyle}>
-                        {product.productImages.map((i, k) => (
-                        <Text
-                            key={k}
-                            style={
-                            k == active ? styles.pagingActiveText : styles.pagingText
-                            }>
-                            ⬤
-                        </Text>
-                        ))}
-                    </View>
-                    <TouchableOpacity style={styles.buttonCartContainers} onPress={() => {
-                      handleCartLogin(product);
-                    }}>
-                        <Text style={styles.buttonText} >Ajouter au panier</Text>
-                    </TouchableOpacity>
-                    </View>
-                    <View style={styles.dropDownscontainer}>
+            //             style={styles.imageSwiper}>
+            //             {product.productImages.map((image, index) => (
+            //                <PhotoZoomer key={index} image={image} windowWidth={windowWidth} windowHeight={windowHeight} />
+            //             ))}
+            //         </ScrollView>
+            //         <View style={styles.dotStyle}>
+            //             {product.productImages.map((i, k) => (
+            //             <Text
+            //                 key={k}
+            //                 style={
+            //                 k == active ? styles.pagingActiveText : styles.pagingText
+            //                 }>
+            //                 ⬤
+            //             </Text>
+            //             ))}
+            //         </View>
+            //         <TouchableOpacity style={styles.buttonCartContainers} onPress={() => {
+            //           handleCartLogin(product);
+            //         }}>
+            //             <Text style={styles.buttonText} >Ajouter au panier</Text>
+            //         </TouchableOpacity>
+            //         </View>
+            //         <View style={styles.dropDownscontainer}>
 
-                    {product.attributs.map((attribute) => {
+            //         {product.attributs.map((attribute) => {
             
-                      const prevChoice = selectedProductValues[product.id] ? selectedProductValues[product.id]['attributes'] : null;
-                      const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null
+            //           const prevChoice = selectedProductValues[product.id] ? selectedProductValues[product.id]['attributes'] : null;
+            //           const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null
                      
-                      const buildAttributes = attribute.attributValues.map(obj => {
-                        return {label: obj.valeur, value: obj.valeur};
-                      });
+            //           const buildAttributes = attribute.attributValues.map(obj => {
+            //             return {label: obj.valeur, value: obj.valeur};
+            //           });
 
                      
-                      return (
+            //           return (
 
-                        <View style={styles.safeContainerStyle} key={attribute.id}>
-                          <Dropdown
-                            style={[styles.dropdown]}
-                            placeholderStyle={styles.placeholderStyle}
-                            selectedTextStyle={styles.selectedTextStyle}
-                            autoScroll
-                            iconStyle={styles.iconStyle}
-                            containerStyle={styles.containerStyle}
-                            labelField="label"
-                            valueField="value"
-                            value={selectedValue}
-                            placeholder={'fr' == Language ? attribute.attribut.name : attribute.attribut.nameEN}
-                            searchPlaceholder="Search..."
-                            showsVerticalScrollIndicator={false}
-                            data={buildAttributes}
-                            onChange={item => {
-                              handleAttributeChange(product, attribute.attribut.id, item.value);
-                            }} 
-                          />
-                        </View>
-                      );
-                    })}
+            //             <View style={styles.safeContainerStyle} key={attribute.id}>
+            //               <Dropdown
+            //                 style={[styles.dropdown]}
+            //                 placeholderStyle={styles.placeholderStyle}
+            //                 selectedTextStyle={styles.selectedTextStyle}
+            //                 autoScroll
+            //                 iconStyle={styles.iconStyle}
+            //                 containerStyle={styles.containerStyle}
+            //                 labelField="label"
+            //                 valueField="value"
+            //                 value={selectedValue}
+            //                 placeholder={'fr' == Language ? attribute.attribut.name : attribute.attribut.nameEN}
+            //                 searchPlaceholder="Search..."
+            //                 showsVerticalScrollIndicator={false}
+            //                 data={buildAttributes}
+            //                 onChange={item => {
+            //                   handleAttributeChange(product, attribute.attribut.id, item.value);
+            //                 }} 
+            //               />
+            //             </View>
+            //           );
+            //         })}
 
-                    <RenderQuantite product={product} />
+            //         <RenderQuantite product={product} />
 
-                    </View>
+            //         </View>
 
                     
-                </View>
+            //     </View>
 
-                <View style={styles.descrContainer}>
-                  <RenderLivraisonAndDescriptionLink product={product} />
-                </View>
+            //     <View style={styles.descrContainer}>
+            //       <RenderLivraisonAndDescriptionLink product={product} />
+            //     </View>
 
+            //     </View>
+            <View style={{ backgroundColor: "#fff", margin: 5}}>
+            <View style={{flexDirection: "row", alignItems: "center",gap: 10, paddingVertical: 12, paddingLeft: 22}}>
+              <View>
+              <ScrollView
+                  pagingEnabled
+                  horizontal
+                  onScroll={({nativeEvent}) => Change(nativeEvent)}
+                  showsHorizontalScrollIndicator={false}
+                  style={styles.imageSwiper}>
+                  {product.productImages.map((image, index) => (
+                    
+                    <PhotoZoomer key={index} image={image} windowWidth={wp(39)} windowHeight={hp(30)} />
+                  ))}
+                </ScrollView>
+                <View style={styles.dotStyle}>
+                  {product.productImages.map((i, k) => (
+                    <Text
+                      key={k}
+                      style={
+                        k == active ? styles.pagingActiveText : styles.pagingText
+                      }>
+                      ⬤
+                    </Text>
+                  ))}
                 </View>
+              </View>
+                <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
+                    <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
+                      <Text style={{fontFamily: "Poppins-Medium", fontSize: 12.5,textAlign: "center", maxWidth: 180}}>{'fr' == Language ? product.name : product.nameEN}</Text>
+                    </View>
+      
+                    <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
+                        <RenderPrices product={product}/>
+                    </Text>
+                      <View style={{marginVertical: 20}}>
+                        {product.attributs.map((attribute) => {
+                
+                          const prevChoice = selectedProductValues[product.id] ? selectedProductValues[product.id]['attributes'] : null;
+                          const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null
+                        
+                          const buildAttributes = attribute.attributValues.map(obj => {
+                            return {label: obj.valeur, value: obj.valeur};
+                          });
+
+                        
+                          return (
+
+                            <View style={[styles.safeContainerStyle, {marginBottom: 10}]} key={attribute.id}>
+                              <DropDownPicker
+                                style={[styles.dropdown, {borderColor: "transparent"}]}
+                                placeholderStyle={styles.placeholderStyle}
+                                selectedTextStyle={styles.selectedTextStyle}
+                                autoScroll
+                                iconStyle={styles.iconStyle}
+                                containerStyle={styles.containerStyle}
+                                labelField="label"
+                                valueField="value"
+                                value={selectedValue}
+                                placeholder={'fr' == Language ? attribute.attribut.name : attribute.attribut.nameEN}
+                                searchPlaceholder="Search..."
+                                showsVerticalScrollIndicator={false}
+                                data={buildAttributes}
+                                onChange={item => {
+                                  handleAttributeChange(product, attribute.attribut.id, item.value);
+                                }} 
+                              />
+                            </View>
+                          );
+                        })}
+                      </View>
+      
+                      <RenderQuantite product={product} />
+
+                      <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10}}>
+                        <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
+                     </View>
+                </View>
+              </View>
+          </View>
             ))}
 
           {selectedProduct && (

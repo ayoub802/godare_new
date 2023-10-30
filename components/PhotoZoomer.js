@@ -27,7 +27,7 @@ class PhotoZoomer extends React.Component {
 
     render() {
         const { modalVisible } = this.state;
-        const { image, index, windowWidth, windowHeight } = this.props;
+        const { image, index, windowWidth, windowHeight, } = this.props;
 
         return (
             <View>
@@ -38,7 +38,6 @@ class PhotoZoomer extends React.Component {
                         resizeMode={ 'contain'}
                     />
                 </TouchableOpacity>
-
                 <Modal
                   isVisible={modalVisible}
                   backdropOpacity={0.4}
@@ -63,7 +62,6 @@ class PhotoZoomer extends React.Component {
                         />
                     </View>
                 </Modal>
-
             </View>
         )
     }

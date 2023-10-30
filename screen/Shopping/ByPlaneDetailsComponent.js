@@ -1,5 +1,5 @@
 //import liraries
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   View,
@@ -27,10 +27,13 @@ import { removePanier, savePanier, getAuthUserEmail, getPanier } from '../../mod
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+import Feather from "react-native-vector-icons/Feather"
 import Button, { ButtonIcon } from '../../components/Button';
 import ListCard from '../../components/ListCard';
 import ByPlaneDetailsComponentGrid from "./ByPlaneDetailsComponentGrid"
 import DropDownPicker from 'react-native-dropdown-picker';
+import { auth } from '../../modules/FirebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
@@ -45,6 +48,8 @@ const ByPlaneDetailsComponent = (props) => {
 
   const Product = props.data;
   const Images = Product.productImages;
+  const [user, setUser] = useState([]);
+  const [ispenModal, setOpenModal] = useState(false)
 
   const productSpecificites = Product.productSpecificites ? Product.productSpecificites[0] : null;
 
@@ -61,6 +66,13 @@ const ByPlaneDetailsComponent = (props) => {
     {label: t('Neuf'), value: 'New'},
     {label: t('Usagé'), value: 'Used'},
   ];
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log('user', user);
+      setUser(user)
+    })
+  }, [])
 
 
   // Donnée dynamique
@@ -160,6 +172,7 @@ const ByPlaneDetailsComponent = (props) => {
     //   }
     // });
   }
+
 
  
   
@@ -307,7 +320,7 @@ const ByPlaneDetailsComponent = (props) => {
     if (success)
     {
       // Not Login
-      if (authStatus === null) 
+      if (user === null) 
       {
         navigation.navigate("Login", {fromCart: 'cart'});
         return; //should never reach
@@ -327,8 +340,8 @@ const ByPlaneDetailsComponent = (props) => {
             showsHorizontalScrollIndicator={false}
             style={styles.imageSwiper}>
             {Images.map((image, index) => (
+                <PhotoZoomer key={index} image={image} windowWidth={wp(29)} windowHeight={hp(40)} />
               
-              <PhotoZoomer key={index} image={image} windowWidth={wp(29)} windowHeight={hp(40)} />
             ))}
           </ScrollView>
           <View style={styles.dotStyle}>
@@ -410,7 +423,7 @@ const ByPlaneDetailsComponent = (props) => {
               <View style={{marginTop: 8, width: "100%",position: "relative", zIndex: -10}}>
               <TouchableOpacity
                 style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
-                onPress={() => openCameraForPicture()}>
+                onPress={toggleModal}>
                 <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
                 <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
                 {
@@ -434,31 +447,31 @@ const ByPlaneDetailsComponent = (props) => {
                         </View>
                         <View style={styles.buttonsContainer}>
                           <TouchableOpacity
-                            style={styles.cameraGallerybuttons}
+                            style={{ paddingVertical: 8, width: "100%", paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
                             onPress={() => {
                               selectImageFromGallery();
                             }}>
-                            <Text style={styles.buttonText}>
+                              <FontAwesome5 name="image" size={20} color="#4E8FDA"/>
+                            <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>
                               {t('Choisir une image dans la galerie')}
                             </Text>
                           </TouchableOpacity>
                           <TouchableOpacity
-                            style={styles.cameraGallerybuttons}
+                            style={{ paddingVertical: 8, width: "100%" ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
                             onPress={() => {
                               openCameraForPicture();
                             }}>
-                            <Text style={styles.buttonText}>
+                            <FontAwesome5 name="camera" size={20} color="#4E8FDA"/>
+                            <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>
                               {t('Ouvrir la caméra')}
                             </Text>
-                          </TouchableOpacity>
-              
-                          
+                          </TouchableOpacity>  
+                        </View>
                           <TouchableOpacity
                             style={styles.cancelButton}
                             onPress={toggleModal}>
-                            <Text style={styles.buttonText}>{t('Annuler')}</Text>
+                            <Feather name="x" size={20}/>
                           </TouchableOpacity>
-                        </View>
                       </View>
                     </Modal>
                   </View>
@@ -679,12 +692,13 @@ const styles = StyleSheet.create({
   },
   ModalContainer: {
     width: windowWidth * 1.0,
-    height: windowHeight * 0.4,
+    height: windowHeight * 0.3,
     backgroundColor: '#fff',
     borderRadius: 10,
     alignSelf: 'center',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    paddingTop: 20,
+    // justifyContent: 'space-around',
     bottom: 0,
     position: 'absolute',
   },
@@ -697,26 +711,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cancelButton: {
-    backgroundColor: '#ff726f',
-    height: 50,
-    width: windowWidth * 0.8,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+    position: "absolute",
+    top: 10,
+    right: 10
   },
   uploadContainer: {
     // backgroundColor: 'tomato',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    width: windowWidth * 0.8,
-    height: 40,
+    justifyContent: 'center',
     alignSelf: 'center',
   },
   uploadText: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#000',
     textAlign: 'center',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Poppins-Bold',
   },
   uploadSubText: {
     color: '#cccccc',
@@ -725,11 +737,11 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     // backgroundColor: 'tomato',
-    width: windowWidth * 0.9,
-    height: windowHeight * 0.3,
-    alignSelf: 'center',
+    width: windowWidth * 0.7,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    gap: 12,
+    justifyContent: "center",
+    marginTop: 50
   },
   bottomTextContainer: {
     // backgroundColor: 'gold',
