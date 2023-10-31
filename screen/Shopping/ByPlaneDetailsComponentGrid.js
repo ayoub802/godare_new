@@ -1,5 +1,5 @@
 //import liraries
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   View,
@@ -11,7 +11,8 @@ import {
   TextInput,
   Alert,
   Image,
-  FlatList
+  FlatList,
+  ToastAndroid
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
@@ -29,12 +30,15 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import Button, { ButtonIcon } from '../../components/Button';
 import ListCard from '../../components/ListCard';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../modules/FirebaseConfig';
+import Feather from "react-native-vector-icons/Feather"
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 // create a component
 const ByPlaneDetailsComponentGrid = (props) => {
+
 
   // Donnée statique
   const navigation = props.navigation
@@ -44,6 +48,8 @@ const ByPlaneDetailsComponentGrid = (props) => {
 
   const Product = props.data;
   const Images = Product.productImages;
+  const [user, setUser] = useState([]);
+  const [ispenModal, setOpenModal] = useState(false)
 
   const productSpecificites = Product.productSpecificites ? Product.productSpecificites[0] : null;
 
@@ -60,6 +66,13 @@ const ByPlaneDetailsComponentGrid = (props) => {
     {label: t('Neuf'), value: 'New'},
     {label: t('Usagé'), value: 'Used'},
   ];
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log('user', user);
+      setUser(user)
+    })
+  }, [])
 
 
   // Donnée dynamique
@@ -160,7 +173,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
     // });
   }
 
- 
+
   
   // Vider le panier
   const handleCartRemove = async () => {
@@ -306,13 +319,14 @@ const ByPlaneDetailsComponentGrid = (props) => {
     if (success)
     {
       // Not Login
-      if (authStatus === null) 
+      if (user === null) 
       {
         navigation.navigate("Login", {fromCart: 'cart'});
         return; //should never reach
       } 
     }
   };
+ 
 
   return (
     <>
@@ -325,28 +339,28 @@ const ByPlaneDetailsComponentGrid = (props) => {
 
           <View style={{flexDirection: "row", alignItems: "center",justifyContent: "space-between" ,gap: 10, paddingTop: 16, paddingLeft: 6, paddingRight: 6}}>
           <View style={{maxWidth: 130}}>
-              <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 10, color: "#000"}}>
+              <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 9.3, color: "#000"}}>
                 {'fr' == Language ? Product.name : Product.nameEN}
                 </Text>
           </View>
-            <View style={{flexDirection: "column", alignItems: "center", gap: 5}}>
+            <View style={{flexDirection: "column", alignItems: "center", gap: 2}}>
                     <View>
-                      <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
+                      <Text style={{fontSize: 11, fontFamily: "Poppins-Medium",color: "#000"}}>
                       {productSpecificites ? productSpecificites.prix  : 0}€/{Product.unite ? Product.unite.valeur : ''}
                     </Text>
                         </View>
                     <View>
                     {productSpecificites && productSpecificites.prixAncien ? 
-                          <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000"}}>
-                          {productSpecificites.prixAncien}€/{Product.unite ? Product.unite.valeur : ''}
-                        </Text>
-                        :
-                        <></>
-                      }
+                      <Text style={{fontSize: 11, fontFamily: "Poppins-Medium",color: "#000", textDecorationLine: "line-through"}}>
+                      {productSpecificites.prixAncien}€/{Product.unite ? Product.unite.valeur : ''}
+                    </Text>
+                    :
+                    <></>
+                  }
                     </View>
             </View>
           </View>
-          <View style={{flexDirection: "row", alignItems: "center", gap: 10, paddingBottom: 8, paddingLeft: 6}}>
+          <View style={{flexDirection: "column", alignItems: "center", paddingBottom: 8, paddingLeft: 6}}>
               {/* <View style={{backgroundColor: "#F5F5F5", height: hp(14), width: wp(20), borderRadius: 20, paddingTop: 10}}>
               <Image source={{uri: item.productImages[0].url}} style={{height: hp(12),objectFit: "cover" ,borderRadius: 22, width: wp(19)}}/>
               </View> */}
@@ -376,51 +390,117 @@ const ByPlaneDetailsComponentGrid = (props) => {
                 </View>
               <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", paddingRight: 6}}>
                 
-              <View style={styles.safeContainerStyle}>
-                <DropDownPicker 
-                items={data}
-                open={open2}
-                setOpen={() => setOpen2(!open2)}
-                value={StateValue}
-                setValue={val => setStateValue(val)}
-                placeholder={t('Etat')}
-                maxHeight={100}
-                autoScroll
-                style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
-                dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
-                onSelectItem={item => {
-                  showDouaneMessage(item.value);
-                  setStateValue(item.value);
-                }}
-              />
-              </View>
-                <View style={styles.safeContainerStyle}>
+                  <View style={styles.safeContainerStyle}>
                     <DropDownPicker 
-                      items={sweeterArray}
-                      open={open}
-                      setOpen={() => setOpen(!open)}
-                      value={QuantitySelected}
-                      setValue={val => setQuantitySelected(val)}
-                      placeholder={t('Quantité')}
-                      autoScroll={true}
-                      maxHeight={120}
-                      style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
-                      dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
-                    />
-                </View>
+                    items={data}
+                    open={open2}
+                    setOpen={() => setOpen2(!open2)}
+                    value={StateValue}
+                    setValue={val => setStateValue(val)}
+                    placeholder={t('Etat')}
+                    maxHeight={100}
+                    autoScroll
+                    style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                    dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+                    onSelectItem={item => {
+                      showDouaneMessage(item.value);
+                      setStateValue(item.value);
+                    }}
+                  />
+                  </View>
+                  
+                    <View style={styles.safeContainerStyle}>
+                        <DropDownPicker 
+                          items={sweeterArray}
+                          open={open}
+                          setOpen={() => setOpen(!open)}
+                          value={QuantitySelected}
+                          setValue={val => setQuantitySelected(val)}
+                          placeholder={t('Quantité')}
+                          autoScroll={true}
+                          maxHeight={120}
+                          style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                          dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+                        />
+                    </View>
+                    <View style={[styles.inputContainer, {position: "relative", zIndex: -10}]}>
+                    <TextInput
+                      placeholder={t('Valeur (€)')}
+                      keyboardType="ascii-capable"
+                      placeholderTextColor={'#14213D'}
+                      style={styles.inputStyle}
+                      value={productValue}
+                      onChangeText={text => {
+                        setProductValue(text);
+                      }}
 
-                <TouchableOpacity style={{ flexDirection: "row",width: wp(24), backgroundColor: "#F5F5F5", borderRadius: 6, paddingHorizontal: 8,paddingVertical: 8 ,alignItems: "center", justifyContent: "space-between", marginTop: 5}}>
-                    <Text style={{fontFamily: "Poppins-Regular", color: "#04091E", fontSize: 11}}>
-                    Quantité
-                    </Text>
-                    <MaterialIcons name="keyboard-arrow-down" size={20} color='#000'/>
-                </TouchableOpacity>
+                        />
+              </View>
+
               </View>
           </View>
 
-          <View style={{justifyContent: "center", alignItems: "center", paddingBottom: 16}}>
-            <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
-          </View>
+          <View style={{marginTop: 8, width: "100%",position: "relative", zIndex: -10, marginBottom: 4, paddingHorizontal: 8}}>
+              <TouchableOpacity
+                style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
+                onPress={toggleModal}>
+                <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
+                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
+                {
+                  <View>
+                    <Modal
+                      isVisible={isModalVisible}
+                      backdropOpacity={0.4}
+                      animationIn={'fadeInUp'}
+                      animationInTiming={600}
+                      animationOut={'fadeOutDown'}
+                      animationOutTiming={600}
+                      useNativeDriver={true}>
+                      <View style={styles.ModalContainer}>
+                        <View style={styles.uploadContainer}>
+                          <Text style={styles.uploadText}>
+                            {t('Télécharger une photo')}
+                          </Text>
+                          <Text style={styles.uploadSubText}>
+                            {t('Choisissez une image')}
+                          </Text>
+                        </View>
+                        <View style={styles.buttonsContainer}>
+                          <TouchableOpacity
+                            style={{ paddingVertical: 8, width: "100%", paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
+                            onPress={() => {
+                              selectImageFromGallery();
+                            }}>
+                              <FontAwesome5 name="image" size={20} color="#4E8FDA"/>
+                            <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>
+                              {t('Choisir une image dans la galerie')}
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={{ paddingVertical: 8, width: "100%" ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
+                            onPress={() => {
+                              openCameraForPicture();
+                            }}>
+                            <FontAwesome5 name="camera" size={20} color="#4E8FDA"/>
+                            <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>
+                              {t('Ouvrir la caméra')}
+                            </Text>
+                          </TouchableOpacity>  
+                        </View>
+                          <TouchableOpacity
+                            style={styles.cancelButton}
+                            onPress={toggleModal}>
+                            <Feather name="x" size={20}/>
+                          </TouchableOpacity>
+                      </View>
+                    </Modal>
+                  </View>
+                }
+              </TouchableOpacity>
+              </View>
+              <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10, paddingHorizontal: 8, paddingBottom: 10}}>
+                <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
+              </View>
       </View>
     </>
   );
@@ -440,7 +520,7 @@ const styles = StyleSheet.create({
   safeContainerStyle: {
     justifyContent: 'center',
     // backgroundColor: 'tomato',
-    width: windowWidth * 0.4,
+    width: '100%',
     // borderRadius:0
     marginTop: 5
   },
@@ -520,7 +600,7 @@ const styles = StyleSheet.create({
   imageSwiper: {
     // backgroundColor: 'gold',
     width: windowWidth * 0.2,
-    height: windowHeight * 0.25,
+    height: windowHeight * 0.2,
     borderRadius: 10,
   },
   imageSwipergGrid: {
@@ -532,12 +612,13 @@ const styles = StyleSheet.create({
   dotStyle: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: windowHeight * 0.06,
+    zIndex: 1500,
+    bottom: windowHeight * .19,
     alignSelf: 'center',
     justifyContent: 'space-around',
     // backgroundColor: 'tomato',
     width: windowWidth * 0.1,
-    color: 'dodgeblue',
+    color: '#000',
   },
   pagingText: {
     color: '#888',
@@ -556,18 +637,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   inputContainer: {
-    backgroundColor: '#d5d6d7',
-    width: windowWidth * 0.4,
-    height: 50,
+    backgroundColor: "#F5F5F5",
+    width: windowWidth * 0.46,
+    height: 40,
     borderRadius: 10,
-    elevation: 1,
+    marginTop: 8,
   },
   inputStyle: {
     padding: 10,
     color: '#000',
     fontFamily: 'Roboto-Regular',
     marginLeft: 10,
-    fontSize: 16,
+    fontSize: 14,
   },
   buttonContainers: {
     backgroundColor: '#3292E0',
@@ -629,12 +710,13 @@ const styles = StyleSheet.create({
   },
   ModalContainer: {
     width: windowWidth * 1.0,
-    height: windowHeight * 0.4,
+    height: windowHeight * 0.3,
     backgroundColor: '#fff',
     borderRadius: 10,
     alignSelf: 'center',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    paddingTop: 20,
+    // justifyContent: 'space-around',
     bottom: 0,
     position: 'absolute',
   },
@@ -647,12 +729,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cancelButton: {
-    backgroundColor: '#ff726f',
-    height: 50,
-    width: windowWidth * 0.8,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+    position: "absolute",
+    top: 10,
+    right: 10
   },
   uploadContainer: {
     // backgroundColor: 'tomato',
@@ -663,10 +745,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   uploadText: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#000',
     textAlign: 'center',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Poppins-Bold',
   },
   uploadSubText: {
     color: '#cccccc',
@@ -675,11 +757,11 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     // backgroundColor: 'tomato',
-    width: windowWidth * 0.9,
-    height: windowHeight * 0.3,
-    alignSelf: 'center',
+    width: windowWidth * 0.7,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    gap: 12,
+    justifyContent: "center",
+    marginTop: 50
   },
   bottomTextContainer: {
     // backgroundColor: 'gold',

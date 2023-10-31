@@ -14,6 +14,8 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 import Octicons from "react-native-vector-icons/Octicons"
 import ByPlaneDetailsComponentGrid from './ByPlaneDetailsComponentGrid'
 const windowWidth = Dimensions.get('window').width;
+import MasonryList from '@react-native-seoul/masonry-list';
+import BuyingDemandDetailComponentGrid from './BuyingDemandDetailComponentGrid'
 
 
 const ShoppingScreen = ({ navigation, route }) => {
@@ -164,6 +166,15 @@ const ShoppingScreen = ({ navigation, route }) => {
 
  const renderDemandItem = ({item}) => (
    <BuyingDemandDetailComponent
+     service={Service.code}
+     data={item}
+     navigation={navigation}
+     paysLivraison={PaysLivraison}
+     language={Language}
+   />
+ );
+ const renderDemandItemGrid = ({item}) => (
+   <BuyingDemandDetailComponentGrid
      service={Service.code}
      data={item}
      navigation={navigation}
@@ -335,11 +346,21 @@ const ShoppingScreen = ({ navigation, route }) => {
                       keyExtractor={item => item.id}
                     />
                     :
-                    <FlatList
-                    showsVerticalScrollIndicator={false}
+                  //   <FlatList
+                  //   key={'#'}
+                  //   showsVerticalScrollIndicator={false}
+                  //   data={products}
+                  //   renderItem={renderByPlaneGridItem}
+                  //   keyExtractor={item => "#" + item.id}
+                  //   numColumns={2}
+                  // />
+                  <MasonryList
                     data={products}
+                    keyExtractor={(item)=> item.id}
+                    numColumns={2}
+                    showsVerticalScrollIndicator={false}
                     renderItem={renderByPlaneGridItem}
-                    keyExtractor={item => item.id}
+                    onEndReachedThreshold={0.1}
                   />
                     }
 
@@ -347,21 +368,51 @@ const ShoppingScreen = ({ navigation, route }) => {
                   ) : null}
 
                   {'fret-par-bateau' == Service.code  ? (
-                    <FlatList
-                      showsVerticalScrollIndicator={false}
-                      data={products}
-                      renderItem={renderByPlaneItem}
-                      keyExtractor={item => item.id}
-                    />
+                    <>
+                     {
+                       activeFilter === 0 
+                       ?
+                       <FlatList
+                         showsVerticalScrollIndicator={false}
+                         data={products}
+                         renderItem={renderByPlaneItem}
+                         keyExtractor={item => item.id}
+                       />
+                       :
+                       <MasonryList
+                       data={products}
+                       keyExtractor={(item)=> item.id}
+                       numColumns={2}
+                       showsVerticalScrollIndicator={false}
+                       renderItem={renderByPlaneGridItem}
+                       onEndReachedThreshold={0.1}
+                     />
+                     }
+                    </>
                   ) : null}
 
                   {'demandes-d-achat' == Service.code   ? (
-                    <FlatList
-                      showsVerticalScrollIndicator={false}
-                      data={products}
-                      renderItem={renderDemandItem}
-                      keyExtractor={item => item.id}
-                    />
+                    <>
+                    {
+                        activeFilter === 0 
+                        ?
+                        <FlatList
+                          showsVerticalScrollIndicator={false}
+                          data={products}
+                          renderItem={renderDemandItem}
+                          keyExtractor={item => item.id}
+                        />
+                        :
+                        <MasonryList
+                        data={products}
+                        keyExtractor={(item)=> item.id}
+                        numColumns={2}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={renderDemandItemGrid}
+                        onEndReachedThreshold={0.1}
+                      />
+                    }
+                    </>
                   ) : null}
 
                   {'ventes-privees' == Service.code  ? (

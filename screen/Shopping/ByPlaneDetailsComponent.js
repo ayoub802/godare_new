@@ -174,7 +174,6 @@ const ByPlaneDetailsComponent = (props) => {
   }
 
 
- 
   
   // Vider le panier
   const handleCartRemove = async () => {

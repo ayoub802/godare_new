@@ -1,40 +1,43 @@
 //import liraries
-import React, {Component, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   View,
   Text,
   StyleSheet,
-  StatusBar,
-  Image,
   TouchableOpacity,
   Dimensions,
-  ScrollView,
   TextInput,
-  SafeAreaView,
+  Alert,
+  Image,
+  FlatList,
   ToastAndroid,
-  Alert} from 'react-native';
+  ScrollView
+} from 'react-native';
+
 import {Dropdown} from 'react-native-element-dropdown';
 import commonStyle from '../../helper/commonStyle';
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from 'react-native-modal';
 import {useTranslation} from 'react-i18next';
 import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import PhotoZoomer from "../../components/PhotoZoomer"
-import { getAuthUserEmail, removePanier, getPanier, savePanier } from '../../modules/GestionStorage';
+import { afficherMessageDouane, afficherMessageProduitServiceDifferent } from '../../modules/RegleGestion';
+import { removePanier, savePanier, getAuthUserEmail, getPanier } from '../../modules/GestionStorage';
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
-import DropDownPicker from 'react-native-dropdown-picker';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
-import Button from '../../components/Button';
+import Feather from "react-native-vector-icons/Feather"
+import Button, { ButtonIcon } from '../../components/Button';
+import ListCard from '../../components/ListCard';
+import DropDownPicker from 'react-native-dropdown-picker';
 import { auth } from '../../modules/FirebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
-
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 // create a component
-const BuyingDemandDetailComponent = props =>  {
+const BuyingDemandDetailComponentGrid = (props) => {
 
   // Donnée statique
   const Navigation = props.navigation;
@@ -481,41 +484,68 @@ const handleCartLogin = async (product) => {
     );
   }
 
+ 
   return (
-    <View style={{ backgroundColor: "#fff", margin: 5}}>
-      <View style={{flexDirection: "row", alignItems: "center",gap: 10, paddingVertical: 12, paddingLeft: 22}}>
+    <>
+     <View style={{ 
+      backgroundColor: "#fff", 
+      margin: 4.5, 
+      borderRadius: 10,    
+      }}>
 
-
-        <View>
-          <ScrollView
-            pagingEnabled
-            horizontal
-            onScroll={({nativeEvent}) => Change(nativeEvent)}
-            showsHorizontalScrollIndicator={false}
-            style={styles.imageSwiper}>
-            {Images.map((image, index) => (
-                <PhotoZoomer key={index} image={image} windowWidth={wp(30)} windowHeight={hp(40)} />
-              
-            ))}
-          </ScrollView>
-          <View style={styles.dotStyle}>
-            {Images.map((i, k) => (
-              <Text
-                key={k}
-                style={
-                  k == active ? styles.pagingActiveText : styles.pagingText
-                }>
-                ⬤
-              </Text>
-            ))}
+          <View style={{flexDirection: "row", alignItems: "center",justifyContent: "space-between" ,gap: 10, paddingTop: 16, paddingLeft: 6, paddingRight: 6}}>
+          <View style={{maxWidth: 130}}>
+              <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 9.3, color: "#000"}}>
+                {'fr' == Language ? Product.name : Product.nameEN}
+                </Text>
           </View>
-        </View>
-
-        <View style={{flexDirection: "column", justifyContent: "center", alignItems: "flex-start"}}>
-            <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
-                <Text style={{fontFamily: "Poppins-Medium", fontSize: 12.5,textAlign: "center", maxWidth: 180}}>{'fr' == Language ? Product.name : Product.nameEN}</Text>
+            <View style={{flexDirection: "column", alignItems: "center", gap: 2}}>
+                    <View>
+                      <Text style={{fontSize: 11, fontFamily: "Poppins-Medium",color: "#000"}}>
+                      {productSpecificites ? productSpecificites.prix  : 0}€/{Product.unite ? Product.unite.valeur : ''}
+                    </Text>
+                        </View>
+                    <View>
+                    {productSpecificites && productSpecificites.prixAncien ? 
+                      <Text style={{fontSize: 11, fontFamily: "Poppins-Medium",color: "#000", textDecorationLine: "line-through"}}>
+                      {productSpecificites.prixAncien}€/{Product.unite ? Product.unite.valeur : ''}
+                    </Text>
+                    :
+                    <></>
+                  }
+                    </View>
             </View>
-            <View style={styles.inputContainer}>
+          </View>
+          <View style={{flexDirection: "column", alignItems: "center", paddingBottom: 8, paddingLeft: 6}}>
+              {/* <View style={{backgroundColor: "#F5F5F5", height: hp(14), width: wp(20), borderRadius: 20, paddingTop: 10}}>
+              <Image source={{uri: item.productImages[0].url}} style={{height: hp(12),objectFit: "cover" ,borderRadius: 22, width: wp(19)}}/>
+              </View> */}
+                <ScrollView
+                pagingEnabled
+                horizontal
+                onScroll={({nativeEvent}) => Change(nativeEvent)}
+                showsHorizontalScrollIndicator={false}
+                style={styles.imageSwiper}
+                >
+                {Images.map((image, index) => (
+                      
+                  <PhotoZoomer key={index} image={image} windowWidth={wp(19)} windowHeight={hp(21)} />
+                    
+                ))}
+              </ScrollView>
+              <View style={styles.dotStyle}>
+                  {Images.map((i, k) => (
+                    <Text
+                      key={k}
+                      style={
+                        k == active ? styles.pagingActiveText : styles.pagingText
+                      }>
+                      ⬤
+                    </Text>
+                  ))}
+                </View>
+              <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", paddingRight: 6}}>
+              <View style={styles.inputContainer}>
               <TextInput
                 key={'url' + Product.id}
                 placeholder="URL"
@@ -527,20 +557,17 @@ const handleCartLogin = async (product) => {
                 }}
               />
             </View>
-
-            <View style={styles.dropDownscontainer}>
-
-              {Product.attributs.map((attribute) => {
+            {Product.attributs.map((attribute) => {
 
                 const product = Product;
                 let prevChoice = selectedProductValues[product.id];
-        
+
                 prevChoice = prevChoice ? prevChoice['attributes'] : null;
                 const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null;
-              
+
 
                 return (
-                  <View style={styles.inputContainer}>
+                <View style={styles.inputContainer}>
                     <TextInput
                     key={attribute.id}
                     placeholder={attribute.attribut.name}
@@ -549,100 +576,99 @@ const handleCartLogin = async (product) => {
                     style={styles.inputStyle}
                     value={selectedValue}
                     onChangeText={text => {
-                      handleAttributeChange(product, attribute.attribut.name, text);
+                    handleAttributeChange(product, attribute.attribut.name, text);
                     }}
                     />
                     </View>
                 )
-          
-              })}
 
-              <RenderQuantite product={Product} />
+                })}
 
-      
-              <View style={[styles.inputContainer, {marginTop: 10}]}>
-                <TextInput
-                  placeholder={t('Prix d’achat')}
-                  keyboardType="ascii-capable"
-                  placeholderTextColor={'#14213D'}
-                  style={styles.inputStyle}
-                  onChangeText={text => {
-                    handleAchatChange(Product, text);
-                  }}
-                />
+                    
+                <RenderQuantite product={Product} />
+                <View style={[styles.inputContainer, {marginTop: 10}]}>
+                    <TextInput
+                    placeholder={t('Prix d’achat')}
+                    keyboardType="ascii-capable"
+                    placeholderTextColor={'#14213D'}
+                    style={styles.inputStyle}
+                    onChangeText={text => {
+                        handleAchatChange(Product, text);
+                    }}
+                    />
+                </View>
               </View>
+          </View>
 
-              <View style={{marginTop: 12, width: "100%",position: "relative", zIndex: -10}}>
-                <TouchableOpacity
-                  style={{ paddingVertical: 8 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
-                  onPress={toggleModal}>
-                  <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
-                  <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
-                  {
-                    <View>
-                      <Modal
-                        isVisible={isModalVisible}
-                        backdropOpacity={0.4}
-                        animationIn={'fadeInUp'}
-                        animationInTiming={600}
-                        animationOut={'fadeOutDown'}
-                        animationOutTiming={600}
-                        useNativeDriver={true}>
-                        <View style={styles.ModalContainer}>
-                          <View style={styles.uploadContainer}>
-                            <Text style={styles.uploadText}>
-                              {t('Télécharger une photo')}
-                            </Text>
-                            <Text style={styles.uploadSubText}>
-                              {t('Choisissez une image')}
-                            </Text>
-                          </View>
-                          <View style={styles.buttonsContainer}>
-                            <TouchableOpacity
-                              style={styles.cameraGallerybuttons}
-                              onPress={() => {
-                                selectImageFromGallery();
-                              }}>
-                              <Text style={styles.buttonText}>
-                                {t('Choisir une image dans la galerie')}
-                              </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              style={styles.cameraGallerybuttons}
-                              onPress={() => {
-                                openCameraForPicture();
-                              }}>
-                              <Text style={styles.buttonText}>
-                                {t('Ouvrir la caméra')}
-                              </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                              style={styles.cancelButton}
-                              onPress={toggleModal}>
-                              <Text style={styles.buttonText}>{t('Annuler')}</Text>
-                            </TouchableOpacity>
-                          </View>
+          <View style={{marginTop: 8, width: "100%",position: "relative", zIndex: -10, marginBottom: 4, paddingHorizontal: 8}}>
+              <TouchableOpacity
+                style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
+                onPress={toggleModal}>
+                <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
+                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
+                {
+                  <View>
+                    <Modal
+                      isVisible={isModalVisible}
+                      backdropOpacity={0.4}
+                      animationIn={'fadeInUp'}
+                      animationInTiming={600}
+                      animationOut={'fadeOutDown'}
+                      animationOutTiming={600}
+                      useNativeDriver={true}>
+                      <View style={styles.ModalContainer}>
+                        <View style={styles.uploadContainer}>
+                          <Text style={styles.uploadText}>
+                            {t('Télécharger une photo')}
+                          </Text>
+                          <Text style={styles.uploadSubText}>
+                            {t('Choisissez une image')}
+                          </Text>
                         </View>
-                      </Modal>
-                    </View>
-                  }
-                </TouchableOpacity>
+                        <View style={styles.buttonsContainer}>
+                          <TouchableOpacity
+                            style={{ paddingVertical: 8, width: "100%", paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
+                            onPress={() => {
+                              selectImageFromGallery();
+                            }}>
+                              <FontAwesome5 name="image" size={20} color="#4E8FDA"/>
+                            <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>
+                              {t('Choisir une image dans la galerie')}
+                            </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={{ paddingVertical: 8, width: "100%" ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
+                            onPress={() => {
+                              openCameraForPicture();
+                            }}>
+                            <FontAwesome5 name="camera" size={20} color="#4E8FDA"/>
+                            <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>
+                              {t('Ouvrir la caméra')}
+                            </Text>
+                          </TouchableOpacity>  
+                        </View>
+                          <TouchableOpacity
+                            style={styles.cancelButton}
+                            onPress={toggleModal}>
+                            <Feather name="x" size={20}/>
+                          </TouchableOpacity>
+                      </View>
+                    </Modal>
+                  </View>
+                }
+              </TouchableOpacity>
               </View>
-              <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10}}>
-                  <Button title="Ajouter au panier" navigation={() => { handleCartLogin(Product);}}/>
+              <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10, paddingHorizontal: 8, paddingBottom: 10}}>
+                <Button title="Ajouter au panier" navigation={() => { handleCartLogin(Product);}}/>
               </View>
-              {/* <TouchableOpacity style={styles.buttonCartContainers}>
-                 <Text style={styles.buttonText} onPress={() => { handleCartLogin(Product);}}>{t('Ajouter au panier')}</Text>
-              </TouchableOpacity> */}
-            </View>
-          
+                        
             <View style={styles.bottomTextContainer}>
               
               <TextInput
                 placeholder={t('Informations complémentaires')}
                 placeholderTextColor={'#BCB8B1'}
                 multiline={true}
-                style={{fontSize: 12 ,fontFamily: "Poppins-Regular",width: windowWidth * 0.55 ,borderRadius: 8, paddingVertical: 5, paddingLeft: 12}}
+                style={{fontSize: 10,fontFamily: "Poppins-Regular",width: windowWidth * 0.5 ,borderRadius: 8, paddingVertical: 5, paddingLeft: 12}}
                 value={selectedProductValues[Product.id] ? selectedProductValues[Product.id]['infos'] : null}
                 onFocus={handleModalOpen}
                 onChangeText={text => {
@@ -651,50 +677,28 @@ const handleCartLogin = async (product) => {
               />
             
           </View>
-
-        </View>
-
       </View>
-
-
-    </View>
+    </>
   );
 };
+
 
 // define your styles
 const styles = StyleSheet.create({
   DetailsContainer: {
     backgroundColor: '#F4F6F8',
     width: windowWidth * 0.95,
-    height: windowHeight * 0.6,
+    height: windowHeight * 0.5,
     marginTop: windowHeight * 0.03,
     borderRadius: 28,
     elevation: 1,
   },
-  modalContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-  },
-  modalInput: {
-    height: 200,
-    width: '100%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    padding: 10,
-    textAlignVertical: 'top',
-  },
-  modalButtonContainer: {
-    marginTop: 10,
-    width: '50%',
-  },
-
   safeContainerStyle: {
     justifyContent: 'center',
     // backgroundColor: 'tomato',
-    width: windowWidth * 0.4,
+    width: windowWidth * 0.46,
     // borderRadius:0
+    marginTop: 5
   },
   upperRow: {
     // backgroundColor: 'green',
@@ -706,6 +710,7 @@ const styles = StyleSheet.create({
     marginTop: windowHeight * 0.03,
   },
   detailTextContainer: {
+    flexDirection: 'row',
     // backgroundColor: 'tomato',
     height: windowHeight * 0.08,
     width: windowWidth * 0.8,
@@ -718,6 +723,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     // backgroundColor: 'tomato',
     margin: 2,
+    marginLeft: '10%',
     width: windowWidth * 0.6,
   },
   discountPriceText: {
@@ -732,6 +738,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     fontSize: 13,
     textDecorationLine: 'line-through',
+    // backgroundColor: 'tomato',
+    margin: 2,
   },
 
   counterTExt: {
@@ -761,24 +769,32 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   dropDowncontainer: {
-    // backgroundColor: 'green',
+    // backgroundColor: 'tomato',
     width: windowWidth * 0.4,
-    height: windowHeight * 0.33,
+    height: windowHeight * 0.3,
   },
   imageSwiper: {
     // backgroundColor: 'gold',
-    width: windowWidth * 0.32,
-    height: windowHeight * 0.25,
+    width: windowWidth * 0.2,
+    height: windowHeight * 0.2,
+    borderRadius: 10,
+  },
+  imageSwipergGrid: {
+    // backgroundColor: 'gold',
+    width: windowWidth * 0.12,
+    height: windowHeight * 0.15,
     borderRadius: 10,
   },
   dotStyle: {
     flexDirection: 'row',
     position: 'absolute',
-    bottom: windowHeight * 0.06,
+    zIndex: 1500,
+    bottom: windowHeight * .19,
     alignSelf: 'center',
     justifyContent: 'space-around',
     // backgroundColor: 'tomato',
     width: windowWidth * 0.1,
+    color: '#000',
   },
   pagingText: {
     color: '#888',
@@ -792,29 +808,40 @@ const styles = StyleSheet.create({
   dropDownscontainer: {
     // backgroundColor: 'green',
     width: windowWidth * 0.4,
+    height: windowHeight * 0.33,
     alignItems: 'center',
-    marginVertical: 10
+    justifyContent: 'space-around',
   },
   inputContainer: {
     backgroundColor: "#F5F5F5",
-    width: windowWidth * 0.4,
-    height: 50,
+    width: windowWidth * 0.46,
+    height: 40,
     borderRadius: 10,
+    marginTop: 8,
   },
   inputStyle: {
     padding: 10,
-    color: '#14213D',
+    color: '#000',
     fontFamily: 'Roboto-Regular',
     marginLeft: 10,
-    fontSize: 16,
+    fontSize: 14,
   },
   buttonContainers: {
+    backgroundColor: '#3292E0',
+    height: windowHeight * 0.04,
+    width: windowWidth * 0.45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50,
+  },
+  buttonUploadContainers: {
     backgroundColor: '#1A6CAF',
     height: windowHeight * 0.04,
     width: windowWidth * 0.45,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 50,
+    // marginTop:10
   },
   buttonCartContainers: {
     backgroundColor: '#3292E0',
@@ -825,24 +852,26 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   buttonText: {
-    fontSize: 10,
+    fontSize: 11,
     color: '#fff',
     fontFamily: 'Roboto-Regular',
+    // backgroundColor: 'tomato',
+    width: windowWidth * 0.4,
+    textAlign: 'center',
   },
   dropdown: {
-    height: 50,
+    height: 35,
     borderRadius: 8,
     paddingHorizontal: 17,
-    backgroundColor: '#d5d6d7',
-    elevation: 1,
+    backgroundColor: "#F5F5F5",
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: 'Roboto-Regular',
     color: '#14213D',
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: 'Roboto-Regular',
     color: '#14213D',
   },
@@ -851,38 +880,21 @@ const styles = StyleSheet.create({
     height: 20,
   },
   containerStyle: {
-    backgroundColor: '#d5d6d7',
+    backgroundColor: "#F5F5F5",
     borderRadius: 8,
     maxHeight: 100,
   },
   ModalContainer: {
     width: windowWidth * 1.0,
-    height: windowHeight * 0.4,
+    height: windowHeight * 0.3,
     backgroundColor: '#fff',
     borderRadius: 10,
     alignSelf: 'center',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    paddingTop: 20,
+    // justifyContent: 'space-around',
     bottom: 0,
     position: 'absolute',
-  },
-  ModalInfosContainer: {
-    width: windowWidth * 1.0,
-    height: windowHeight ,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    bottom: 0,
-    position: 'absolute',
-  },
-  infosComplementaires: {
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    width: windowWidth * 0.8,
-    marginTop: windowHeight * 0.1,
-    alignSelf: 'center',
   },
   cameraGallerybuttons: {
     backgroundColor: '#1A6CAF',
@@ -893,26 +905,24 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   cancelButton: {
-    backgroundColor: '#ff726f',
-    height: 50,
-    width: windowWidth * 0.8,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
+    position: "absolute",
+    top: 10,
+    right: 10
   },
   uploadContainer: {
     // backgroundColor: 'tomato',
     alignItems: 'center',
-    justifyContent: 'space-around',
-    width: windowWidth * 0.8,
-    height: 40,
+    justifyContent: 'center',
     alignSelf: 'center',
   },
   uploadText: {
-    fontSize: 18,
+    fontSize: 14,
     color: '#000',
     textAlign: 'center',
-    fontFamily: 'Roboto-Bold',
+    fontFamily: 'Poppins-Bold',
   },
   uploadSubText: {
     color: '#cccccc',
@@ -921,16 +931,17 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     // backgroundColor: 'tomato',
-    width: windowWidth * 0.9,
-    height: windowHeight * 0.3,
-    alignSelf: 'center',
+    width: windowWidth * 0.7,
     alignItems: 'center',
-    justifyContent: 'space-around',
+    gap: 12,
+    justifyContent: "center",
+    marginTop: 50
   },
   bottomTextContainer: {
     // backgroundColor: 'gold',
-    width: windowWidth * 0.9,
-    marginTop: 5
+    alignSelf: 'center',
+    paddingLeft: 20,
+    paddingBottom: 10
   },
   bottomText: {
     fontFamily: 'Roboto-Regular',
@@ -940,14 +951,34 @@ const styles = StyleSheet.create({
   },
   commentInput: {
     // backgroundColor: 'tomato',
-    width: windowWidth * 0.5,
+    alignSelf: 'center',
+    width: windowWidth * 0.85,
+    height: windowHeight * 0.1,
+    textAlignVertical: 'top',
     color: '#000',
     fontFamily: 'Roboto-Regular',
-    borderWidth: 1,
-    borderColor: "#000",
-    borderRadius: 5
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  },
+  modalCloseButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 1,
+  },
+  modalCloseButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  modalImage: {
+    width: '100%',
+    height: '100%',
   },
 });
 
 //make this component available to the app
-export default BuyingDemandDetailComponent;
+export default BuyingDemandDetailComponentGrid;

@@ -65,7 +65,7 @@ const EditProfile = ({ navigation }) => {
     setInitializing(true)
     try{
       const userEmail = getAuth().currentUser;
-      const q = query(collection(firebase_db, "users"), where('email', '==', 'hamid@gmail.com'))
+      const q = query(collection(firebase_db, "users"), where('email', '==', "hamid@gmail.com"))
       const querySnapshot = await getDocs(q);
   
       querySnapshot.forEach((doc) => {
@@ -105,16 +105,6 @@ async function updateUser(){
     console.log("Error:",error);
   }
 }
-
-// async function getDate(){
-//   const response = await axiosInstance.get('https://godaregroup.com/api/clients/46/' + Email);
-//   let data = response.data;
-//   if(response.data){
-//     setName(data.nom);
-//     setPrename(data.prenom);
-//     setPhoneNumber(data.telephone);
-//   }
-// }
 
 if(true == initializing){
   return(

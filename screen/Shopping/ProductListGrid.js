@@ -34,7 +34,6 @@ import Pdf from 'react-native-pdf';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../modules/FirebaseConfig';
 import ServiceHeader from '../../components/ServiceHeader';
-import MasonryList from '@react-native-seoul/masonry-list';
 
 
 const ProductList = () => {
@@ -642,190 +641,94 @@ const ProductList = () => {
     }
 
     const RenderList = () => {
-      return(
-          <>
-              {products.map((product) => (
-                  <View style={{ backgroundColor: "#fff", margin: 5}} key={product.id}>
-                  <View style={{flexDirection: "row", alignItems: "center",gap: 10, paddingVertical: 12, paddingLeft: 22}}>
-                      <View>
-                          <ScrollView
-                              pagingEnabled
-                              horizontal
-                              onScroll={({nativeEvent}) => Change(nativeEvent)}
-                              showsHorizontalScrollIndicator={false}
-      
-                              style={styles.imageSwiper}>
-                              {product.productImages.map((image, index) => (
-                                  <PhotoZoomer key={index} image={image} windowWidth={wp(40)} windowHeight={hp(40)} />
-                              ))}
-                          </ScrollView>
-                          <View style={styles.dotStyle}>
-                              {product.productImages.map((i, k) => (
-                              <Text
-                                  key={k}
-                                  style={
-                                  k == active ? styles.pagingActiveText : styles.pagingText
-                                  }>
-                                  ⬤
-                              </Text>
-                              ))}
-                          </View>
-                      </View>
-                      <View style={{flexDirection: "column", justifyContent: "center", alignItems: "flex-start"}}>
-                          <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
-                              <Text style={{fontFamily: "Poppins-Medium", fontSize: 12.5,textAlign: "center", maxWidth: 180}}>{ 'fr' == Language ? product.name : product.nameEN}</Text>
-                          
-                              <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000",  marginTop: 8}}>
-                              <RenderPrices product={product} />
-                              </Text>
-                          </View>
-      
-                          {product.attributs.map((attribute) => {
-                          const prevChoice = selectedProductValues[product.id] ? selectedProductValues[product.id]['attributes'] : null;
-                          const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null
-                          
-                          const buildAttributes = attribute.attributValues.map(obj => {
-                              return {label: obj.valeur, value: obj.valeur};
-                          });
-      
-                          
-                          return (
-      
-                              <View style={styles.safeContainerStyle} key={attribute.id}>
-                              <Dropdown
-                                  style={[styles.dropdown]}
-                                  placeholderStyle={styles.placeholderStyle}
-                                  selectedTextStyle={styles.selectedTextStyle}
-                                  autoScroll
-                                  iconStyle={styles.iconStyle}
-                                  containerStyle={styles.containerStyle}
-                                  labelField="label"
-                                  valueField="value"
-                                  value={selectedValue}
-                                  placeholder={'fr' == Language ? attribute.attribut.name : attribute.attribut.nameEN}
-                                  searchPlaceholder="Search..."
-                                  showsVerticalScrollIndicator={false}
-                                  data={buildAttributes}
-                                  onChange={item => {
-                                  handleAttributeChange(product, attribute.attribut.id, item.value);
-                                  }} 
-                              />
-                              </View>
-                          );
-                          })}
-                          <RenderQuantite product={product} />
-      
-                          <View style={{marginTop: 10, width: "100%", position: "relative", zIndex: -10}}>
-                          <Button title="Ajouter au panier" navigation={() =>  handleCartLogin(product)}/>
-                      </View>
-                          <View style={styles.descrContainer}>
-                          <RenderLivraisonAndDescriptionLink product={product} />
-                          </View>
-                      </View>
-                  </View>
-      
-                  </View>
-              ))}
-          </>
-      )
-    }
-
-    const RenderGrid = (props) => {
-      const product = props.data
-      return(
-          <>
-            <View style={{ backgroundColor: "#fff", margin: 5, borderRadius: 10, }} key={product.id}>
-                <View style={{flexDirection: "row", alignItems: "center",justifyContent: "space-between" ,gap: 10, paddingTop: 16, paddingLeft: 6, paddingRight: 6}}>
-                    <View style={{maxWidth: 100}}> 
-                      <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 8.3, color: "#000"}}>
-                      {'fr' == Language ? product.name : product.nameEN}
-                      </Text>
-                    </View>
-                    <View style={{flexDirection: "column", alignItems: "center", gap: 2, maxWidth: 100}}>
-                        <Text style={{fontSize: 9.5, fontFamily: "Poppins-Medium",color: "#000",  marginTop: 8}}>
-                                <RenderPrices product={product} />
-                          </Text>
-                    </View>
-                  </View>
-                  <View style={{flexDirection: "column", alignItems: "center", paddingBottom: 8, paddingLeft: 6}}>
-                        <ScrollView
-                            pagingEnabled
-                            horizontal
-                            onScroll={({nativeEvent}) => Change(nativeEvent)}
-                            showsHorizontalScrollIndicator={false}
-    
-                            style={styles.imageSwiper}>
-                            {product.productImages.map((image, index) => (
-                                <PhotoZoomer key={index} image={image} windowWidth={wp(39)} windowHeight={hp(32)} />
-                            ))}
-                        </ScrollView>
-                        <View style={styles.dotStyle}>
-                            {product.productImages.map((i, k) => (
-                            <Text
-                                key={k}
-                                style={
-                                k == active ? styles.pagingActiveText : styles.pagingText
-                                }>
-                                ⬤
-                            </Text>
-                            ))}
-                        </View>
-                    <View style={{flexDirection: "column", justifyContent: "center", alignItems: "flex-start"}}>
-    
-                        {product.attributs.map((attribute) => {
-                        const prevChoice = selectedProductValues[product.id] ? selectedProductValues[product.id]['attributes'] : null;
-                        const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null
-                        
-                        const buildAttributes = attribute.attributValues.map(obj => {
-                            return {label: obj.valeur, value: obj.valeur};
-                        });
-    
-                        
-                        return (
-    
-                            <View style={styles.safeContainerStyle} key={attribute.id}>
-                            <Dropdown
-                                style={[styles.dropdown]}
-                                placeholderStyle={styles.placeholderStyle}
-                                selectedTextStyle={styles.selectedTextStyle}
-                                autoScroll
-                                iconStyle={styles.iconStyle}
-                                containerStyle={styles.containerStyle}
-                                labelField="label"
-                                valueField="value"
-                                value={selectedValue}
-                                placeholder={'fr' == Language ? attribute.attribut.name : attribute.attribut.nameEN}
-                                searchPlaceholder="Search..."
-                                showsVerticalScrollIndicator={false}
-                                data={buildAttributes}
-                                onChange={item => {
-                                handleAttributeChange(product, attribute.attribut.id, item.value);
-                                }} 
-                            />
+        return(
+            <>
+                {products.map((product) => (
+                    <View style={{ backgroundColor: "#fff", margin: 5}} key={product.id}>
+                    <View style={{flexDirection: "row", alignItems: "center",gap: 10, paddingVertical: 12, paddingLeft: 22}}>
+                        <View>
+                            <ScrollView
+                                pagingEnabled
+                                horizontal
+                                onScroll={({nativeEvent}) => Change(nativeEvent)}
+                                showsHorizontalScrollIndicator={false}
+        
+                                style={styles.imageSwiper}>
+                                {product.productImages.map((image, index) => (
+                                    <PhotoZoomer key={index} image={image} windowWidth={wp(40)} windowHeight={hp(40)} />
+                                ))}
+                            </ScrollView>
+                            <View style={styles.dotStyle}>
+                                {product.productImages.map((i, k) => (
+                                <Text
+                                    key={k}
+                                    style={
+                                    k == active ? styles.pagingActiveText : styles.pagingText
+                                    }>
+                                    ⬤
+                                </Text>
+                                ))}
                             </View>
-                        );
-                        })}
-                        <RenderQuantite product={product} />
-    
-                        <View style={{marginTop: 10, width: "100%", position: "relative", zIndex: -10}}>
-                        <Button title="Ajouter au panier" navigation={() =>  handleCartLogin(product)}/>
-                    </View>
-                        <View style={styles.descrContainer}>
-                        <RenderLivraisonAndDescriptionLink product={product} />
+                        </View>
+                        <View style={{flexDirection: "column", justifyContent: "center", alignItems: "flex-start"}}>
+                            <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
+                                <Text style={{fontFamily: "Poppins-Medium", fontSize: 12.5,textAlign: "center", maxWidth: 180}}>{ 'fr' == Language ? product.name : product.nameEN}</Text>
+                            
+                                <Text style={{fontSize: 13, fontFamily: "Poppins-Medium",color: "#000",  marginTop: 8}}>
+                                <RenderPrices product={product} />
+                                </Text>
+                            </View>
+        
+                            {product.attributs.map((attribute) => {
+                            const prevChoice = selectedProductValues[product.id] ? selectedProductValues[product.id]['attributes'] : null;
+                            const selectedValue = prevChoice ? prevChoice[attribute.attribut.id] : null
+                            
+                            const buildAttributes = attribute.attributValues.map(obj => {
+                                return {label: obj.valeur, value: obj.valeur};
+                            });
+        
+                            
+                            return (
+        
+                                <View style={styles.safeContainerStyle} key={attribute.id}>
+                                <Dropdown
+                                    style={[styles.dropdown]}
+                                    placeholderStyle={styles.placeholderStyle}
+                                    selectedTextStyle={styles.selectedTextStyle}
+                                    autoScroll
+                                    iconStyle={styles.iconStyle}
+                                    containerStyle={styles.containerStyle}
+                                    labelField="label"
+                                    valueField="value"
+                                    value={selectedValue}
+                                    placeholder={'fr' == Language ? attribute.attribut.name : attribute.attribut.nameEN}
+                                    searchPlaceholder="Search..."
+                                    showsVerticalScrollIndicator={false}
+                                    data={buildAttributes}
+                                    onChange={item => {
+                                    handleAttributeChange(product, attribute.attribut.id, item.value);
+                                    }} 
+                                />
+                                </View>
+                            );
+                            })}
+                            <RenderQuantite product={product} />
+        
+                            <View style={{marginTop: 10, width: "100%", position: "relative", zIndex: -10}}>
+                            <Button title="Ajouter au panier" navigation={() =>  handleCartLogin(product)}/>
+                        </View>
+                            <View style={styles.descrContainer}>
+                            <RenderLivraisonAndDescriptionLink product={product} />
+                            </View>
                         </View>
                     </View>
-
-                  </View>
-                </View>
-          </>
-      )
-    }
-
-    const RenderItems = ({item}) => (
-      <RenderGrid 
-        data={item}
-      />
-    )
+        
+                    </View>
+                ))}
+            </>
+        )
+      }
+    
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -895,20 +798,6 @@ const ProductList = () => {
                     </View>
                   </View>
 
-              {
-                activeFilter === 0
-                ?
-                <RenderList />
-                :
-                <MasonryList
-                data={products}
-                keyExtractor={(item)=> item.id}
-                numColumns={2}
-                showsVerticalScrollIndicator={false}
-                renderItem={RenderItems}
-                onEndReachedThreshold={0.1}
-              />
-              }
 
           {selectedProduct && (
             <Modal visible={modalVisible} animationType="slide">
@@ -929,6 +818,7 @@ const ProductList = () => {
       
     );
   };
+
 
 
   const styles = StyleSheet.create({
@@ -1081,13 +971,11 @@ const ProductList = () => {
     dotStyle: {
       flexDirection: 'row',
       position: 'absolute',
-      zIndex: 1500,
-      bottom: windowHeight * .31,
+      bottom: windowHeight * 0.09,
       alignSelf: 'center',
       justifyContent: 'space-around',
       // backgroundColor: 'tomato',
       width: windowWidth * 0.1,
-      color: '#000',
     },
     pagingText: {
       color: '#888',
