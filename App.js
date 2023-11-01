@@ -7,7 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import axiosInstance from './axiosInstance';
 import { saveConditionsMentions, saveParametrages } from './modules/GestionStorage';
 import { GetPlatformLanguageAndSavedInStorage } from './modules/DeviceSettings';
-import { useTranslation } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import i18n from './language/i18n';
 
 console.disableYellowBox = true;
 const App = () => {
@@ -79,18 +80,18 @@ const App = () => {
 
     // Recuperer les parametrages
     fetchParametrageAndConditionsLegales();
-
-  }, []);
-  useEffect(() => {
     SplashScreen.hide();
+
   }, []);
 
   return (
-    <StripeProvider publishableKey="pk_test_51MP1s8H53XOlotVAmo3JD8WTYIy7qYuXEKc7z2saRD9mmhBDxl0naLPsYa5oevuJn5wMYV2UOLP0WhDpdzOkjTVt00Bw8i8DRE">
-      <SafeAreaView style={{flex: 1}}>
-         <AppNavigation />
-      </SafeAreaView>
-    </StripeProvider>
+    <I18nextProvider i18n={i18n}>
+      <StripeProvider publishableKey="pk_test_51MP1s8H53XOlotVAmo3JD8WTYIy7qYuXEKc7z2saRD9mmhBDxl0naLPsYa5oevuJn5wMYV2UOLP0WhDpdzOkjTVt00Bw8i8DRE">
+        <SafeAreaView style={{flex: 1}}>
+          <AppNavigation />
+        </SafeAreaView>
+      </StripeProvider>
+    </I18nextProvider> 
   );
 };
 

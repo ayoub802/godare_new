@@ -3,11 +3,39 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
+  // container: {
+  //   flex: 1,
+  //   // justifyContent: 'center',
+  //   alignItems: 'center',
+  //   backgroundColor: '#fff',
+  // },
   container: {
-    flex: 1,
-    // justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    paddingTop: 60,
+    paddingHorizontal: 16,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  title: {
+    color: "#444",
+    fontSize: 28,
+    fontWeight: "600",
+  },
+  buttonContainer: {
+    marginTop: 10,
+  },
+  text: {
+    fontSize: 18,
+    color: "#000",
+    paddingVertical: 4,
+  },
+  selectedText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "tomato",
+    paddingVertical: 4,
   },
   serviceContainer: {
     backgroundColor: '#fff',

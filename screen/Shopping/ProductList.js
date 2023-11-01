@@ -527,7 +527,7 @@ const ProductList = () => {
             maxHeight={120}
             value={choosQuantity}
             setValue={val => setChoosQuantity(val)}
-            placeholder={t('Quantité')}
+            placeholder={t('quantité')}
             searchPlaceholder="Search..."
             showsVerticalScrollIndicator={true}
             items={sweeterArray}
@@ -716,7 +716,7 @@ const ProductList = () => {
                           <RenderQuantite product={product} />
       
                           <View style={{marginTop: 10, width: "100%", position: "relative", zIndex: -10}}>
-                          <Button title="Ajouter au panier" navigation={() =>  handleCartLogin(product)}/>
+                          <Button title={t('ajouter au panier')} navigation={() =>  handleCartLogin(product)}/>
                       </View>
                           <View style={styles.descrContainer}>
                           <RenderLivraisonAndDescriptionLink product={product} />
@@ -759,7 +759,7 @@ const ProductList = () => {
                                 <PhotoZoomer key={index} image={image} windowWidth={wp(39)} windowHeight={hp(32)} />
                             ))}
                         </ScrollView>
-                        <View style={styles.dotStyle}>
+                        <View style={styles.dotStyleGrid}>
                             {product.productImages.map((i, k) => (
                             <Text
                                 key={k}
@@ -808,7 +808,7 @@ const ProductList = () => {
                         <RenderQuantite product={product} />
     
                         <View style={{marginTop: 10, width: "100%", position: "relative", zIndex: -10}}>
-                        <Button title="Ajouter au panier" navigation={() =>  handleCartLogin(product)}/>
+                        <Button title={t('ajouter au panier')} navigation={() =>  handleCartLogin(product)}/>
                     </View>
                         <View style={styles.descrContainer}>
                         <RenderLivraisonAndDescriptionLink product={product} />
@@ -1082,9 +1082,20 @@ const ProductList = () => {
       flexDirection: 'row',
       position: 'absolute',
       zIndex: 1500,
-      bottom: windowHeight * .31,
+      bottom: windowHeight * .08,
       alignSelf: 'center',
-      justifyContent: 'space-around',
+      gap: 2,
+      // backgroundColor: 'tomato',
+      width: windowWidth * 0.1,
+      color: '#000',
+    },
+    dotStyleGrid: {
+      flexDirection: 'row',
+      position: 'absolute',
+      zIndex: 1500,
+      bottom: windowHeight * .28,
+      alignSelf: 'center',
+      gap: 2,
       // backgroundColor: 'tomato',
       width: windowWidth * 0.1,
       color: '#000',

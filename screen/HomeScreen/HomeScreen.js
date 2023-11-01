@@ -1,4 +1,4 @@
-import {View, Text, ScrollView, FlatList, TouchableOpacity, ActivityIndicator, Image} from 'react-native';
+import {View, Text, ScrollView, FlatList, TouchableOpacity, ActivityIndicator, Image, Pressable} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -14,9 +14,12 @@ import { useTranslation } from 'react-i18next';
 import DropDownPicker from 'react-native-dropdown-picker';
 import i18next from 'i18next';
 import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import { useIsFocused } from '@react-navigation/native';
+
 const HomeScreen = ({navigation}) => {
   const { t, i18n } = useTranslation();
 
+  var isFocused = useIsFocused()
   const [Services, setServices] = useState([]);
   const [ServicesRaw, setServicesRaw] = useState([]);
   const [Activity, setActivity] = useState(true);
@@ -24,7 +27,8 @@ const HomeScreen = ({navigation}) => {
   const [WaveSessionID, setWaveSessionID] = useState(null);
   const [isOpen, setIsOpen] = useState(false)
   const [current, setCurrent] = useState('')
-
+  const [loadLang, setLoadLang] = useState(false)
+  const [language, setLanguage] = useState('fr')
   useEffect(() => {
 
     async function fetchServices()
@@ -34,7 +38,6 @@ const HomeScreen = ({navigation}) => {
       try 
       {
 
-        const currentLanguage = await getPlatformLanguage();
         let services = await getServices();
 
         if (services.length < 1)
@@ -57,7 +60,7 @@ const HomeScreen = ({navigation}) => {
           obj.id = row.id;
           obj.statut = row.statut;
 
-          if ('fr' == currentLanguage)
+          if (language == 'fr')
           {
             obj.nom = row.nom;
             obj.message = row.message;
@@ -83,8 +86,22 @@ const HomeScreen = ({navigation}) => {
     }
 
     fetchServices();
+    gatLanguage()
 
-  }, []);
+  }, [isFocused]);
+
+  async function gatLanguage(){
+    setLoadLang(false)
+    try{
+      const currentLanguage = await getPlatformLanguage();
+      setLoadLang(true)
+      console.log("Language:",currentLanguage);
+      setLanguage(currentLanguage)
+    }
+    catch(error){
+      console.log("Error:", error);
+    }
+  }
  
 
   async function navigateToCountryDelivery(service) {
@@ -109,16 +126,6 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
- const items = [
-  {
-    label: "France",
-    value: "fr"
-  },
-  {
-    label: "Anglais",
-    value: "en"
-  },
- ]
 
 
   if (Activity)
@@ -132,6 +139,18 @@ const HomeScreen = ({navigation}) => {
       </ScrollView>
     );
   }
+  if (loadLang == false)
+  {
+    return (
+      <ScrollView>
+         <HeaderEarth />
+        <View style={{justifyContent: 'center', flex: 1}}>
+          <ActivityIndicator size="large" color="#3292E0" style={{}} />
+        </View>
+      </ScrollView>
+    );
+  }
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView
@@ -177,5 +196,7 @@ const HomeScreen = ({navigation}) => {
     </SafeAreaView>
   );
 };
+
+
 
 export default HomeScreen;

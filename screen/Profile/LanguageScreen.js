@@ -14,11 +14,11 @@ const LanguageScreen = (props) => {
 
   const data = [
     {
-      label: t('Français'),
+      label: 'Français',
       value: 'fr',
     },
     {
-      label: t('English'),
+      label: 'English',
       value: 'en',
     },
   ];
@@ -33,8 +33,7 @@ const LanguageScreen = (props) => {
 
     console.log(value);
 
-    i18n
-      .changeLanguage(value)
+    i18n.changeLanguage(value)
       .then(() => setCurrentLanguage(value))
       .catch(err => console.log(err));
   };
@@ -65,10 +64,13 @@ const LanguageScreen = (props) => {
           }}
         />
       </View>
+      <View style={{justifyContent: "center", alignItems: "center"}}>
+        <Text>{t('Hey')}</Text>
+      </View>
       <TouchableOpacity
         style={styles.ButtonContainer}
         onPress={() => changeLanguage()}>
-        <Text style={styles.ButtonText}>{t('Valider / Validate')}</Text>
+        <Text style={styles.ButtonText}>{t('valider')}</Text>
       </TouchableOpacity>
     </View>
   )

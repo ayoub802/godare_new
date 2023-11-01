@@ -10,7 +10,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Button, { ButtonIcon } from '../../components/Button';
 import Stepper from '../Stepper';
 import { HeaderActions } from '../../components/Header';
-import { getAuthUserEmail, getDepotModeChoice, getDepotValues, getNewAddedAddress, getPanier, getSelectedCountry, getSelectedService, getServices, saveCreneaux, saveDepotAdresseId, saveDepotAdresseValues, saveDepotMagasinId, saveDepotMagasinValues, saveDepotModeChoice, saveDepotValidation, saveSelectedService } from '../../modules/GestionStorage';
+import { getAuthUserEmail, getDepotModeChoice, getDepotValues, getNewAddedAddress, getPanier, getPlatformLanguage, getSelectedCountry, getSelectedService, getServices, saveCreneaux, saveDepotAdresseId, saveDepotAdresseValues, saveDepotMagasinId, saveDepotMagasinValues, saveDepotModeChoice, saveDepotValidation, saveSelectedService } from '../../modules/GestionStorage';
 import axiosInstance from '../../axiosInstance';
 import { useTranslation } from 'react-i18next';
 import { useIsFocused } from '@react-navigation/native';
@@ -78,6 +78,9 @@ const DepotScreen1 = (props) => {
       let paysLivraisonObject = await getSelectedCountry();
       setPaysLivraisonObject(paysLivraisonObject);
 
+      // Language
+      const currentLanguage = await getPlatformLanguage();
+      setLanguage(currentLanguage);
 
       // Get service
       let service = await getSelectedService();
@@ -509,7 +512,7 @@ const DepotScreen1 = (props) => {
            <View style={{ marginTop: 30, paddingHorizontal: 16}}>
             <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
                 <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000", marginBottom: 10}}>
-                      Adresse d'enlèvement
+                {t("Adresse d'enlèvement")}
                 </Text>
               
               <Dropdown
@@ -551,7 +554,7 @@ const DepotScreen1 = (props) => {
            <View style={{ marginTop: 12, paddingHorizontal: 16}}>
               <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
                   <Text style={{fontFamily: "Poppins-Medium", fontSize: 12, color: "#000"}}>
-                     Les coordonnées de destinataire de la commande
+                   {t('Les coordonnées de destinataire de la commande')}
                   </Text>
                 
                 <View style={styles.inputCountryCustomContainer}>
@@ -612,7 +615,7 @@ const DepotScreen1 = (props) => {
              <View style={{ marginTop: 32, paddingHorizontal: 16}}>
              <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
                   <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
-                    Liste des magasins de dépot
+                    {t('Liste des magasins de dépot')}
                   </Text>
                   <View style={{marginTop: 10}}>
                       <Dropdown
@@ -638,7 +641,7 @@ const DepotScreen1 = (props) => {
                       />
                   </View>
                   <View style={{marginTop: 8}}>
-                     <Text style={{fontFamily: "Poppins-Regular",color: "#000", fontSize: 10}}>*Livrasion 72h aprés la prise en charge</Text>
+                     <Text style={{fontFamily: "Poppins-Regular",color: "#000", fontSize: 10}}>*{t('Livraison 72h aprés la prise en charge')}</Text>
                   </View>
                   </View>
               </View>
@@ -667,7 +670,7 @@ const DepotScreen1 = (props) => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.Heading}>{t('Horaires d\'ouverture')}</Text>
+                <Text style={styles.Heading}>{t("Horaires d'ouverture")}</Text>
                 <Text style={styles.modalText}>{actionTriggered.horaireOuverture}</Text>
                 <Text style={styles.modalText}>
                   {actionTriggered.adresse + ', ' + (actionTriggered.codePostal ? (actionTriggered.codePostal + ' ') : '' ) + actionTriggered.ville + ' ' + actionTriggered.pays  }
@@ -677,12 +680,12 @@ const DepotScreen1 = (props) => {
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => ResetChoixMagasin()}>
-                    <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>Fermer</Text>
+                    <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Fermer")}</Text>
                   </Pressable>
                   <Pressable
                     style={[styles.button, styles.buttonOpen]}
                     onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
-                    <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>Selectionner le magasin</Text>
+                    <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Selectionner le magasin")}</Text>
                   </Pressable>
                 </View>
               </View>

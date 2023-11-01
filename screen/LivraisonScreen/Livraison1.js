@@ -12,7 +12,7 @@ import Stepper from '../Stepper';
 import { CallingCodePicker } from '@digieggs/rn-country-code-picker';
 import PhoneInput from 'react-native-phone-number-input';
 import { useIsFocused } from '@react-navigation/native';
-import { getAuthUserEmail, getLivraisonValues, getNewAddedAddress, getPanier, getSelectedCountry, getSelectedService, getServices, saveLivraisonAdresseId, saveLivraisonDomicileData, saveLivraisonMagasinData, saveLivraisonMode, saveLivraisonRelaisId, saveSelectedCountry, saveSelectedService } from '../../modules/GestionStorage';
+import { getAuthUserEmail, getLivraisonValues, getNewAddedAddress, getPanier, getPlatformLanguage, getSelectedCountry, getSelectedService, getServices, saveLivraisonAdresseId, saveLivraisonDomicileData, saveLivraisonMagasinData, saveLivraisonMode, saveLivraisonRelaisId, saveSelectedCountry, saveSelectedService } from '../../modules/GestionStorage';
 import axiosInstance from '../../axiosInstance';
 import { useTranslation } from 'react-i18next';
 import ServiceHeader from '../../components/ServiceHeader';
@@ -88,6 +88,9 @@ const Livraison1 = (props) => {
       let paysLivraisonObject = await getSelectedCountry();
       setPaysLivraisonObject(paysLivraisonObject);
 
+      // Language
+      const currentLanguage = await getPlatformLanguage();
+      setLanguage(currentLanguage);
       
       // Get service
       let service = await getSelectedService();
@@ -504,7 +507,7 @@ const Livraison1 = (props) => {
               
                 />
                 <View style={{marginTop: 10, paddingLeft: 30}}>
-                  <Text style={{ fontFamily: "Poppins-Regular", fontSize: 10, color: "#000"}}>*Livrasion 72h aprés la prise en charge</Text>
+                  <Text style={{ fontFamily: "Poppins-Regular", fontSize: 10, color: "#000"}}>*{t('Livraison 72h aprés la prise en charge')}</Text>
                 </View>
               </View>
 

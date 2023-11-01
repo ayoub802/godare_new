@@ -192,7 +192,7 @@ const PaysLivraison = ({navigation, route}) => {
               fontFamily: 'Roboto-Medium',
               fontSize: 16,
             }}>
-            Pays de livraison
+              {t('pay livraison')}
           </Text>
 
       </View>
@@ -203,7 +203,7 @@ const PaysLivraison = ({navigation, route}) => {
               items={
                 data.map(item => (
                   {
-                    label: '',
+                    label: item.destination,
                     value: item.id,
                     icon: () => {
                       return (
@@ -252,6 +252,8 @@ const PaysLivraison = ({navigation, route}) => {
                   }))
                 
               } 
+              labelStyle={{display: "none"}}
+              listItemLabelStyle={{display: "none"}}
               open={isOpen}
               setOpen={() => setIsOpen(!isOpen)}
               value={value}
@@ -266,7 +268,7 @@ const PaysLivraison = ({navigation, route}) => {
                 borderColor: '#2BA6E9',
                 fontSize: 54,
               }}
-              placeholder="Pays de Livraison"
+              placeholder={t('pay livraison')}
               placeholderStyle={{
                 color: '#86909C',
                 fontFamily: 'Roboto-Regular',
@@ -274,6 +276,7 @@ const PaysLivraison = ({navigation, route}) => {
               }}
               textStyle={{fontFamily: 'Roboto-Regular', fontSize: 14}}
               searchable={true}
+              autoScroll
               searchContainerStyle={{borderBottomWidth: 0}}
               searchTextInputStyle={{borderColor: '#2BA6E9'}}
               searchPlaceholder="Recherche Pays..."
@@ -313,7 +316,7 @@ const PaysLivraison = ({navigation, route}) => {
           }}
           style={{ paddingVertical: 8,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}}>
 
-          <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>{'Valider'}</Text>
+          <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>{t('valider')}</Text>
 
         </TouchableOpacity>
      </View>

@@ -511,10 +511,10 @@ console.log(CartProducts.length);
                      placeholder='FD248AK268'
                      style={{padding: 0, paddingLeft: 19, width: 200, color: "#000"}}
                    />
-                   <Button title="Appliquer Coupon" navigation={() => setCouponShow(!couponShow)}/>
+                   <Button title={t('Appliquer Coupon')} navigation={() => setCouponShow(!couponShow)}/>
                 </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13}}>
-                    <Text style={{color: "#000", fontSize: 15,fontFamily: "Poppins-Medium", letterSpacing: 0.3}}>Frais de douane:</Text>
+                    <Text style={{color: "#000", fontSize: 15,fontFamily: "Poppins-Medium", letterSpacing: 0.3}}>{t('fais douane')}:</Text>
                     <Text style={{color: "#000", fontSize: 16,fontFamily: "Poppins-Regular", letterSpacing: 0.3}}>{'ventes-privees' == Service.code ? t('Offert') : (prices.sommeFraisDouane + '€') }</Text>
                 </View>
             </View>
@@ -530,7 +530,7 @@ console.log(CartProducts.length);
           (
             <View style={styles.secondContainer}>
               <View style={styles.totalContainer}>
-                <Text style={styles.totalText}>{t('Frais de transit')} </Text>
+                <Text style={styles.totalText}>{t('frais transit')} </Text>
                 <Text style={styles.totalText}>{t('Offert')}</Text>
               </View>
             </View>
@@ -541,7 +541,7 @@ console.log(CartProducts.length);
         
 
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: 13, width: "100%", paddingHorizontal: 40}}>
-            <Text style={{fontSize: 18, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>Montant total :</Text>
+            <Text style={{fontSize: 18, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Montant total')} :</Text>
             <Text style={{fontSize: 16, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
               { prices.totalPrixAvecDouaneRemiseAvoir } €
             </Text>

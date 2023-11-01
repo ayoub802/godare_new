@@ -29,26 +29,7 @@ const ServiceHeader = props => {
 
   return (
     <>
-    {/* <View style={styles.tabsContainer}>
-        
-        <View style={{ flexDirection: 'row' }}>
 
-          <TouchableOpacity onPress={() => { Navigation.navigate('HomeScreen'); }} >
-              <Text style={styles.tabarTextStyle}>
-                { Service ? ( 'fr' == Language ? Service.nom : Service.nomEN ) : '' }
-              </Text>
-          </TouchableOpacity>
-      
-            <TouchableOpacity onPress={() => { Navigation.navigate('PaysLivraison'); }}>
-              <CountryFlag 
-                drapeauDepart={PaysLivraison.drapeauDepart} 
-                drapeauDestination={PaysLivraison.drapeauDestination} 
-                label={PaysLivraison.label} />
-            </TouchableOpacity>
-
-        </View>
-        
-    </View> */}
                 <View style={{ position: "relative" ,alignItems: "center", backgroundColor: "#2BA6E9", justifyContent: "center", height: hp(12)}}>
                 <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold"}}>
                   { Service ? ( 'fr' == Language ? Service.nom : Service.nomEN ) : '' }

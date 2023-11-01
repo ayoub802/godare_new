@@ -380,7 +380,7 @@ const ByPlaneDetailsComponent = (props) => {
                 setOpen={() => setOpen2(!open2)}
                 value={StateValue}
                 setValue={val => setStateValue(val)}
-                placeholder={t('Etat')}
+                placeholder={t('etat')}
                 maxHeight={100}
                 autoScroll
                 style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
@@ -398,8 +398,8 @@ const ByPlaneDetailsComponent = (props) => {
                 setOpen={() => setOpen(!open)}
                 value={QuantitySelected}
                 setValue={val => setQuantitySelected(val)}
-                placeholder={t('Quantité')}
-                autoScroll={true}
+                placeholder={t('quantité')}
+                autoScroll
                 maxHeight={120}
                 style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
                 dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
@@ -408,7 +408,7 @@ const ByPlaneDetailsComponent = (props) => {
 
           <View style={[styles.inputContainer, {position: "relative", zIndex: -10}]}>
             <TextInput
-              placeholder={t('Valeur (€)')}
+              placeholder={t('valeur')}
               keyboardType="ascii-capable"
               placeholderTextColor={'#14213D'}
               style={styles.inputStyle}
@@ -424,7 +424,7 @@ const ByPlaneDetailsComponent = (props) => {
                 style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
                 onPress={toggleModal}>
                 <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
-                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
+                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('prendre photo')}</Text>
                 {
                   <View>
                     <Modal
@@ -479,7 +479,7 @@ const ByPlaneDetailsComponent = (props) => {
               </View>
 
               <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10}}>
-                  <Button title="Ajouter au panier" navigation={() => handleCartLogin()}/>
+                  <Button title={t('ajouter au panier')} navigation={() => handleCartLogin()}/>
               </View>
           </View>
         </View>

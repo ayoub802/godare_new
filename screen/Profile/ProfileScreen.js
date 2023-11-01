@@ -13,25 +13,33 @@ import France from '../../assets/images/france.png';
 import Feather from 'react-native-vector-icons/Feather';
 import CoteIvoire from '../../assets/images/cote_ivoire.png';
 import SmallEarth from '../../assets/images/small_earth.png';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {UserList} from '../../constant/data';
-import {getAuthUserEmail, getAuthentificationData, removeAuthentificationData} from '../../modules/GestionStorage';
+import {getAuthUserEmail, getAuthentificationData, getPlatformLanguage, removeAuthentificationData} from '../../modules/GestionStorage';
 import {getAuth, signOut} from 'firebase/auth';
 import { HeaderEarth } from '../../components/Header';
-import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { Header } from 'react-native/Libraries/NewAppScreen';
 import axiosInstance from '../../axiosInstance';
 import { auth, firebase_db } from '../../modules/FirebaseConfig';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import AntDesign from "react-native-vector-icons/AntDesign"
+import Ionicons from "react-native-vector-icons/Ionicons"
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import Octicons from "react-native-vector-icons/Octicons"
+import Coupon from "../../assets/images/coupon.png"
+import Language from "../../assets/images/language.png"
+import { useTranslation } from 'react-i18next';
 const ProfileScreen = ({navigation}) => {
+
   const [LocalStorage, setLocalStorage] = useState(null);
   const [Loader,setLoader] = useState(false);
   const [RemiseLoader, setRemiseLoader] = useState(true);
+  const {t, i18n} = useTranslation();
+  const [language, setLanguage] = useState('fr')
   useEffect(() => {
 
     async function fetchValue() {
@@ -39,6 +47,9 @@ const ProfileScreen = ({navigation}) => {
         setLoader(true);
         setRemiseLoader(true);
         
+        const currentLanguage = await getPlatformLanguage();
+
+        setLanguage(currentLanguage);
         const auth = await getAuthentificationData();
   
         if(null === auth){
@@ -61,6 +72,8 @@ const ProfileScreen = ({navigation}) => {
     fetchValue();
 
   }, []);
+
+  console.log(language);
   const logout = async () => {
     await removeAuthentificationData();
 
@@ -80,6 +93,50 @@ const ProfileScreen = ({navigation}) => {
         navigation.navigate('Login')
   };
 
+  const UserList = [
+    {
+        id: 1,
+        title: t('Commande'),
+        icon: <AntDesign name="inbox"  size={24} color="#2BA6E9"/>,
+        path: "CommandeScreen"
+    },
+    {
+        id: 2,
+        title: t('Address'),
+        icon: <MaterialCommunityIcons name="map-marker-outline"  size={24} color="#2BA6E9"/>,
+        path: "AdresseScreen"
+    },
+    {
+        id: 3,
+        title: t("profile"),
+        icon: <Ionicons name="person-circle-outline"  size={24} color="#2BA6E9"/>,
+        path: "EditProfile"
+    },
+    {
+        id: 4,
+        title: t("remise et avoir"),
+        icon: <Image source={Coupon} />,
+        path: "RemiseAvoir"
+    },
+    {
+        id: 5,
+        title: t("cartes bancaires"),
+        icon: <Octicons name="credit-card"  size={24} color="#2BA6E9"/>,
+        path: "CartBancair"
+    },
+    {
+        id: 6,
+        title: t("langues"),
+        icon: <MaterialIcons name="language"  size={24} color="#2BA6E9"/>,
+        path: "LanguageScreen"
+    },
+    {
+        id: 7,
+        title: t("envoyer"),
+        icon: <Image source={Language} />,
+        path: "MessageScreen"
+    },
+]
 
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -139,7 +196,7 @@ const ProfileScreen = ({navigation}) => {
                     fontSize: 14,
                     fontFamily: 'Poppins-SemiBold',
                   }}>
-                  Deconnexion
+                  {t('Disconnect')}
                 </Text>
               </TouchableOpacity>
               <View>
@@ -153,7 +210,7 @@ const ProfileScreen = ({navigation}) => {
                       textAlign: 'center',
                       textDecorationLine: 'underline',
                     }}>
-                    Conditions générales
+                      {t('conditon')}
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigation.navigate("LegalNotice")}>
@@ -166,7 +223,7 @@ const ProfileScreen = ({navigation}) => {
                       textAlign: 'center',
                       textDecorationLine: 'underline',
                     }}>
-                    Mentions légales
+                      {t('mention')}
                   </Text>
                 </TouchableOpacity>
               </View>

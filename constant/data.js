@@ -23,6 +23,7 @@ import Plane from "../assets/images/plane.png"
 import Boat from "../assets/images/boat.png"
 import Iphone from "../assets/images/iphone.png"
 import SteperCounter from "../screen/SteperCounter"
+import { useTranslation } from "react-i18next"
 
 
 export const categories = [

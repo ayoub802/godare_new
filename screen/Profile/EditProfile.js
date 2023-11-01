@@ -14,9 +14,12 @@ import axiosInstance from '../../axiosInstance'
 import { getAuth } from 'firebase/auth'
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { firebase_db } from '../../modules/FirebaseConfig'
+import { useIsFocused } from '@react-navigation/native'
 
 
 const EditProfile = ({ navigation }) => {
+
+  var isFocused = useIsFocused()
   const [name, setName] = useState(undefined);
   const [id, setId] = useState(0);
   const [getData, setGetData] = useState([]);
@@ -58,7 +61,7 @@ const EditProfile = ({ navigation }) => {
 
   useEffect(() => {
     fetchValue();
-  }, []);
+  }, [isFocused]);
   
   async function fetchValue() {
     setActivity(true);

@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet,Dimensions, TouchableOpacity, FlatList, ActivityIndicator, ScrollView} from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { HeaderEarth } from '../../components/Header'
-import { getSelectedCountry, getSelectedService } from '../../modules/GestionStorage'
+import { getPlatformLanguage, getSelectedCountry, getSelectedService } from '../../modules/GestionStorage'
 import axiosInstance from '../../axiosInstance'
 import styles from './styles';
 import Icon  from 'react-native-vector-icons/FontAwesome';
@@ -16,9 +16,12 @@ import ByPlaneDetailsComponentGrid from './ByPlaneDetailsComponentGrid'
 const windowWidth = Dimensions.get('window').width;
 import MasonryList from '@react-native-seoul/masonry-list';
 import BuyingDemandDetailComponentGrid from './BuyingDemandDetailComponentGrid'
+import { useIsFocused } from '@react-navigation/native'
 
 
 const ShoppingScreen = ({ navigation, route }) => {
+
+  var isFocused = useIsFocused();
 
     const [ActivityIndicatorVar, setActivityIndicatorVar] = useState(true);
     const [ActivityIndicatorProduct, setActivityIndicatorProduct] = useState(true);
@@ -28,6 +31,7 @@ const ShoppingScreen = ({ navigation, route }) => {
     const [CategoriesProducts, setCategoriesProducts] = useState([]);
     const [Language, setLanguage] = useState('fr');
     const [activeFilter, setActiveFilter] = useState(0);
+    const [Loader,setLoader] = useState(false);
 
     // Par défaut le service Expéditions par avion sera selectionné (donc les sous categories seront chargées)
     const [Service, setService] = useState(null);
@@ -36,7 +40,9 @@ const ShoppingScreen = ({ navigation, route }) => {
 
     useEffect(() => {
 
-        // Recuperer les sous categories
+      let mounted = true;
+      setLoader(true)
+      // Recuperer les sous categories
         async function fetchData()
         {
            setActivityIndicatorVar(true);
@@ -45,6 +51,13 @@ const ShoppingScreen = ({ navigation, route }) => {
      
            // Recuperer le service selectionné
            const selectedService = await getSelectedService();
+
+           const currentLanguage = await getPlatformLanguage();
+           if(currentLanguage)
+           {
+            setLoader(false)
+            setLanguage(currentLanguage)
+           }
      
            if (!selectedService)
            {
@@ -82,11 +95,12 @@ const ShoppingScreen = ({ navigation, route }) => {
                  }
                });
              }
-             
+             setLoader(false)
            }
            catch (erreur)
            {
              console.log('categories fetch error', erreur);
+             setLoader(false)
            }
      
            setActivityIndicatorVar(false);
@@ -95,8 +109,11 @@ const ShoppingScreen = ({ navigation, route }) => {
      
      
        fetchData();
-     
-       }, []);
+
+       return (mounted) => mounted = false;
+
+       }, [isFocused]);
+
 
     useEffect(() => {
         if (Service)
@@ -206,7 +223,10 @@ const ShoppingScreen = ({ navigation, route }) => {
         </View>
       );
     }
-
+    if (Loader )
+    {
+      return (<View style={{justifyContent: 'center', height: '80%'}}><ActivityIndicator size={'large'} color="#3292E0" /></View>);
+    }
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{marginBottom: 85}}>
@@ -214,6 +234,7 @@ const ShoppingScreen = ({ navigation, route }) => {
           navigation={navigation}
           service={Service}
           paysLivraison={PaysLivraison}
+          Language={Language}
         />
 
         {/* {

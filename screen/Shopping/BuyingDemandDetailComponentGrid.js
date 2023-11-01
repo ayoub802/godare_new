@@ -470,7 +470,7 @@ const handleCartLogin = async (product) => {
           dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
           items={sweeterArray}
           maxHeight={200}
-          placeholder={t('Quantité')}
+          placeholder={t('quantité')}
           searchPlaceholder="Search..."
           value={StateValue}
           setValue={val => setStateValue(val)}
@@ -588,7 +588,7 @@ const handleCartLogin = async (product) => {
                 <RenderQuantite product={Product} />
                 <View style={[styles.inputContainer, {marginTop: 10}]}>
                     <TextInput
-                    placeholder={t('Prix d’achat')}
+                    placeholder={t('prix achat')}
                     keyboardType="ascii-capable"
                     placeholderTextColor={'#14213D'}
                     style={styles.inputStyle}
@@ -605,7 +605,7 @@ const handleCartLogin = async (product) => {
                 style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
                 onPress={toggleModal}>
                 <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
-                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('Prendre une photo')}</Text>
+                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('prendre photo')}</Text>
                 {
                   <View>
                     <Modal
@@ -659,13 +659,13 @@ const handleCartLogin = async (product) => {
               </TouchableOpacity>
               </View>
               <View style={{marginTop: 8, width: "100%", position: "relative", zIndex: -10, paddingHorizontal: 8, paddingBottom: 10}}>
-                <Button title="Ajouter au panier" navigation={() => { handleCartLogin(Product);}}/>
+                <Button title={t('ajouter au panier')} navigation={() => { handleCartLogin(Product);}}/>
               </View>
                         
             <View style={styles.bottomTextContainer}>
               
               <TextInput
-                placeholder={t('Informations complémentaires')}
+                placeholder={t('informations complémentaires')}
                 placeholderTextColor={'#BCB8B1'}
                 multiline={true}
                 style={{fontSize: 10,fontFamily: "Poppins-Regular",width: windowWidth * 0.5 ,borderRadius: 8, paddingVertical: 5, paddingLeft: 12}}
