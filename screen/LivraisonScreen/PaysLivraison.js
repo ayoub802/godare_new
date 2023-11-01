@@ -279,7 +279,7 @@ const PaysLivraison = ({navigation, route}) => {
               autoScroll
               searchContainerStyle={{borderBottomWidth: 0}}
               searchTextInputStyle={{borderColor: '#2BA6E9'}}
-              searchPlaceholder="Recherche Pays..."
+              searchPlaceholder={t('Recherche Pays...')}
               onSelectItem={(item) => {
                 setValue(item.value)
               }}

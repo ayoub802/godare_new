@@ -17,11 +17,13 @@ const windowWidth = Dimensions.get('window').width;
 import MasonryList from '@react-native-seoul/masonry-list';
 import BuyingDemandDetailComponentGrid from './BuyingDemandDetailComponentGrid'
 import { useIsFocused } from '@react-navigation/native'
+import { useTranslation } from 'react-i18next'
 
 
 const ShoppingScreen = ({ navigation, route }) => {
 
   var isFocused = useIsFocused();
+  const {t, i18n} = useTranslation();
 
     const [ActivityIndicatorVar, setActivityIndicatorVar] = useState(true);
     const [ActivityIndicatorProduct, setActivityIndicatorProduct] = useState(true);
@@ -314,13 +316,13 @@ const ShoppingScreen = ({ navigation, route }) => {
                       <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
                       <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
                         <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
-                          Filtrer
+                          {t('Filtrer')}
                         </Text>
                         <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
                       </TouchableOpacity>
                         <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
                           <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
-                            Trier
+                            {t('Trier')}
                           </Text>
                           <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
                         </TouchableOpacity>

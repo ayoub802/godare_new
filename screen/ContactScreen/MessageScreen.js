@@ -6,7 +6,7 @@ import Button from '../../components/Button'
 import DropDownPicker from 'react-native-dropdown-picker'
 import Textarea from 'react-native-textarea';
 import { ScrollView } from 'react-native-virtualized-view';
-import { getAuthUserEmail, getConversationMessagesObject, saveConversationMessagesObject } from '../../modules/GestionStorage'
+import { getAuthUserEmail, getConversationMessagesObject, getPlatformLanguage, saveConversationMessagesObject } from '../../modules/GestionStorage'
 import axiosInstance from '../../axiosInstance'
 import styles from './styles'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +26,8 @@ const MessageScreen = ({ navigation }) => {
     const [MessageObjectsLoader, setMessageObjectsLoader] = useState(true);
     const [IsClient, setIsClient] = useState(false);
     const [ClientEmail, setClientEmail] = useState(null);
-  
+    const [Language, setLanguage] = useState('fr');
+
     const navigateToConversationScreen = () => {
       // console.log('done');
       props.navigation.navigate(Navigationstrings.ConversationList);
@@ -44,6 +45,11 @@ const MessageScreen = ({ navigation }) => {
         setClientEmail(email);
   
   
+      // Language
+      const currentLanguage = await getPlatformLanguage();
+      setLanguage(currentLanguage);
+
+
         setIsClient(null === email ? false : true);
   
         let conversationMessagesObject = await getConversationMessagesObject();
@@ -233,7 +239,7 @@ const MessageScreen = ({ navigation }) => {
                     color: '#000',
                     textAlign: 'center',
                     }}>
-                    Envoyez un nouveau message
+                    {t('Envoyez un nouveau message')}
                 </Text>
             </View>
 
@@ -260,7 +266,7 @@ const MessageScreen = ({ navigation }) => {
                 <TextInput
                 value={phoneNumber}
                 onChangeText={newText => setphoneNumber(newText)} 
-                placeholder="Téléphone"
+                placeholder={t("Téléphone")}
                 style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
                 />
             </View>

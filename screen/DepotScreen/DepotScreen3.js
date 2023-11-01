@@ -11,7 +11,7 @@ import { TimeDatePicker } from "react-native-time-date-picker";
 import moment from 'moment';
 import Button from '../../components/Button';
 import { ScrollView } from 'react-native-virtualized-view';
-import { getCreneaux, getDepotValues, getSelectedCountry, getSelectedService, saveDepotCreneau } from '../../modules/GestionStorage';
+import { getCreneaux, getDepotValues, getPlatformLanguage, getSelectedCountry, getSelectedService, saveDepotCreneau } from '../../modules/GestionStorage';
 import { useIsFocused } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import ServiceHeader from '../../components/ServiceHeader';
@@ -32,115 +32,118 @@ const DepotScreen3 = (props) => {
   const [Language, setLanguage] = useState('fr');
 
   
-  // async function navigateToDelivery()
-  // {
-  //   if (selectedDate === '')
-  //   {
-  //     Toast.show({
-  //       type: 'error',
-  //       text1: 'Créneau',
-  //       text2: t('Vous devez choisir un créneau'),
-  //     });
+  async function navigateToDelivery()
+  {
+    if (selectedDate === '')
+    {
+      Toast.show({
+        type: 'error',
+        text1: 'Créneau',
+        text2: t('Vous devez choisir un créneau'),
+      });
 
-  //     return;
-  //   }
+      return;
+    }
 
-  //   props.navigation.navigate("Livraison1");
-  // }
+    props.navigation.navigate("Livraison1");
+  }
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   async function getCreneauxValues()
-  //   {
-  //     const depotValues = await getDepotValues();
+    async function getCreneauxValues()
+    {
+      const depotValues = await getDepotValues();
 
 
-  //     let departement = depotValues.depotDepartement;
+      let departement = depotValues.depotDepartement;
    
-  //     let ville = depotValues.depotVille;
+      let ville = depotValues.depotVille;
   
-  //     let creneaux = await getCreneaux();
-  //     creneaux = creneaux ? creneaux : [];
+      let creneaux = await getCreneaux();
+      creneaux = creneaux ? creneaux : [];
 
-  //     let service = await getSelectedService();
-  //     setService(service);
+      let service = await getSelectedService();
+      setService(service);
 
-  //     // Get pays de livraison
-  //     let paysLivraisonObject = await getSelectedCountry();
-  //     setPaysLivraisonObject(paysLivraisonObject);
-
-  //     let data = [];
-  //     creneaux.forEach((creneau) => {
-  //       if (creneau.departement == departement || creneau.ville.toLowerCase() == ville)
-  //       {
-  //         data.push(creneau);
-  //       }
-  //     });
-
-  //     let formatted = [];
-  //     let dates = {};
-  //     data.forEach((creneau) => {
-  //       let plages = creneau.creneauEnlevementPlages;
-        
-  //       plages.forEach((plage) => {
-
-  //         let date = moment(plage.date, 'DD/MM/YYYY').format('YYYY-MM-DD');
-          
-  //         formatted.push({
-  //           id: plage.id,
-  //           value: plage.id,
-  //           place: plage.quantite,
-  //           date: date,
-  //           horaireDebut: plage.horaireDebut,
-  //           horaireFin: plage.horaireFin,
-  //           label: t("Horaire d'ouverture") + " : " + plage.horaireDebut + ' - ' + plage.horaireFin
-  //         });
-
-  //         dates[date] = {disabled: false}
-          
-  //       });
-  //     });
-
-  //     setAvailableDates(dates);
-  //     setCreneaux(formatted);
-
-  //     setActivity(false);
-  //   }
-
-  //   setActivity(true);
-
-  //   getCreneauxValues();
-
-  // }, [isFocused]);
-
-  // const handleDayPress = (date) => {
-  //   setSelectedDate(date);
-
-  //   let horaires = [];
-  //   Creneaux.forEach((obj) => {
       
-  //     if (obj.date == date)
-  //     {
-  //       horaires.push(obj);
-  //     }
-  //   });
+      // Language
+      const currentLanguage = await getPlatformLanguage();
+      setLanguage(currentLanguage);
 
-  //   setHoraires(horaires);
+      // Get pays de livraison
+      let paysLivraisonObject = await getSelectedCountry();
+      setPaysLivraisonObject(paysLivraisonObject);
 
-  //   setModalVisible(true);
-  // }
+      let data = [];
+      creneaux.forEach((creneau) => {
+        if (creneau.departement == departement || creneau.ville.toLowerCase() == ville)
+        {
+          data.push(creneau);
+        }
+      });
 
-  // async function handleTimeSelect (obj) {
-  //   setModalVisible(false);
+      let formatted = [];
+      let dates = {};
+      data.forEach((creneau) => {
+        let plages = creneau.creneauEnlevementPlages;
+        
+        plages.forEach((plage) => {
 
-  //   await saveDepotCreneau(obj);
+          let date = moment(plage.date, 'DD/MM/YYYY').format('YYYY-MM-DD');
+          
+          formatted.push({
+            id: plage.id,
+            value: plage.id,
+            place: plage.quantite,
+            date: date,
+            horaireDebut: plage.horaireDebut,
+            horaireFin: plage.horaireFin,
+            label: t("Horaire d'ouverture") + " : " + plage.horaireDebut + ' - ' + plage.horaireFin
+          });
 
-  //   navigateToDelivery();
-  // };
+          dates[date] = {disabled: false}
+          
+        });
+      });
 
-  // const closeModal = () => {
-  //   setModalVisible(false);
-  // };
+      setAvailableDates(dates);
+      setCreneaux(formatted);
+
+      setActivity(false);
+    }
+
+    setActivity(true);
+
+    getCreneauxValues();
+
+  }, [isFocused]);
+
+  let horaires = [];
+  const handleDayPress = (date) => {
+    console.log(moment(date).format("YYYY/MM/DD"));
+    setSelectedDate(moment(date).format("YYYY/MM/DD"));
+
+    Creneaux.forEach((obj) => {
+      
+      if (obj.date == moment(date).format("YYYY/MM/DD"))
+      {
+        horaires.push(obj);
+      }
+    });
+
+  }
+
+  async function handleTimeSelect (obj) {
+    setModalVisible(false);
+
+    await saveDepotCreneau(obj);
+
+    navigateToDelivery();
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   const hours =[
     {
       id: 1,
@@ -195,7 +198,7 @@ const DepotScreen3 = (props) => {
                     selectedDate={now}
                     onSelectedChange={(selected) => {
                       // handleDayPress(moment(selected).format("YYYY/MM/DD"))
-                      console.log(selected);
+                      handleDayPress(selected)
                     }}
                   style={{height: 400, paddingTop: 12, borderWidth: 1,borderRadius: 4 ,borderColor: "#E5E5E5"}}
                   options={{ borderColor: "transparent", mainColor: "#2196F3", textSecondaryColor: "#999"}}
@@ -209,7 +212,7 @@ const DepotScreen3 = (props) => {
                         {
                           hours.map((item, index) => (
                             
-                            <TouchableOpacity onPress={() => setActiveHour(index)} style={ activeHour === index ? styles.hourActiveContaianer : styles.hourContaianer } key={index}>
+                            <TouchableOpacity onPress={() => {setActiveHour(index); handleTimeSelect(item.id)}} style={ activeHour === index ? styles.hourActiveContaianer : styles.hourContaianer } key={index}>
                               <Text style={ activeHour === index ? styles.hourContaianerText : styles.hourContaianerActiveText}>{item.label}</Text>
                             </TouchableOpacity>
                           ))

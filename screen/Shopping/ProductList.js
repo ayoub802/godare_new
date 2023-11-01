@@ -854,13 +854,13 @@ const ProductList = () => {
                       <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
                       <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
                         <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
-                          Filtrer
+                        {t('Filtrer')}
                         </Text>
                         <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
                       </TouchableOpacity>
                         <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
                           <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
-                            Trier
+                          {t('Trier')}
                           </Text>
                           <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
                         </TouchableOpacity>

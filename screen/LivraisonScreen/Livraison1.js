@@ -511,7 +511,7 @@ const Livraison1 = (props) => {
                 </View>
               </View>
 
-
+ 
           {
             showLivraisonDomicile &&
             <>
@@ -519,7 +519,7 @@ const Livraison1 = (props) => {
             <View style={{ marginTop: 10, paddingHorizontal: 16}}>
             <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
             <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
-               Liste des adresse existane
+               {t('Liste des adresse existane')}
             </Text>
             
              
@@ -568,7 +568,7 @@ const Livraison1 = (props) => {
             <View style={{ marginTop: 10, paddingHorizontal: 16}}>
               <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
               <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
-              Liste des points relais
+              {t('Liste des points relais')}
                   </Text>
                 
                 <View style={styles.dropContainerStyle}>
@@ -606,7 +606,7 @@ const Livraison1 = (props) => {
             <View style={{ marginTop: 10, paddingHorizontal: 16}}>
               <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
                  <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
-                   Les coordonnées de la personne à contacter
+                 {t('Contact details of the person to contact')}
                   </Text>
                
                 <View style={styles.inputCountryCustomContainer}>
@@ -711,7 +711,7 @@ const Livraison1 = (props) => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.Heading}>{t('Horaires d\'ouverture')}</Text>
+                <Text style={styles.Heading}>{t("Horaires d'ouverture")}</Text>
                 <Text style={styles.modalText}>{actionTriggered.horaireOuverture}</Text>
                 <Text style={styles.modalText}>
                 {actionTriggered.adresse + ', ' + (actionTriggered.codePostal ? (actionTriggered.codePostal + ' ') : '' ) + actionTriggered.ville + ' ' + actionTriggered.pays  }
@@ -720,12 +720,12 @@ const Livraison1 = (props) => {
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => unSetChoixRelais()}>
-                    <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>Fermer</Text>
+                    <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Fermer")}</Text>
                   </Pressable>
                   <Pressable
                     style={[styles.button, styles.buttonOpen]}
                     onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
-                    <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>Selectionner le magasin</Text>
+                    <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Selectionner le magasin")}</Text>
                   </Pressable>
                 </View>
               </View>
