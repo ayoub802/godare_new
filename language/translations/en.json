@@ -42,6 +42,7 @@
     "Adresse d'enlèvement": "Collection address",
     "Choisir une adresse existante" : "Choose an existing address",
     "(ou) Ajouter une nouvelle adresse" : "(or) Add a new address",
+    "Ajouter une nouvelle adresse" : "Add a new address",
     "Les coordonnées de destinataire de la commande" : "Order recipient contact details",
     "Nom de la personne à contacter": "Name of contact person",
     "Téléphone" : "Phone",
@@ -69,5 +70,18 @@
     "Envoyer": "Send",
     "Trier" : "Sort",
     "Filtrer":"Filter",
-    "Recherche Pays..." : "Country Search..."
+    "Recherche Pays..." : "Country Search...",
+    "Mon carnet d’adresses" : "My address book",
+    "Vos commandes en cours" : "Your current orders",
+    "Suivis colis" : "Package Tracking",
+    "commander à nouveau" : "order again",
+    "Vos commandes précédentes" : "Your previous orders",
+    "Mes avoirs" : "My assets",
+    "Remises en cours" : "Discounts in progress",
+    "Recherches des Produits" : "Product Searches",
+    "Recherche..." : "Search...",
+    "Créneau d’enlévement" : "Abduction niche",
+    "Mode de paiement" : "Payment method",
+    "Enregistrer les détails de la carte" : "Save card details",
+    "Valider le paiement" : "Validate payment"
 }

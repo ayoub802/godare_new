@@ -7,9 +7,13 @@ import {DataTable} from 'react-native-paper';
 import { getAuthUserEmail } from '../../modules/GestionStorage';
 import axiosInstance from '../../axiosInstance';
 import { ScrollView } from 'react-native-virtualized-view';
+import { useTranslation } from 'react-i18next';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const RemiseAvoirScreen = () => {
+
+  const {t, i18n} = useTranslation();
+  
   const headerTable = [
     {
       title: 'total',
@@ -220,7 +224,7 @@ const RemiseAvoirScreen = () => {
                 color: '#000',
                 textAlign: 'center',
               }}>
-              Mes avoirs : {AvoirTotal}€
+              {t('Mes avoirs')} : {AvoirTotal}€
             </Text>
           </View>
 
@@ -279,7 +283,7 @@ const RemiseAvoirScreen = () => {
                 color: '#000',
                 textAlign: 'center',
               }}>
-              Remises en cours
+              {t('Remises en cours')}
             </Text>
           </View>
 

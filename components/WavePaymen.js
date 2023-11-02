@@ -314,10 +314,10 @@ const WavePaymen = (props) => {
   }
 
   return (
-      <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+      <View style={{flex: 1}}>
 
         <Text style={{fontFamily:"Poppins-Medium", fontSize: 18, color:"#000", textAlign: "center"}}>
-          {t('Montant à payer : ')} € { TotalPrice }
+          {t('Montant à payer')}: € { TotalPrice }
         </Text>
 
             <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
@@ -327,7 +327,7 @@ const WavePaymen = (props) => {
                       onPress={validatePayment}// stripe Payment Button
                       disabled={LoadingPayment}
                     >
-                    <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>{t('Valider le paiement (Wave)')}</Text>
+                    <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>{t('Valider le paiement')} (Wave)</Text>
                     </TouchableOpacity>
             </View>
 

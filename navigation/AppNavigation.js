@@ -50,6 +50,8 @@ import SuccessFullyRegOrder from '../screen/SuccessFullyRegOrder';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../modules/FirebaseConfig';
 import { getAuthUserEmail, getPanier, getSelectedCountry, getSelectedService, getServices, saveSelectedCountry, saveSelectedService } from '../modules/GestionStorage';
+import CreditCard from '../screen/CreaditCard';
+import AddStripeUserCard from '../screen/CreaditCard/AddUserStripe';
 
 
 const Home = createNativeStackNavigator();
@@ -58,6 +60,7 @@ const Cart = createNativeStackNavigator();
 const AppNavigation = (props) => {
 
 
+  CartLenght = props.CartLenght;
   const [user, setUser] = useState(null);
   const [Service, setService] = useState(null);
   const [Loader,setLoader] = useState(false);
@@ -328,7 +331,7 @@ const AppNavigation = (props) => {
                     color={focused ? '#fff' : '#ffffffb3'}
                   />
                   <View style={{ position: "absolute", top: -5, right: -5, backgroundColor: '#F4951A', width: 20, height: 20, justifyContent: "center", alignItems: "center", borderRadius: 50}}>
-                    <Text style={{fontSize: 12, fontFamily: "Poppins-Medium", color: "#fff"}}>{CartProducts.length}</Text>
+                    <Text style={{fontSize: 12, fontFamily: "Poppins-Medium", color: "#fff"}}>{CartLenght}</Text>
                   </View>
                 </View>
               );
@@ -387,6 +390,8 @@ const AppNavigation = (props) => {
                 <Profile.Screen name='AdresseScreen' component={AdresseScreen}/>
                 <Profile.Screen name='AddAdresseScreen' component={AddAdressScreen}/>
                 <Profile.Screen name='TermsAndConditionsScreen' component={TermsConditions}/>
+                <Profile.Screen name='CreditCard' component={CreditCard}/>
+                <Profile.Screen name='AddStripeUserCard' component={AddStripeUserCard}/>
                 <Profile.Screen name='LegalNotice' component={LegalNotice}/>
               </Profile.Navigator>
             )

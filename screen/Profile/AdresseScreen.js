@@ -5,7 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Dimensions,
+  Dimensions, 
   StyleSheet,
   ActivityIndicator,
   FlatList,
@@ -147,51 +147,57 @@ const AdresseScreen = () => {
 
   
       <HeaderEarth />
-          <View style={{marginTop: 24, marginBottom: 12}}>
-                    <Text
-                        style={{
-                        fontFamily: 'Poppins-SemiBold',
-                        fontSize: 16,
-                        color: '#000',
-                        textAlign: 'center',
-                        }}>
-                        Mon carnet d’adresses
-                    </Text>
-                </View>
+      <ScrollView>
+        <View style={{flex: 1, marginBottom: 10}}>
+            <View style={{marginTop: 24, marginBottom: 12}}>
+                      <Text
+                          style={{
+                          fontFamily: 'Poppins-SemiBold',
+                          fontSize: 16,
+                          color: '#000',
+                          textAlign: 'center',
+                          }}>
+                          {t('Mon carnet d’adresses')}
+                      </Text>
+                  </View>
 
-                <View style={{paddingHorizontal: 12}}>
-                    <TouchableOpacity onPress={AddAddress} style={{backgroundColor: "#fff", paddingVertical: 14, alignItems: "center", justifyContent: "center", borderRadius: 12, borderWidth: 1.2, borderStyle: "dashed" , borderColor: "#CDD6D7"}}>
-                      <View style={{ backgroundColor: "#34CAA5", padding: 12, borderRadius: 50, marginBottom: 10}}>
-                          <Ionicons name="add" size={20} color="#fff"/>
-                      </View>
-                      <Text style={{color: "#747681", fontSize: 13, fontFamily: "Poppins-Medium"}}>Ajouter une nouvelle adresse</Text>
-                    </TouchableOpacity>
-                </View>
+                  <View style={{paddingHorizontal: 12}}>
+                      <TouchableOpacity onPress={AddAddress} style={{backgroundColor: "#fff", paddingVertical: 14, alignItems: "center", justifyContent: "center", borderRadius: 12, borderWidth: 1.2, borderStyle: "dashed" , borderColor: "#CDD6D7"}}>
+                        <View style={{ backgroundColor: "#34CAA5", padding: 12, borderRadius: 50, marginBottom: 10}}>
+                            <Ionicons name="add" size={20} color="#fff"/>
+                        </View>
+                        <Text style={{color: "#747681", fontSize: 13, fontFamily: "Poppins-Medium"}}>{t('Ajouter une nouvelle adresse')}</Text>
+                      </TouchableOpacity>
+                  </View>
 
-          {
-            Adresses.length > 0 
-            
-            ?
-            <>
-            <View style={{paddingHorizontal: 12, marginTop: 25, paddingBottom: 50}}>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              scrollEnabled
-              data={Adresses}
-              renderItem={renderItem}
-              keyExtractor={item => item.id}
-              contentContainerStyle={styles.containerFlatelist}
-            />
+            {
+              Adresses.length > 0 
+              
+              ?
+              <>
+              <View style={{paddingHorizontal: 12, marginTop: 25, paddingBottom: 50}}>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                scrollEnabled
+                data={Adresses}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+                contentContainerStyle={styles.containerFlatelist}
+              />
 
-            </View>
-            </>
-            :
-            <>
-              <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
-                <Text>Pas Des Address</Text>
               </View>
-            </> 
-          }
+              </>
+              :
+              <>
+                <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
+                  <Text>Pas Des Address</Text>
+                </View>
+              </> 
+            }
+
+        </View>
+
+      </ScrollView>
             
 
 

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  ActivityIndicator,
+  ActivityIndicator, 
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import styles from './styles';
@@ -316,7 +316,6 @@ const CartScreen = (props) => {
     }
   };
 
-console.log(CartProducts.length);
   // Sauvegarder la nouvelle quantité
   const saveProductNewQuantity = async (item, quantity) => {
 

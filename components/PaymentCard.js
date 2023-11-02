@@ -11,6 +11,12 @@ import { getAuthUserEmail, getCartPrices, removePanier } from '../modules/Gestio
 import { buildCommande } from '../modules/GestionFinalisationPanier';
 import { getImageType } from '../modules/TraitementImage';
 import axiosInstance from '../axiosInstance';
+import MasterCard from "../assets/images/masterCard.png"
+import { cardData } from '../constant/data';
+import CartViolet from "../assets/images/card_violet.png"
+import CartGreen from "../assets/images/card_green.png"
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const PaymentCard = (props) => {
@@ -113,7 +119,8 @@ const PaymentCard = (props) => {
   
     }, [isFocused]);
   
-  
+    console.log("Cards:", Cards);
+
   
     //validatePayment
     const validatePayment = async () => {
@@ -290,19 +297,71 @@ const PaymentCard = (props) => {
       
     };
   
+    if(!Cards){
+      return (
+        <View style={{justifyContent: 'center', height: '80%'}}>
+            <ActivityIndicator size="large" color="#3292E0" style={{}} />
+        </View>
+      );
+    }
   
     return (
         <View style={styles.container}>  
-          <Text style={styles.headingText}>
-            {t('Montant à payer : ')} €{ TotalPrice }
-          </Text>
-  
+
+              {Cards.length > 0 
+              ? 
+                (
+                  <></>
+                )
+              :
+              <Text style={{textAlign: "center"}}>
+                Ajouter votre carte bancaire
+              </Text>
+            }
+            {/* {Cards.map((card, index) => (
+              <View style={styles.CardMainContainer} key={index}>
+                
+                <TouchableOpacity onPress={() => setSelectedCard(card)}>
+                  <View style={styles.CardField}>
+                    <Image
+                      source={'visa' == card.card.brand ? MasterCard : MasterCard}
+                      resizeMode="contain"
+                      style={styles.CardFieldImage}
+                    />
+                    
+                    <Text style={styles.CardFieldText}>*****{card.card.last4}</Text>
+          
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}  */}
+             <ScrollView horizontal style={{paddingLeft: 10}} showsHorizontalScrollIndicator={false}>
+                        {
+                            Cards.map((item, index) => (
+                            <TouchableOpacity onPress={() => setSelectedCard(item)} style={{position: "relative", marginRight: 22}} key={index}>
+                                <Image source={CartViolet} style={{width: wp(75), height: hp(19), objectFit: 'cover', borderRadius: 25}}/>
+                                <View style={{ position: "absolute", top: 38, left: 30}}>
+                                    <Text style={{color: "#fff", fontSize: 12, fontFamily: 'Poppins-Medium'}}>{item.billing_details.name}</Text>
+                                    <Text style={{color: "#fff", fontSize: 16, fontFamily: 'Poppins-Bold'}}>{TotalPrice} €</Text>
+                                </View>
+            
+                                <View style={{ position: "absolute", bottom: 18, left: 30}}>
+                                    <Text style={{color: "#fff", fontSize: 14, fontFamily: 'Poppins-Medium'}}>**** **** ****{item.card.last4}</Text>
+                                </View>
+                                <View style={{ position: "absolute", top: 68, right: 40}}>
+                                  <Image source={MasterCard}/>
+                                </View>
+                            </TouchableOpacity>
+                            ))
+                        }
+                </ScrollView>
           {SelectedCard && (
-            <View>
+            <View style={{paddingHorizontal: 25, marginTop: 25}}>
+              <Text style={{ fontSize: 14, fontFamily: "Poppins-Medium", color: "#000", marginBottom: 5}}>CSV</Text>
               <TextInput
                 placeholder={t('Saisir le CSV')}
-                placeholderTextColor="#CED2F5"
-                style={styles.inputStyle}
+                placeholderTextColor="#626262"
+                style={{borderWidth: 1,width: "100%" ,borderColor: "#AAB0B7", paddingLeft: 20 ,borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
                 value={SelectedCardCVC}
                 onChangeText={text => setSelectedCardCVC(text)}
               />
@@ -315,7 +374,8 @@ const PaymentCard = (props) => {
               <View style={styles.PaymentInputsContainer}>
   
                 <View style={{width: "100%"}}>
-                  
+                <Text style={{ fontSize: 14, fontFamily: "Poppins-Medium", color: "#000", marginBottom: 5}}>Nom du titulaire</Text>
+
                     <TextInput 
                         value={name}
                         onChangeText={text => setName(text)}
@@ -325,42 +385,57 @@ const PaymentCard = (props) => {
                         />
                 </View>
   
-                <CardField
-                    postalCodeEnabled={false}
-                    placeholder={{
-                      number: '4242 4242 4242 4242',
-                    }}
-                    cardStyle={{
-                      backgroundColor: '#FFFFFF',
-                      textColor: '#000000',
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      borderColor: "#AAB0B7",
-                      borderWidth: 1,
-                      borderRadius: 8
-                    }}
-                    style={{
-                      width: '100%',
-                      height: 60,
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginVertical: 20,
-                    }}
-                    onCardChange={(cardDetails) => setCardDetails(cardDetails)}
+
+
+                <Text style={{ fontSize: 14, fontFamily: "Poppins-Medium", color: "#000", marginBottom: 5, marginTop: 15}}>Cart Bancaire</Text>                 
+                    <CardField
+                        postalCodeEnabled={false}
+                        placeholder={{
+                          number: '4242 4242 4242 4242',
+                        }}
+
+                        cardStyle={{
+                          backgroundColor: '#FFFFFF',
+                          textColor: '#000000',
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          borderColor: "#AAB0B7",
+                          borderWidth: 1,
+                          borderRadius: 8
+                        }}
+                        style={{
+                          width: '100%',
+                          height: 60,
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          marginTop: 0,
+                          marginBottom: 20
+                        }}
+                        onCardChange={(cardDetails) => setCardDetails(cardDetails)}
+                        
+                      />
+
+  
+  
+                <View style={{flexDirection: "row-reverse",gap: 14}}>
+                    <Text style={{fontSize: 12, fontFamily: "Poppins-Regular", color: "#000"}}>{t('Enregistrer les détails de la carte')}</Text>
+                      <Checkbox
+                        value={enregistrerCarte}
+                        onValueChange={value => setEnregistrerCarte(value)}
+                        style={{borderRadius: 5, padding: 5, borderColor: "#2BA6E9",}}
+                      />
+                    </View>
+
                     
-                  />
-  
-  
-                <View style={{flexDirection: "row-reverse",gap: 4}}>
-                <Text>{t('Enregistrer la carte')}</Text>
-                  <Checkbox
-                    value={enregistrerCarte}
-                    onValueChange={value => setEnregistrerCarte(value)}
-                  />
-                </View>
               </View>
+                <View style={{marginTop: 30, paddingHorizontal: 26}}>
+                    <View style={{flexDirection: "row",justifyContent: "space-between", alignItems: "center"}}>
+                      <Text style={{ fontSize: 12, fontFamily: "Poppins-Regular", color: "#000"}}>{t('Montant à payer')}</Text>
+                      <Text style={{ fontSize: 18, fontFamily: "Poppins-Bold", color: "#262A2B"}}>{ TotalPrice }€</Text>
+                    </View>
+                </View>
             </>
           )
   
@@ -369,7 +444,7 @@ const PaymentCard = (props) => {
           
   
           
-          <View style={{flex: 1, paddingTop: 120}}>
+          <View style={{flex: 1, justifyContent: "center", alignItems: "center"}}>
             <TouchableOpacity
                 style={{marginTop: 10, backgroundColor: '#3292E0',paddingVertical: 12 ,paddingHorizontal: 32,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}}
                 //onPress={handleConfirmation}// stripe Payment Button
@@ -389,17 +464,19 @@ const PaymentCard = (props) => {
 
 const styles = StyleSheet.create({
     container: { 
-      height: "70%",
-      alignItems: "center",
       width: "100%",
-      justifyContent: "center"
+      marginBottom: 80
     },
     PaymentInputsContainer: {
       // backgroundColor: 'tomato',
       height: windowHeight * 0.22,
       width: windowWidth * 0.9,
       marginTop: windowHeight * 0.03,
-      alignItems: 'center',
+      marginHorizontal:"auto",
+      alignItems: 'flex-start',
+      justifyContent: "center",
+      marginTop: 50,
+      paddingLeft: wp(4)
     },
     inputContainer: {
       // backgroundColor: 'green',
@@ -452,6 +529,23 @@ const styles = StyleSheet.create({
       width: '81%',
       alignSelf: 'center',
       marginTop: 15,
+    },
+    checkStyle:{
+      position: "absolute", 
+      bottom: 12, 
+      right: 20,
+      zIndex: 1000, 
+      backgroundColor: "#fff", 
+      padding: 8, 
+      borderRadius: 50,
+      shadowColor: "#000",
+      shadowOffset: {
+          width: 0,
+          height: 7,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 5.16,
+      elevation: 12,
     },
     CardField: {
       flexDirection: 'row',

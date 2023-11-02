@@ -126,7 +126,7 @@ const CommandScreen = (props) => {
                 <Text style={{ fontSize: 12, color: "#292625", fontFamily: "Poppins-Medium"}}>{t(item.statut)}</Text>
               </TouchableOpacity>
             <TouchableOpacity onPress={()=> console.log("Test")}>
-                   <Button title="commander à nouveau" navigation={() => props.navigation.navigate('CartScreen')}/>
+                   <Button title={t('commander à nouveau')} navigation={() => props.navigation.navigate('CartScreen')}/>
             </TouchableOpacity>
             <TouchableOpacity  key={item.id} onPress={() => handleCommandeClick(item.id)}>
                 <Text style={{ fontSize: 12, color: "#292625", fontFamily: "Poppins-Regular", textDecorationLine: "underline"}}>{t('Suivis colis')}</Text>
@@ -150,7 +150,7 @@ const CommandScreen = (props) => {
     
           <ScrollView  showsVerticalScrollIndicator={false}>
             <View style={{flex: 1, marginBottom: 50}}>
-                <View style={{marginTop: 24}}>
+                <View style={{marginTop: 24, marginBottom: 15}}>
                         <Text
                             style={{
                             fontFamily: 'Poppins-SemiBold',
@@ -158,7 +158,7 @@ const CommandScreen = (props) => {
                             color: '#000',
                             textAlign: 'center',
                             }}>
-                            Vos commandes en cours
+                            {t('Vos commandes en cours')}
                         </Text>
                     </View>
         
@@ -173,7 +173,9 @@ const CommandScreen = (props) => {
                                     ))
                                 )
                                 :
-                                <Text>Pas de commandes</Text>
+                                <View style={{paddingVertical: 20}}>
+                                   <Text style={{textAlign: "center"}}>Pas de commandes</Text>
+                                </View>
                                 }
                         </View>
                     </View>
@@ -187,7 +189,7 @@ const CommandScreen = (props) => {
                             color: '#000',
                             textAlign: 'center',
                             }}>
-                            Vos commandes en cours
+                            {t('Vos commandes précédentes')}
                         </Text>
                     </View>
         
@@ -200,7 +202,9 @@ const CommandScreen = (props) => {
                                 ))
                             )
                             :
-                            <Text>Pas de commandes</Text>
+                            <View style={{paddingVertical: 20}}>
+                              <Text style={{textAlign: "center"}}>Pas de commandes</Text>
+                            </View>
                             }
                       </View>
                     </View>

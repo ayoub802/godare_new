@@ -360,10 +360,11 @@ const ByPlaneDetailsComponentGrid = (props) => {
                     </View>
             </View>
           </View>
-          <View style={{flexDirection: "column", alignItems: "center", paddingBottom: 8, paddingLeft: 6}}>
+          <View style={{flexDirection: "row", alignItems: "center", paddingBottom: 8, paddingLeft: 6}}>
               {/* <View style={{backgroundColor: "#F5F5F5", height: hp(14), width: wp(20), borderRadius: 20, paddingTop: 10}}>
               <Image source={{uri: item.productImages[0].url}} style={{height: hp(12),objectFit: "cover" ,borderRadius: 22, width: wp(19)}}/>
               </View> */}
+              <View>
                 <ScrollView
                 pagingEnabled
                 horizontal
@@ -388,6 +389,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
                     </Text>
                   ))}
                 </View>
+              </View>
               <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", paddingRight: 6}}>
                 
                   <View style={styles.safeContainerStyle}>
@@ -398,6 +400,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
                     value={StateValue}
                     setValue={val => setStateValue(val)}
                     placeholder={t('etat')}
+                    placeholderStyle={{fontSize: 12.8}}
                     maxHeight={100}
                     autoScroll
                     style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
@@ -419,7 +422,8 @@ const ByPlaneDetailsComponentGrid = (props) => {
                           placeholder={t('Quantité')}
                           autoScroll={true}
                           maxHeight={120}
-                          style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+                          placeholderStyle={{fontSize: 12.8}}
+                          style={{backgroundColor: "#F5F5F5",borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
                           dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
                         />
                     </View>
@@ -520,7 +524,7 @@ const styles = StyleSheet.create({
   safeContainerStyle: {
     justifyContent: 'center',
     // backgroundColor: 'tomato',
-    width: '100%',
+    width: windowWidth * 0.25,
     // borderRadius:0
     marginTop: 5
   },
@@ -613,7 +617,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     zIndex: 1500,
-    bottom: windowHeight * .19,
+    bottom: windowHeight * .4,
     alignSelf: 'center',
     justifyContent: 'space-around',
     // backgroundColor: 'tomato',
@@ -638,7 +642,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: "#F5F5F5",
-    width: windowWidth * 0.46,
+    width: windowWidth * 0.25,
     height: 40,
     borderRadius: 10,
     marginTop: 8,
@@ -648,7 +652,7 @@ const styles = StyleSheet.create({
     color: '#000',
     fontFamily: 'Roboto-Regular',
     marginLeft: 10,
-    fontSize: 14,
+    fontSize: 13,
   },
   buttonContainers: {
     backgroundColor: '#3292E0',

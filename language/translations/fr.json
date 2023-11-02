@@ -41,6 +41,7 @@
     "Adresse d'enlèvement": "Adresse d'enlèvement",
     "Choisir une adresse existante" : "Choisir une adresse existante",
     "(ou) Ajouter une nouvelle adresse" : "(ou) Ajouter une nouvelle adresse",
+    "Ajouter une nouvelle adresse" : "Ajouter une nouvelle adresse",
     "Les coordonnées de destinataire de la commande" : "Les coordonnées de destinataire de la commande",
     "Nom de la personne à contacter": "Nom de la personne à contacter",
     "Téléphone" : "Téléphone",
@@ -68,5 +69,18 @@
     "Envoyer": "Envoyer",
     "Trier" : "Trier",
     "Filtrer":"Filtrer",
-    "Recherche Pays..." : "Recherche Pays..."
+    "Recherche Pays..." : "Recherche Pays...",
+    "Mon carnet d’adresses" : "Mon carnet d’adresses",
+    "Vos commandes en cours" : "Vos commandes en cours",
+    "Suivis colis":"Suivis colis",
+    "commander à nouveau" : "commander à nouveau",
+    "Vos commandes précédentes" : "Vos commandes précédentes",
+    "Mes avoirs" : "Mes avoirs",
+    "Remises en cours" : "Remises en cours",
+    "Recherches des Produits" : "Recherches des Produits",
+    "Recherche..." : "Recherche...",
+    "Créneau d’enlévement" : "Créneau d’enlévement",
+    "Mode de paiement" : "Mode de paiement",
+    "Enregistrer les détails de la carte" : "Enregistrer les détails de la carte",
+    "Valider le paiement" : "Valider le paiement"
 }

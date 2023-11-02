@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, Image, TextInput,TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, ScrollView, Image, TextInput,TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import France from "../../assets/images/france.png"
@@ -11,9 +11,13 @@ import PaymentCard from '../../components/PaymentCard'
 import WavePaymen from '../../components/WavePaymen'
 import { firebase } from '@react-native-firebase/firestore';
 import { useTranslation } from 'react-i18next'
+import { getAuthentificationData, getPlatformLanguage, getSelectedCountry, getSelectedService } from '../../modules/GestionStorage'
+import { useIsFocused } from '@react-navigation/native'
+import ServiceHeader from '../../components/ServiceHeader'
+import { getClientCards } from '../../modules/GestionStripe'
 
 
-const AddCardScreen = ({ navigation }) => {
+const AddCardScreen = (props) => {
     const {t, i18n} = useTranslation();
 
     const [isSelected, setIsSelected] = useState(false);
@@ -22,6 +26,14 @@ const AddCardScreen = ({ navigation }) => {
     const [year, setYear] = useState(0);
     const [cvv, setCvv] = useState(0);
     const [name, setName] = useState('');
+    var isFocused = useIsFocused();
+    const [Service, setService] = useState(null);
+    const [paysLivraisonObject, setPaysLivraisonObject] = useState(null);
+    const [Language, setLanguage] = useState('fr');
+
+    const [Activity, setActivity] = useState(true);
+    const [ClientEmail, setClientEmail] = useState([]);
+    const [Cards, setCards] = useState([]);
 
     const navigateToHomePickup = () => {
         const StoreAddress = firebase.firestore()
@@ -36,32 +48,63 @@ const AddCardScreen = ({ navigation }) => {
           });
       };
 
+    useEffect(() => {
 
+        async function fetchData()
+        {
+          setActivity(true);
+    
+    
+    
+          // Get pays de livraison
+          let paysLivraisonObject = await getSelectedCountry();
+          setPaysLivraisonObject(paysLivraisonObject);
+    
+          // Language
+          const currentLanguage = await getPlatformLanguage();
+          setLanguage(currentLanguage);
+          
+          // Get service
+          let service = await getSelectedService();
+    
+          const userEmail = await getAuthentificationData();
+          setClientEmail(userEmail);
+  
+          const userCards = await getClientCards(userEmail);
+  
+          setCards(userCards.data);
+    
+          setService(service);
+
+    
+           setActivity(false);
+    
+        }
+    
+    
+        fetchData();
+    }, [isFocused])
+    
+    if (!Service )
+    {
+      return (
+        <View style={{justifyContent: 'center', height: '80%'}}>
+            <ActivityIndicator size="large" color="#3292E0" style={{}} />
+        </View>
+      );
+    }
   return (
     <SafeAreaView style={{flex: 1}}>
 
            <View style={{flex: 1}}>
-                <View style={{ position: "relative" ,alignItems: "center", backgroundColor: "#2BA6E9", justifyContent: "center", height: hp(12)}}>
-                    <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold"}}>Fret par avoin</Text>
-                    <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginTop: 10}}>
-                        <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
-                            <Image source={France}/>
-                            <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>France</Text>
-                            <Feather name="arrow-up-right" color="#fff" size={22}/>
-                        </View>
-                        <View style={{flexDirection: "row", alignItems: "center", gap: 4}}>
-                            <Image source={CoteIvoire}/>
-                            <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Regular"}}>Côte d'ivoire</Text>
-                            <Feather name="arrow-down-right" color="#fff" size={22}/>
-                        </View>
-                    </View>
+             
+             <ServiceHeader 
+            navigation={props.navigation}
+            service={Service}
+            paysLivraison={paysLivraisonObject}
+            language={Language}
+            />
 
-                    <View style={{ position: "absolute", top: 15, right: 10}}>
-                        <Image source={SmallEarth}/>
-                        <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold", textAlign: "center", marginTop: 4}}>GS</Text>
-                    </View>
-                </View>
-            
 
                 <View style={{marginTop: 24, marginBottom: 12}}>
                     <Text
@@ -71,14 +114,14 @@ const AddCardScreen = ({ navigation }) => {
                         color: '#000',
                         textAlign: 'center',
                         }}>
-                        Mode de paiment
+                        {t('Mode de paiement')}
                     </Text>
                 </View>
                 
                 <ScrollView  horizontal style={{paddingLeft: 10}} showsHorizontalScrollIndicator={false}>
                             {
                                 card_category.map((item, index) => (
-                                    <View key={index} style={{ marginRight: 15, marginBottom: 25}}>
+                                    <View key={index} style={{ marginRight: 15, marginBottom: 15}}>
                                         <TouchableOpacity onPress={() => setActiveCard(index)} style={[activeCard === index ?  styles.backgroundColorActive : styles.backgroundColor, { justifyContent: "center",borderRadius: 20,alignItems: "center" ,paddingHorizontal: 41, paddingVertical: 16, height: 56, borderWidth: 1.2, borderColor: "#2196F3"}]}>
                                             <View style={{display: item.imgDisplay}}>{activeCard === index ? item.imgActive : item.img}</View>
                                             <Text style={[activeCard === index ? styles.textActive : styles.textColor, {display: item.titledisplay, fontFamily: "Poppins-Medium", fontSize: 16}]}>{item.title}</Text>
@@ -87,37 +130,39 @@ const AddCardScreen = ({ navigation }) => {
                                 ))
                             }
                 </ScrollView>
+                <ScrollView>
+                        {
+                            activeCard == 0 ?
+                            (
+                                <PaymentCard />
+                            )
+                            :
+                            null
+                        }
 
-                {
-                    activeCard == 0 ?
-                    (
-                        <PaymentCard />
-                    )
-                    :
-                    null
-                }
+                        {
+                            activeCard == 1 ?
+                            (
+                                <WavePaymen />
+                            )
+                            :
+                            null
+                        }
+                        {
+                            activeCard == 2 ? 
+                            (
+                                <TouchableOpacity
+                                onPress={() => {
+                                    navigateToHomePickup();
+                                }}>
+                                    <Text>{t('Payer au dépôt au magasin')}</Text>
+                                </TouchableOpacity>
+                            )
+                            :
+                            null
+                        }
+                </ScrollView>
 
-                {
-                    activeCard == 1 ?
-                    (
-                        <WavePaymen />
-                    )
-                    :
-                    null
-                }
-                {
-                    activeCard == 2 ? 
-                    (
-                        <TouchableOpacity
-                        onPress={() => {
-                            navigateToHomePickup();
-                          }}>
-                            <Text>{t('Payer au dépôt au magasin')}</Text>
-                        </TouchableOpacity>
-                    )
-                    :
-                    null
-                }
 
            </View>
     </SafeAreaView>

@@ -1,4 +1,4 @@
-import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, Image, TextInput, StyleSheet, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context';
 import France from "../../assets/images/france.png"
@@ -31,16 +31,12 @@ const DepotScreen3 = (props) => {
   const [paysLivraisonObject, setPaysLivraisonObject] = useState(null);
   const [Language, setLanguage] = useState('fr');
 
-  
+   
   async function navigateToDelivery()
   {
-    if (selectedDate === '')
+    if (dateCreneau === '')
     {
-      Toast.show({
-        type: 'error',
-        text1: 'Créneau',
-        text2: t('Vous devez choisir un créneau'),
-      });
+      ToastAndroid.show('Vous devez choisir un créneau', ToastAndroid.SHORT)
 
       return;
     }
@@ -118,27 +114,29 @@ const DepotScreen3 = (props) => {
 
   }, [isFocused]);
 
-  let horaires = [];
+  // let horairesTimes = [];
   const handleDayPress = (date) => {
-    console.log(moment(date).format("YYYY/MM/DD"));
-    setSelectedDate(moment(date).format("YYYY/MM/DD"));
-
+    // setSelectedDate(moment(date).format("YYYY/MM/DD"));
+    
+    let dateString = moment(date).format("YYYY-MM-DD");
     Creneaux.forEach((obj) => {
+      console.log("Date:",obj.date);
       
-      if (obj.date == moment(date).format("YYYY/MM/DD"))
+      if (obj.date == "2023-12-18")
       {
-        horaires.push(obj);
+        Horaires.push(obj); 
       }
     });
 
+    console.log("Horaires Times:", Horaires);
   }
+
 
   async function handleTimeSelect (obj) {
     setModalVisible(false);
 
     await saveDepotCreneau(obj);
 
-    navigateToDelivery();
   };
 
   const closeModal = () => {
@@ -174,6 +172,7 @@ const DepotScreen3 = (props) => {
     );
   }
 
+  let dateCreneau  = ''
   return (
     <SafeAreaView style={{flex: 1}}>
       <ScrollView style={{paddingBottom: 50}} showsVerticalScrollIndicator={false}>
@@ -190,15 +189,21 @@ const DepotScreen3 = (props) => {
               <Stepper position={1}/>
             </View>
 
-            <View style={{ paddingHorizontal: 26, marginTop: 30}}>
-                <View style={{marginBottom: 10}}>
-                    <Text style={{ textAlign: "center", fontFamily: "Poppins-SemiBold", color: "#000", fontSize: 16}}>Créneau d’enlévement</Text>
+            <View style={{ marginTop: 30}}>
+                <View style={{marginBottom: 10, paddingHorizontal: 26,}}>
+                    <Text style={{ textAlign: "center", fontFamily: "Poppins-SemiBold", color: "#000", fontSize: 16}}>
+                      {t('Créneau d’enlévement')}
+                    </Text>
                 </View>
+                <View style={{paddingHorizontal: 26,}}>
                 <TimeDatePicker 
                     selectedDate={now}
                     onSelectedChange={(selected) => {
                       // handleDayPress(moment(selected).format("YYYY/MM/DD"))
                       handleDayPress(selected)
+                      // setSelectedDate(moment(selected).format("YYYY/MM/DD"))
+                      dateCreneau = moment(selected).format("YYYY/MM/DD");
+                      console.log("Time :",dateCreneau);
                     }}
                   style={{height: 400, paddingTop: 12, borderWidth: 1,borderRadius: 4 ,borderColor: "#E5E5E5"}}
                   options={{ borderColor: "transparent", mainColor: "#2196F3", textSecondaryColor: "#999"}}
@@ -206,23 +211,29 @@ const DepotScreen3 = (props) => {
                     console.log("month: ", month);
                   }}
                 />
-                
+                </View>
                 <View style={{ marginTop: 10, marginBottom: 20}}>
+                      <ScrollView
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={false}
+                      style={{paddingLeft: 26}}
+                      >
                     <View style={{ flexDirection: "row", alignItems: "center", gap: 4}}>
-                        {
-                          hours.map((item, index) => (
-                            
-                            <TouchableOpacity onPress={() => {setActiveHour(index); handleTimeSelect(item.id)}} style={ activeHour === index ? styles.hourActiveContaianer : styles.hourContaianer } key={index}>
-                              <Text style={ activeHour === index ? styles.hourContaianerText : styles.hourContaianerActiveText}>{item.label}</Text>
-                            </TouchableOpacity>
-                          ))
-                        }
+                          {
+                            Horaires.map((item, index) => (
+                              
+                              <TouchableOpacity onPress={() => {setActiveHour(index); handleTimeSelect(item.id)}} style={ activeHour === index ? styles.hourActiveContaianer : styles.hourContaianer } key={index}>
+                                <Text style={ activeHour === index ? styles.hourContaianerText : styles.hourContaianerActiveText}>{ item.horaireDebut + ' - ' + item.horaireFin }</Text>
+                              </TouchableOpacity>
+                            ))
+                          }
                     </View>
+                      </ScrollView>
                 </View>
             </View>
 
             <View style={{ flex: 1, justifyContent: "flex-end", alignItems: 'center', paddingBottom: 72}}>
-              <Button title="Valider"/>
+              <Button title={t("valider")} navigation={()=>{navigateToDelivery()}} />
             </View>
         </View>
       </ScrollView>

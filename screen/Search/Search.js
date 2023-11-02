@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { HeaderEarth } from '../../components/Header'
 import Feather from "react-native-vector-icons/Feather"
+import { useTranslation } from 'react-i18next'
 
 
 const Search = () => {
@@ -12,6 +13,7 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [fullData, setFullData] = useState([]);
+  const {t, i18n} = useTranslation();
 
   // const fetchData = async () => {
   //   try{
@@ -32,7 +34,7 @@ const Search = () => {
                     color: '#000',
                     textAlign: 'center',
                     }}>
-                    Recherches des Produits
+                    {t('Recherches des Produits')}
                 </Text>
             </View>
 
@@ -49,7 +51,7 @@ const Search = () => {
                    <TextInput 
                      clearButtonMode='always'
                      autoCapitalize="none"
-                     placeholder='Recherche...'
+                     placeholder={t('Recherche...')}
                      style={{fontFamily: "Poppins-Medium", fontSize: 14, width: "100%", backgroundColor: "transparent", textDecorationLine: "none"}}
                    />
                </View>
