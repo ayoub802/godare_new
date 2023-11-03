@@ -400,7 +400,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
                     value={StateValue}
                     setValue={val => setStateValue(val)}
                     placeholder={t('etat')}
-                    placeholderStyle={{fontSize: 12.8}}
+                    placeholderStyle={{fontSize: 12.8, fontWeight: "500"}}
                     maxHeight={100}
                     autoScroll
                     style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
@@ -422,7 +422,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
                           placeholder={t('Quantité')}
                           autoScroll={true}
                           maxHeight={120}
-                          placeholderStyle={{fontSize: 12.8}}
+                          placeholderStyle={{fontSize: 12.8, fontWeight: "500"}}
                           style={{backgroundColor: "#F5F5F5",borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
                           dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
                         />

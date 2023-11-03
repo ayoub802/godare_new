@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 15,
     alignSelf: 'center',
-    elevation: 5,
+    elevation: 5, 
     justifyContent: 'center',
   
   },
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
 },
   imageTextContainer: {
     flexDirection: 'row',
-    height: windowHeight * 0.035,
+    height: windowHeight * 0.045,
     alignItems: 'center',
     gap: 10,
     width: windowWidth * 0.25,

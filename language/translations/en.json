@@ -83,5 +83,17 @@
     "Créneau d’enlévement" : "Abduction niche",
     "Mode de paiement" : "Payment method",
     "Enregistrer les détails de la carte" : "Save card details",
-    "Valider le paiement" : "Validate payment"
+    "Valider le paiement" : "Validate payment",
+    "Veuillez créer un compte" : "Please create an account",
+    "Civilite" : "Civility",
+    "Le nom est requis" : "Name is required",
+    "Le nom doit comporter 3 caractères" : "The name must be 3 characters long",
+    "Nom" : "Name",
+    "Erreur" : "Error",
+    "Prénom" : "First name",
+    "Mot de passe" : "Password",
+    "Date de naissance" : "Date of birth",
+    "s'inscrire" : "register",
+    "Vous acceptez nos" : "You accept our",
+    "conditions générales d’utilisation" : "Terms of Service"
 }

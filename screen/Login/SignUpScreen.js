@@ -229,7 +229,7 @@ const SignUpScreen = (props) => {
 
           <View style={{marginTop: 30, marginBottom: 12}}>
             <Text
-              style={{
+              style={{ 
                 fontFamily: 'Poppins-SemiBold',
                 fontSize: 16,
                 color: '#000',

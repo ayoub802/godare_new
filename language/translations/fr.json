@@ -82,5 +82,17 @@
     "Créneau d’enlévement" : "Créneau d’enlévement",
     "Mode de paiement" : "Mode de paiement",
     "Enregistrer les détails de la carte" : "Enregistrer les détails de la carte",
-    "Valider le paiement" : "Valider le paiement"
+    "Valider le paiement" : "Valider le paiement",
+    "Veuillez créer un compte" : "Veuillez créer un compte",
+    "Civilite" : "Civilité",
+    "Le nom est requis" : "Le nom est requis",
+    "Le nom doit comporter 3 caractères" : "Le nom doit comporter 3 caractères",
+    "Nom" : "Nom",
+    "Erreur" : "Erreur",
+    "Prénom" : "Prénom",
+    "Mot de passe" : "Mot de passe",
+    "Date de naissance" : "Date de naissance",
+    "s'inscrire" : "s'inscrire",
+    "Vous acceptez nos" : "Vous acceptez nos",
+    "conditions générales d’utilisation" : "conditions générales d’utilisation"
 }

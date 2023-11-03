@@ -357,7 +357,7 @@ const ByPlaneDetailsComponent = (props) => {
         </View>
           <View style={{flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
               <View style={{paddingHorizontal: 12, paddingVertical: 8, borderRadius: 12, justifyContent: "center", alignItems: "center", maxWidth: 250}}>
-                <Text style={{fontFamily: "Poppins-Medium", fontSize: 12.5,textAlign: "center", maxWidth: 180}}>{'fr' == Language ? Product.name : Product.nameEN}</Text>
+                <Text style={{fontFamily: "Poppins-Medium", fontSize: 12.5,textAlign: "center", maxWidth: 180, color: "#666"}}>{'fr' == Language ? Product.name : Product.nameEN}</Text>
               </View>
 
               <View style={{flexDirection: "row", alignItems: "center", gap: 5, marginTop: 8}}>

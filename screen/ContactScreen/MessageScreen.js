@@ -1,18 +1,19 @@
-import { View, Text, TextInput, Alert, ToastAndroid, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, Alert, ToastAndroid, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { HeaderEarth } from '../../components/Header'
 import Button from '../../components/Button'
 import DropDownPicker from 'react-native-dropdown-picker'
 import Textarea from 'react-native-textarea';
-import { ScrollView } from 'react-native-virtualized-view';
 import { getAuthUserEmail, getConversationMessagesObject, getPlatformLanguage, saveConversationMessagesObject } from '../../modules/GestionStorage'
 import axiosInstance from '../../axiosInstance'
 import styles from './styles'
 import { useTranslation } from 'react-i18next'
 import PhoneInput from 'react-native-phone-number-input'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '../../modules/FirebaseConfig'
 
-const MessageScreen = ({ navigation }) => {
+const MessageScreen = (props) => {
     const [isOpen2, setIsOpen2] = useState(false);
     const [current2, setCurrent2] = useState();
     const {t, i18n} = useTranslation();
@@ -27,13 +28,19 @@ const MessageScreen = ({ navigation }) => {
     const [IsClient, setIsClient] = useState(false);
     const [ClientEmail, setClientEmail] = useState(null);
     const [Language, setLanguage] = useState('fr');
+    const [user, setUser] = useState(null);
 
     const navigateToConversationScreen = () => {
       // console.log('done');
-      props.navigation.navigate(Navigationstrings.ConversationList);
+      props.navigation.navigate("Conversation");
     };
   
-  
+    useEffect(() => {
+      onAuthStateChanged(auth, (user) => {
+        console.log('user', user);
+        setUser(user)
+      })
+    }, [])
   
     useEffect(() => {
   
@@ -42,15 +49,15 @@ const MessageScreen = ({ navigation }) => {
         setMessageObjectsLoader(true);
   
         const email = await getAuthUserEmail();
-        setClientEmail(email);
+        setClientEmail(user);
   
   
-      // Language
+      // Language 
       const currentLanguage = await getPlatformLanguage();
       setLanguage(currentLanguage);
 
 
-        setIsClient(null === email ? false : true);
+        setIsClient(null === user ? false : true);
   
         let conversationMessagesObject = await getConversationMessagesObject();
         
@@ -77,7 +84,7 @@ const MessageScreen = ({ navigation }) => {
               });
   
               let messageObjects = [];
-              if (null === email)
+              if (null === user)
               {
                 messageObjects = objectNonClient;
               }
@@ -120,7 +127,7 @@ const MessageScreen = ({ navigation }) => {
           });
   
           let messageObjects = [];
-          if (null === email)
+          if (null === user)
           {
             messageObjects = objectNonClient;
           }
@@ -143,15 +150,14 @@ const MessageScreen = ({ navigation }) => {
   
     }, []);
   
-  
-  
+    
   
     const navigateToCofirmSentScreen = () => {
   
       let conversation = {};
       let url = '/conversations/clients/create';
   
-      if (false === IsClient)
+      if (null === user)
       {
         if (Email === '')
         {
@@ -174,7 +180,7 @@ const MessageScreen = ({ navigation }) => {
       }
       else 
       {
-        conversation.email = ClientEmail;
+        conversation.email = ClientEmail.email;
       }
   
   
@@ -215,7 +221,12 @@ const MessageScreen = ({ navigation }) => {
           ],
         );
       })
-      .catch(error => console.log('error contact', error.response));
+      .catch(error =>
+        {
+          console.log('error contact', error.response)
+          ToastAndroid.show("error contact sending", ToastAndroid.SHORT)
+        }
+      );
     };
   
    
@@ -245,31 +256,64 @@ const MessageScreen = ({ navigation }) => {
 
             <View style={{paddingHorizontal: 28}}>  
 
-            <View style={{marginTop: 12}}>
-                <TextInput
-                value={Name}
-                onChangeText={newText => setName(newText)} 
-                placeholder="Ehouman"
-                keyboardType="ascii-capable"
-                style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
-                />
-            </View>
-            <View style={{marginTop: 12}}>
-                <TextInput
-                value={Email}
-                onChangeText={newText => setEmail(newText)} 
-                placeholder="Email*"
-                style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
-                />
-            </View>
-            <View style={{marginTop: 12}}>
-                <TextInput
-                value={phoneNumber}
-                onChangeText={newText => setphoneNumber(newText)} 
-                placeholder={t("Téléphone")}
-                style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
-                />
-            </View>
+                  {null != user ?
+                    (
+                      <TouchableOpacity
+                        activeOpacity={0.5}
+                        style={styles.settingItemContainer}
+                        onPress={() => {
+                          navigateToConversationScreen();
+                        }}>
+                        <Text style={{color: "#fff"}}>{t('Mes échanges')}</Text>
+                      </TouchableOpacity>
+                    )
+                    :
+                    <></>
+                 }
+                 {null === user 
+                 ? 
+                 <>
+                  <View style={{marginTop: 12}}>
+                      <TextInput
+                      value={Name}
+                      onChangeText={newText => setName(newText)} 
+                      placeholder="Ehouman"
+                      keyboardType="ascii-capable"
+                      style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{marginTop: 12}}>
+                      <TextInput
+                      value={Email}
+                      onChangeText={newText => setEmail(newText)} 
+                      placeholder="Email*"
+                      style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{marginTop: 12}}>
+                      <PhoneInput
+                      defaultValue={phoneNumber}
+                      defaultCode="FR"
+                      layout="first"
+                      containerStyle={styles.phoneContainer}
+                      textContainerStyle={styles.textInput}
+                      codeTextStyle={styles.codeTextStyle}
+                      countryPickerButtonStyle={styles.countryPickerButtonStyle}
+                      textInputProps={{placeholderTextColor: '#BCB8B1'}}
+                      textInputStyle={styles.textInputStyle}
+                      onChangeFormattedText={text => {
+                        setphoneNumber(text);
+                      }}
+                      value={phoneNumber}
+                      placeholder={t("Téléphone")}
+                      style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
+                      />
+                  </View>
+                
+                 </>
+                 :
+                 <></>
+                }
 
             <View style={{marginTop: 12}}>
                  <DropDownPicker
