@@ -475,6 +475,7 @@ const Livraison1 = (props) => {
                   style={[styles.dropdown]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
+                  itemTextStyle={{color: "#000"}}
                   autoScroll
                   iconStyle={styles.iconStyle}
                   containerStyle={styles.containerrrrStyle}
@@ -528,6 +529,7 @@ const Livraison1 = (props) => {
                   style={[styles.dropdown]}
                   placeholderStyle={styles.placeholderStyle}
                   selectedTextStyle={styles.selectedTextStyle}
+                  itemTextStyle={{color: "#000"}}
                   autoScroll
                   iconStyle={styles.iconStyle}
                   containerStyle={styles.containerrrrStyle}
@@ -576,6 +578,7 @@ const Livraison1 = (props) => {
                     style={[styles.dropdown]}
                     placeholderStyle={styles.placeholderStyle}
                     selectedTextStyle={styles.selectedTextStyle}
+                    itemTextStyle={{color: "#000"}}
                     autoScroll
                     iconStyle={styles.iconStyle}
                     containerStyle={styles.containerrrrStyle}

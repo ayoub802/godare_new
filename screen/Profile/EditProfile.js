@@ -23,7 +23,7 @@ const EditProfile = ({ navigation }) => {
   const [name, setName] = useState(undefined);
   const [id, setId] = useState(0);
   const [getData, setGetData] = useState([]);
-  const [prename, setPrename] = useState(undefined);
+  const [prename, setPrename] = useState([]);
   const [Email, setEmail] = useState(undefined);
   const [birthday, setBirthday] = useState(undefined);
   const [phoneNumber, setPhoneNumber] = useState(undefined);
@@ -61,10 +61,9 @@ const EditProfile = ({ navigation }) => {
 
   useEffect(() => {
     fetchValue();
-  }, [isFocused]);
+  }, []);
   
   async function fetchValue() {
-    setActivity(true);
     setInitializing(true)
     try{
       const userEmail = getAuth().currentUser;
@@ -88,7 +87,7 @@ const EditProfile = ({ navigation }) => {
     catch(error){
       console.log("Error", error);
     }
-  setActivity(false);
+    setInitializing(false);
 }
 
 
@@ -117,12 +116,12 @@ if(true == initializing){
   )
 }
 
+
 return (
         <SafeAreaView style={{ flex: 1}}>
           <ScrollView style={{paddingBottom: 50}} showsVerticalScrollIndicator={false}>
              <View style={{flex: 1}}>
-                 <HeaderEarth />
-    
+                 <HeaderEarth />    
 
                 <View style={{ marginTop: 30, marginBottom: 12,paddingHorizontal: 28 ,flexDirection: "row" ,alignItems: "center", justifyContent: "space-between"}}>
                     <View style={{marginLeft: "auto"}}>
@@ -146,7 +145,7 @@ return (
                   <View style={{marginTop: 12}}>
                       <TextInput
                         value={name} 
-                        placeholder={name}
+                        placeholder={getData.name}
                         onChangeText={(name) => setName(name)}
                         placeholderTextColor="#000"
                         style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
@@ -155,7 +154,8 @@ return (
                   <View style={{marginTop: 12}}>
                       <TextInput 
                         value={prename}
-                        placeholder={prename}
+                        placeholder={getData.prenom}
+                        placeholderTextColor="#000"
                         onChangeText={(prename) => setPrename(prename)}
                         style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
                       />
@@ -163,7 +163,7 @@ return (
                   <View style={{}}>
                       <PhoneInput 
                         value={phoneNumber}
-                        placeholder={phoneNumber}
+                        placeholder={getData.phone}
                         onChangeText={(phoneNumber) => setPhoneNumber(phoneNumber)}
                         placeholderTextColor="#000"
                         defaultCode='FR'
@@ -178,7 +178,7 @@ return (
                       <TextInput 
                         placeholderTextColor="#000"
                         value={Email}
-                        placeholder={Email}
+                        placeholder={getData.email}
                         onChangeText={(Email) => setEmail(Email)}
                         style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
                       />

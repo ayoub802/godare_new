@@ -42,34 +42,31 @@ const AdresseScreen = () => {
   const [UserEmail, setUserEmail] = useState(null);
   const navigation = useNavigation();
   useEffect(() => {
-
-    async function fetchValue()
-    {
-        setLoader(true);
-
-        const email = await getAuthUserEmail();
-        setUserEmail(email);
-
-        try 
-        {
-          const response = await axiosInstance.get('adresses/user/' + email);
-
-   
-          setAdresses(response.data);
-
-          console.log(response.data);
-          setLoader(false);
-        }
-        catch (erreur)
-        {
-          console.log('adresse fetch error', erreur);
-
-        }
-    }
-
     fetchValue();
-  
   }, []);
+  async function fetchValue()
+  {
+      setLoader(true);
+
+      const email = await getAuthUserEmail();
+      setUserEmail(email);
+
+      try 
+      {
+        const response = await axiosInstance.get('adresses/user/' + email);
+
+ 
+        setAdresses(response.data);
+
+        console.log(response.data);
+        setLoader(false);
+      }
+      catch (erreur)
+      {
+        console.log('adresse fetch error', erreur);
+
+      }
+  }
 
   const DeletePost = async (id) => {
     try{
@@ -77,6 +74,7 @@ const AdresseScreen = () => {
       if(response){
         setLoader(true);
         ToastAndroid.show("Address été supprié", ToastAndroid.SHORT)
+        fetchValue();
       }
     }
     catch(err){

@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   containerrrrStyle: {
-    marginTop: 10,
+    marginTop: 0,
     backgroundColor: '#fff',
     borderRadius: 8,
     maxHeight: 180,
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   containerDepotStyle: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    maxHeight: 150,
+    maxHeight: 250,
     elevation: 10,
   },
 

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Alert, ToastAndroid, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, TextInput, Alert, ToastAndroid, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { HeaderEarth } from '../../components/Header'
@@ -12,7 +12,8 @@ import { useTranslation } from 'react-i18next'
 import PhoneInput from 'react-native-phone-number-input'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth } from '../../modules/FirebaseConfig'
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const MessageScreen = (props) => {
     const [isOpen2, setIsOpen2] = useState(false);
     const [current2, setCurrent2] = useState();
@@ -29,6 +30,7 @@ const MessageScreen = (props) => {
     const [ClientEmail, setClientEmail] = useState(null);
     const [Language, setLanguage] = useState('fr');
     const [user, setUser] = useState(null);
+    const [conversations, setConversations] = useState([]);
 
     const navigateToConversationScreen = () => {
       // console.log('done');
@@ -49,7 +51,7 @@ const MessageScreen = (props) => {
         setMessageObjectsLoader(true);
   
         const email = await getAuthUserEmail();
-        setClientEmail(user);
+        // setClientEmail(user);
   
   
       // Language 
@@ -147,10 +149,23 @@ const MessageScreen = (props) => {
       }
   
       fetchData();
+
+      fetchConversations();
   
     }, []);
   
-    
+    const fetchConversations = async () => {
+      try {
+        const email = await getAuthUserEmail();
+  
+  
+        const response = await axiosInstance.get('conversations/clients/' + email);
+        setConversations(response.data);
+        console.log('response.data', response.data)
+      } catch (error) {
+        console.error('Erreur lors du chargement des conversations :', error);
+      }
+    };
   
     const navigateToCofirmSentScreen = () => {
   
@@ -180,7 +195,7 @@ const MessageScreen = (props) => {
       }
       else 
       {
-        conversation.email = ClientEmail.email;
+        conversation.email = user.email;
       }
   
   
@@ -230,7 +245,7 @@ const MessageScreen = (props) => {
     };
   
    
-    if (true === MessageObjectsLoader)
+    if (true === MessageObjectsLoader )
     {
       return (
         <View style={{justifyContent: 'center', height: '80%'}}><ActivityIndicator size={'large'} color="#3292E0" /></View>
@@ -242,34 +257,50 @@ const MessageScreen = (props) => {
       <ScrollView style={{marginBottom: 20, flex: 1}} showsVerticalScrollIndicator={false}>
         <View style={{flex: 1}}>
           <HeaderEarth />
-           <View style={{marginTop: 24, marginBottom: 12}}>
-                <Text
-                    style={{
-                    fontFamily: 'Poppins-SemiBold',
-                    fontSize: 16,
-                    color: '#000',
-                    textAlign: 'center',
-                    }}>
-                    {t('Envoyez un nouveau message')}
-                </Text>
-            </View>
 
             <View style={{paddingHorizontal: 28}}>  
-
+ 
                   {null != user ?
                     (
-                      <TouchableOpacity
-                        activeOpacity={0.5}
-                        style={styles.settingItemContainer}
-                        onPress={() => {
-                          navigateToConversationScreen();
-                        }}>
-                        <Text style={{color: "#fff"}}>{t('Mes échanges')}</Text>
-                      </TouchableOpacity>
+                      <>
+                      <View style={{marginTop: 24, marginBottom: 12}}>
+                        <Text
+                            style={{
+                            fontFamily: 'Poppins-SemiBold',
+                            fontSize: 16,
+                            color: '#000',
+                            textAlign: 'center',
+                            }}>
+                            {t('Mes échanges précédents')}
+                        </Text>
+                    </View>
+                    <View style={{backgroundColor: "#fff",borderRadius: 10,width: windowWidth * 0.85, alignSelf: "center"}}>
+                          {conversations.map((conversation) => (
+                              <View key={conversation.id} style={{paddingHorizontal: 15, paddingVertical: 20,borderBottomWidth: 1,borderBottomColor: "#E9E9E9" ,justifyContent: "space-between", flexDirection: "row"}}>
+                                      <Text style={{fontSize: 12,color: "#000", fontFamily: "Poppins-Regular", letterSpacing: 1}}>{conversation.subject}</Text> 
+                                      <Text style={{fontSize: 12,color: "#000", fontFamily: "Poppins-Regular", letterSpacing: 1}}>{conversation.createdAt}</Text>
+                              </View>
+                          ))}
+                      </View>
+                        <TouchableOpacity onPress={() => {navigateToConversationScreen()}} style={{justifyContent: "flex-end", width: "100%", alignItems: "flex-end", paddingTop: 5}}>
+                          <Text style={{fontSize: 14,fontFamily:'Roboto-Regular', color: "#2BA6E9"}}>{t('Voir tous les échanges')}</Text>
+                        </TouchableOpacity>
+                       </>
                     )
                     :
                     <></>
                  }
+                 <View style={{marginTop: 24, marginBottom: 12}}>
+                    <Text
+                        style={{
+                        fontFamily: 'Poppins-SemiBold',
+                        fontSize: 16,
+                        color: '#000',
+                        textAlign: 'center',
+                        }}>
+                        {t('Envoyez un nouveau message')}
+                    </Text>
+                </View>
                  {null === user 
                  ? 
                  <>
@@ -334,8 +365,8 @@ const MessageScreen = (props) => {
 
              <View style={{ marginTop: 12}}>
                 <Textarea
-                containerStyle={{height: 180, backgroundColor: "#fff", borderWidth: 1, borderColor: "#AAB0B7", borderRadius: 8, paddingLeft: 10}}
-                style={{backgroundColor: "#fff",fontSize: 14,fontFamily: "Poppins-Regular"}}
+                containerStyle={{height: 180 ,backgroundColor: "#fff", borderWidth: 1, borderColor: "#AAB0B7", borderRadius: 8, paddingLeft: 10}}
+                style={{backgroundColor: "#fff",fontSize: 14 ,fontFamily: "Poppins-Regular", color: "#000"}}
                     maxLength={120}
                     value={Message}
                     placeholder={'Message'}

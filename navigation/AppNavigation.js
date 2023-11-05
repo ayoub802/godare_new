@@ -397,7 +397,6 @@ const AppNavigation = (props) => {
                 }
                 <Profile.Screen name='CartBancair' component={CartBancair}/>
                 <Profile.Screen name='EditProfile' component={EditProfile}/>
-                <Profile.Screen name='ConversationList' component={ConversationList}/>
                 <Profile.Screen name='RemiseAvoir' component={RemiseAvoirScreen}/>
                 <Profile.Screen name='MessageScreen' component={MessageScreen}/>
                 <Profile.Screen name='LanguageScreen' component={LanguageScreen}/>
@@ -409,6 +408,7 @@ const AppNavigation = (props) => {
                 <Profile.Screen name='CreditCard' component={CreditCard}/>
                 <Profile.Screen name='AddStripeUserCard' component={AddStripeUserCard}/>
                 <Profile.Screen name='LegalNotice' component={LegalNotice}/>
+                <Profile.Screen name='Conversation' component={ConversationList}/>
               </Profile.Navigator>
             )
           }

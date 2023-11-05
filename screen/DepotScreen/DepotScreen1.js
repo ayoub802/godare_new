@@ -466,7 +466,7 @@ const DepotScreen1 = (props) => {
           <ActivityIndicator size="large" color="#3292E0" style={{}} />
         </View>
       ) : (
-        <ScrollView style={{flex: 1}}>
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
          
             <View style={{marginTop: 28}}>
             <Dropdown
@@ -476,8 +476,9 @@ const DepotScreen1 = (props) => {
                 autoScroll
                 iconStyle={styles.iconStyle}
                 containerStyle={styles.containerDepotStyle}
+                itemTextStyle={{color: "#000"}}
                 data={items}
-                maxHeight={350}
+                maxHeight={450}
                 labelField="label"
                 valueField="value"
                 placeholder={!isDepotChoice ? t('Mode de prise du colis' ) : '...'}
@@ -524,6 +525,7 @@ const DepotScreen1 = (props) => {
                 containerStyle={styles.containerrrrStyle}
                 data={adresses}
                 value={userAdresseChoice}
+                itemTextStyle={{color: "#000"}}
                 maxHeight={120}
                 labelField="label"
                 valueField="value"
@@ -625,6 +627,7 @@ const DepotScreen1 = (props) => {
                         autoScroll
                         iconStyle={styles.iconStyle}
                         containerStyle={styles.containerrrrStyle}
+                        itemTextStyle={{color: "#000"}}
                         data={MagasinsDepot}
                         value={userMagasinChoice}
                         maxHeight={220}

@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
+  ScrollView,
+  ToastAndroid
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
@@ -15,7 +17,6 @@ const windowHeight = Dimensions.get('window').height;
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PhoneInput from 'react-native-phone-number-input';
-import { ScrollView } from 'react-native-virtualized-view';
 import axiosInstance from '../../axiosInstance';
 import { HeaderEarth } from '../../components/Header';
 import Button from '../../components/Button';
@@ -74,6 +75,8 @@ const AddAdressScreen = (props) => {
           text2: t("La ville et l'adresse sont obligatoires !"),
         });
 
+        ToastAndroid.show("La ville et l'adresse sont obligatoires !",ToastAndroid.SHORT)
+
         console.log("La ville et l'adresse sont obligatoires !");
   
         return;
@@ -87,7 +90,7 @@ const AddAdressScreen = (props) => {
           text2: t("Le pays est obligatoire"),
         });
         console.log("Le pays est obligatoire");
-
+        ToastAndroid.show("Le pays est obligatoire",ToastAndroid.SHORT)
         return;
       }
       else 
@@ -99,6 +102,8 @@ const AddAdressScreen = (props) => {
             text1: 'Champs obligatoires',
             text2: t("Le pays est obligatoire !"),
           });
+
+          ToastAndroid.show("Le pays est obligatoire !",ToastAndroid.SHORT)
           console.log("Le pays est obligatoire !");
 
           return;
@@ -120,9 +125,9 @@ const AddAdressScreen = (props) => {
       })
       .then(function (response) {
         console.log('adresse add ', response.data)
+        ToastAndroid.show("Adresse ajoutée",ToastAndroid.SHORT)
   
         console.log("Adresse ajoutée");
-
         setStorageAndBackToPreviousPage(response.data);
       })
       .catch(function (error) {
@@ -139,7 +144,7 @@ const AddAdressScreen = (props) => {
       //     libelle: AdresseLibelle,
       //     nom: AdresseNom,
       //     telephone: AdresseTelephone,
-      //     pays: AdressePays,
+      //     pays: ('carnetAdresse' == pageFrom || 'summary' == pageFrom) ? AdressePays : Pays,
       //     ville: Ville,
       //     codePostal: CodePostal, 
       //     adresse: Adresse, 
@@ -149,6 +154,7 @@ const AddAdressScreen = (props) => {
       //   .then((response) => response.json())
       //   .then((responseData) => {
       //     console.log(JSON.stringify(responseData));
+      //     ToastAndroid.show("Adresse ajoutée",ToastAndroid.SHORT)
       //     console.log("Data Added");
       //     setStorageAndBackToPreviousPage(responseData);
       //   })
@@ -273,7 +279,37 @@ const AddAdressScreen = (props) => {
             defaultCode="FR"
             layout="first"
             placeholder={t('Téléphone')}
+            containerStyle={{
+              borderWidth: 1,
+              borderColor: '#AAB0B7',
+              flexDirection: 'row',
+              borderRadius: 8,
+              alignItems: 'center',
+              color: '#000',
+              backgroundColor: '#fff',
+              height: 55
+            }}
+            textContainerStyle={{
+              backgroundColor: 'transparent',
+              padding: 0,
+              color: '#000',
+              fontFamily: 'Poppins-Regular',
+              fontSize: 14,
+            }}
+            countryPickerButtonStyle={styles.countryPickerButtonStyle}
             textInputProps={{placeholderTextColor: '#BCB8B1'}}
+            textInputStyle={
+              {
+              height: 50,
+              paddingLeft: 16,
+              borderColor: '#AAB0B7',
+              color: '#000',
+              borderRadius: 8,
+              backgroundColor: '#fff',
+            }}
+            flagButtonStyle={{
+              backgroundColor: '#fff',
+            }}
             value={AdresseTelephone}
             onChangeFormattedText={text => {
               setAdresseTelephone(text);

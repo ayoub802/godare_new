@@ -39,7 +39,7 @@ const LanguageScreen = (props) => {
   };
 
   return (
-    <View>
+    <View style={{flex: 1}}>
       <HeaderEarth />
       <View style={styles.dropContainerStyle}>
         <Dropdown
@@ -63,15 +63,12 @@ const LanguageScreen = (props) => {
             setIsFocus(false);
           }}
         />
-      </View>
-      <View style={{justifyContent: "center", alignItems: "center"}}>
-        <Text>{t('Hey')}</Text>
-      </View>
       <TouchableOpacity
         style={styles.ButtonContainer}
         onPress={() => changeLanguage()}>
         <Text style={styles.ButtonText}>{t('valider')}</Text>
       </TouchableOpacity>
+      </View>
     </View>
   )
 }
@@ -95,14 +92,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ButtonContainer: {
-    width: '40%',
-    height: 45,
     borderRadius: 60,
+    paddingVertical: 8,
+    paddingHorizontal: 22,
+    backgroundColor: "#4E8FDA",
     justifyContent: 'center',
-    backgroundColor: '#3292E0',
-    marginTop: windowHeight * 0.5,
     alignSelf: 'center',
-    marginBottom: 10,
+    marginTop: 50,
   },
   ButtonText: {
     textAlign: 'center',
@@ -111,10 +107,12 @@ const styles = StyleSheet.create({
   },
   dropContainerStyle: {
     justifyContent: 'center',
+    flex: 1,
     // backgroundColor: 'tomato',
     width: windowWidth * 0.9,
     // borderRadius:0
     alignSelf: 'center',
+    alignItems: "center",
     marginTop: windowHeight * 0.02,
     marginBottom: windowHeight * 0.01,
   },

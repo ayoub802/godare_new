@@ -11,7 +11,6 @@ import {
 import { getAuthUserEmail } from "../../modules/GestionStorage";
 import axiosInstance from '../../axiosInstance';
 
-
 const ConversationDetails = ({ navigation, route }) => {
     const { conversationId } = route.params;
     const [conversation, setConversation] = useState(null);
