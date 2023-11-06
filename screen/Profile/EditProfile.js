@@ -15,6 +15,7 @@ import { getAuth } from 'firebase/auth'
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { firebase_db } from '../../modules/FirebaseConfig'
 import { useIsFocused } from '@react-navigation/native'
+import DropDownPicker from 'react-native-dropdown-picker'
 
 
 const EditProfile = ({ navigation }) => {
@@ -33,8 +34,10 @@ const EditProfile = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [text, setText] = useState('');
   const [initializing, setInitializing] = useState(true);
-
+  const [open, setOpen] = useState(false);
+  const [selectValue, setSelectValue] = useState('');
   const phoneInput = useRef(null);
+  const [civilite, setCivilite] = useState('') 
 
   const [RefValue, setRefValue] = useState('');
 
@@ -115,7 +118,20 @@ if(true == initializing){
   </View>
   )
 }
-
+const items = [
+  {
+    label: "Mr",
+    value: "Mr"
+  },
+  {
+    label: "Mme",
+    value: "Mme"
+  },
+  {
+    label: "Autre",
+    value: "Autre"
+  },
+]
 
 return (
         <SafeAreaView style={{ flex: 1}}>
@@ -137,9 +153,21 @@ return (
                 <View style={{paddingHorizontal: 28}}>
     
                   <View style={{marginTop: 12}}>
-                      <TextInput 
+                      {/* <TextInput 
                         placeholder="Civilité"
                         style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                      /> */}
+                      <DropDownPicker 
+                        items={items}
+                        open={open}
+                        setOpen={() => setOpen(!open)}
+                        value={civilite}
+                        setValue={val => setCivilite(val)}
+                        placeholder={getData.civilite}
+                        style={{position: "relative", zIndex: 100}}
+                        onSelectItem={item => {
+                          setCivilite(item.value)
+                        }}
                       />
                   </View>
                   <View style={{marginTop: 12}}>

@@ -562,13 +562,9 @@ const DepotScreen1 = (props) => {
                 <View style={styles.inputCountryCustomContainer}>
                   <TextInput
                     layout="first"
-                    containerStyle={styles.phoneContainer}
-                    textContainerStyle={styles.textInput}
-                    codeTextStyle={styles.codeTextStyle}
-                    countryPickerButtonStyle={styles.countryPickerButtonStyle}
                     placeholder={t('Nom de la personne à contacter')}
                     textInputProps={{placeholderTextColor: '#BCB8B1'}}
-                    textInputStyle={styles.textInputStyle}
+                    style={{color: "#000"}}
                     value={NomContact}
                     onChangeText={text => {
                       setNomContact(text);
