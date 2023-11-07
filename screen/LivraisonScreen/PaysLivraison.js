@@ -181,6 +181,8 @@ const PaysLivraison = ({navigation, route}) => {
       </View>
     )
   }
+
+  let size = 32
   return (
     <View >
       <HeaderEarth />
@@ -217,9 +219,9 @@ const PaysLivraison = ({navigation, route}) => {
                               gap: wp(4.5),
                             }} key={item.id}>
                             <View
-                              style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                              style={{flexDirection: 'row', alignItems: 'center', gap: 7}}>
                               <View>
-                                <Flag code={'FR'} size={32}/>
+                                <Flag code={'FR'} size={size}/>
                               </View>
                               <Text
                                 style={{
@@ -229,12 +231,12 @@ const PaysLivraison = ({navigation, route}) => {
                                 }}>
                                 {item.depart}
                               </Text>
-                              <Feather name="arrow-up-right" size={22} color="#000" />
+                              <Feather name="arrow-up-right" size={20} color="#000" />
                             </View>
                             <View
-                              style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                              style={{flexDirection: 'row', alignItems: 'center', gap: 7}}>
                               <View>
-                                <Flag code={item.drapeauDestination} size={32}/>
+                                <Flag code={item.drapeauDestination} size={size}/>
                               </View>
                               <Text
                                 style={{
@@ -244,7 +246,7 @@ const PaysLivraison = ({navigation, route}) => {
                                 }}>
                                 {item.destination}
                               </Text>
-                              <Feather name="arrow-down-right" size={22} color="#000" />
+                              <Feather name="arrow-down-right" size={20} color="#000" />
                             </View>
                           </View>
                         </>

@@ -61,10 +61,10 @@ const CommandeDetail = ({ navigation, route }) => {
         <View style={{flex: 1}}>
               <HeaderEarth />
   
-              <ScrollView>
+              <ScrollView style={{flex: 1}}>
   
   
-                <View> 
+                <View style={{flex: 1, marginBottom: 50}}> 
                 <View style={{marginTop: 24, paddingHorizontal: 16}}>
                      <Text style={{fontSize: 14, color: "#C3BCBC", fontFamily: "Poppins-Regular", letterSpacing: 1}}>Order ID</Text>
                      <View>
