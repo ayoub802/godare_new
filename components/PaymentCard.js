@@ -38,7 +38,8 @@ const PaymentCard = (props) => {
     const [Cards, setCards] = useState([]);
     const [SelectedCard, setSelectedCard] = useState(null);
     const [SelectedCardCVC, setSelectedCardCVC] = useState('');
-  
+    const [isSelected, setIsSelected] = useState(false);
+
   
     useEffect(() => {
   
@@ -339,14 +340,14 @@ const PaymentCard = (props) => {
                         {
                             Cards.map((item, index) => (
                             <TouchableOpacity onPress={() => setSelectedCard(item)} style={{position: "relative", marginRight: 22}} key={index}>
-                                <Image source={CartViolet} style={{width: wp(75), height: hp(19), objectFit: 'cover', borderRadius: 25}}/>
+                                <Image source={CartViolet} style={{width: wp(75), height: hp(22), objectFit: 'cover', borderRadius: 25}}/>
                                 <View style={{ position: "absolute", top: 38, left: 30}}>
-                                    <Text style={{color: "#fff", fontSize: 12, fontFamily: 'Poppins-Medium'}}>{item.billing_details.name}</Text>
-                                    <Text style={{color: "#fff", fontSize: 16, fontFamily: 'Poppins-Bold'}}>{TotalPrice} €</Text>
+                                    <Text style={{color: "#fff", fontSize: 12, fontFamily: 'Poppins-Medium', textTransform: "capitalize"}}>{item.billing_details.name}</Text>
+                                    <Text style={{color: "#fff", fontSize: 16, fontFamily: 'Poppins-Bold'}}>{TotalPrice.toFixed(2)} €</Text>
                                 </View>
             
                                 <View style={{ position: "absolute", bottom: 18, left: 30}}>
-                                    <Text style={{color: "#fff", fontSize: 14, fontFamily: 'Poppins-Medium'}}>**** **** ****{item.card.last4}</Text>
+                                    <Text style={{color: "#fff", fontSize: 14, fontFamily: 'Poppins-Medium'}}>**** **** **** {item.card.last4}</Text>
                                 </View>
                                 <View style={{ position: "absolute", top: 68, right: 40}}>
                                   <Image source={MasterCard}/>
@@ -381,7 +382,7 @@ const PaymentCard = (props) => {
                         onChangeText={text => setName(text)}
                         placeholder="Samuel Witwicky"
                         placeholderTextColor="#626262"
-                        style={{borderWidth: 1,width: "100%" ,borderColor: "#AAB0B7", paddingLeft: 20 ,borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                        style={{borderWidth: 1,width: "100%", height: 54 ,borderColor: "#AAB0B7", paddingLeft: 20 ,borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
                         />
                 </View>
   
@@ -406,12 +407,12 @@ const PaymentCard = (props) => {
                         }}
                         style={{
                           width: '100%',
-                          height: 60,
+                          height: 54,
                           flexDirection: "column",
                           justifyContent: "center",
                           alignItems: "center",
                           marginTop: 0,
-                          marginBottom: 20
+                          marginBottom: 20,
                         }}
                         onCardChange={(cardDetails) => setCardDetails(cardDetails)}
                         
@@ -419,21 +420,26 @@ const PaymentCard = (props) => {
 
   
   
-                <View style={{flexDirection: "row-reverse",gap: 14}}>
+                <View style={{flexDirection: "row-reverse",alignItems: "center" ,gap: 5}}>
                     <Text style={{fontSize: 12, fontFamily: "Poppins-Regular", color: "#000"}}>{t('Enregistrer les détails de la carte')}</Text>
-                      <Checkbox
+                      {/* <Checkbox
                         value={enregistrerCarte}
-                        onValueChange={value => setEnregistrerCarte(value)}
+                        onValueChange={value => console.log(value)}
                         style={{borderRadius: 5, padding: 5, borderColor: "#2BA6E9",}}
-                      />
+                      /> */}
+                      <TouchableOpacity onPress={() => {setIsSelected(!isSelected), setEnregistrerCarte(!enregistrerCarte)}}>
+                                <View style={{width: wp(5.8), height: hp(3), borderColor: "#2BA6E9", borderWidth: 2, borderRadius: 7, padding: 4,justifyContent: "center",alignItems: "center" , backgroundColor: "transparent"}}>
+                                    {isSelected ? <View style={{ backgroundColor: "#2BA6E9", width: 12, height: 12, borderRadius: 3}}></View> : null}
+                                </View>
+                        </TouchableOpacity>
                     </View>
 
                     
               </View>
-                <View style={{marginTop: 30, paddingHorizontal: 26}}>
+                <View style={{marginTop: wp(12), width: windowWidth * 0.85,alignSelf: "center"}}>
                     <View style={{flexDirection: "row",justifyContent: "space-between", alignItems: "center"}}>
                       <Text style={{ fontSize: 12, fontFamily: "Poppins-Regular", color: "#000"}}>{t('Montant à payer')}</Text>
-                      <Text style={{ fontSize: 18, fontFamily: "Poppins-Bold", color: "#262A2B"}}>{ TotalPrice }€</Text>
+                      <Text style={{ fontSize: 18, fontFamily: "Poppins-Bold", color: "#262A2B"}}>{ TotalPrice.toFixed(2) } €</Text>
                     </View>
                 </View>
             </>
@@ -470,12 +476,12 @@ const styles = StyleSheet.create({
     PaymentInputsContainer: {
       // backgroundColor: 'tomato',
       height: windowHeight * 0.22,
-      width: windowWidth * 0.9,
-      marginTop: windowHeight * 0.03,
+      width: windowWidth * 0.93,
+      alignSelf: "center",
       marginHorizontal:"auto",
       alignItems: 'flex-start',
       justifyContent: "center",
-      marginTop: 50,
+      marginTop: windowWidth * 0.2,
       paddingLeft: wp(4)
     },
     inputContainer: {

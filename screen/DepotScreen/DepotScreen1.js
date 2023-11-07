@@ -450,7 +450,7 @@ const DepotScreen1 = (props) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{ flex: 1, position: "relative", marginBottom: 50}}>
+      <View style={{ flex: 1, position: "relative"}}>
       <ServiceHeader 
           navigation={props.navigation}
           service={Service}
@@ -467,234 +467,234 @@ const DepotScreen1 = (props) => {
         </View>
       ) : (
         <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
-         
-            <View style={{marginTop: 28}}>
-            <Dropdown
-                style={[styles.dropdown]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                autoScroll
-                iconStyle={styles.iconStyle}
-                containerStyle={styles.containerDepotStyle}
-                itemTextStyle={{color: "#000"}}
-                data={items}
-                maxHeight={450}
-                labelField="label"
-                valueField="value"
-                placeholder={!isDepotChoice ? t('Mode de prise du colis' ) : '...'}
-                value={depotChoiceMode}
-                showsVerticalScrollIndicator={false}
-                onFocus={() => setIsDepotChoice(true)}
-                onBlur={() => setIsDepotChoice(false)}
-                onChange={item => {
-                  if('magasin' == item.value)
-                  {
-                    setShowMagasin(true);
-                    setShowAdresseEnlevement(false);
-                  }
-                  else 
-                  {
-                    setShowAdresseEnlevement(true);
-                    setShowMagasin(false);
-                  }
+          <View style={{flex: 1, marginBottom: 75}}>
+                <View style={{marginTop: 28}}>
+                <Dropdown
+                    style={[styles.dropdown]}
+                    placeholderStyle={styles.placeholderStyle}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    autoScroll
+                    iconStyle={styles.iconStyle}
+                    containerStyle={styles.containerDepotStyle}
+                    itemTextStyle={{color: "#000"}}
+                    data={items}
+                    maxHeight={450}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={!isDepotChoice ? t('Mode de prise du colis' ) : '...'}
+                    value={depotChoiceMode}
+                    showsVerticalScrollIndicator={false}
+                    onFocus={() => setIsDepotChoice(true)}
+                    onBlur={() => setIsDepotChoice(false)}
+                    onChange={item => {
+                      if('magasin' == item.value)
+                      {
+                        setShowMagasin(true);
+                        setShowAdresseEnlevement(false);
+                      }
+                      else 
+                      {
+                        setShowAdresseEnlevement(true);
+                        setShowMagasin(false);
+                      }
 
-                  setStorageDepotChoiceMode(item.value);
-                  setDepotChoiceMode(item.value);
-                  setIsDepotChoice(false)
-                }}
-              />
-            </View>
+                      setStorageDepotChoiceMode(item.value);
+                      setDepotChoiceMode(item.value);
+                      setIsDepotChoice(false)
+                    }}
+                  />
+                </View>
 
-      
-          {
-            showAdresseEnlevement &&
-            <>
           
-           <View style={{ marginTop: 30, paddingHorizontal: 16}}>
-            <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
-                <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000", marginBottom: 10}}>
-                {t("Adresse d'enlèvement")}
-                </Text>
+              {
+                showAdresseEnlevement &&
+                <>
               
-              <Dropdown
-                style={[styles.dropdown]}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                autoScroll
-                iconStyle={styles.iconStyle}
-                containerStyle={styles.containerrrrStyle}
-                data={adresses}
-                value={userAdresseChoice}
-                itemTextStyle={{color: "#000"}}
-                maxHeight={120}
-                labelField="label"
-                valueField="value"
-                placeholder={!isFocus1 ? t('Choisir une adresse existante') : '...'}
-                showsVerticalScrollIndicator={false}
-                onFocus={() => setIsFocus1(true)}
-                onBlur={() => setIsFocus1(false)}
-                onChange={item => {
-                  setUserDomicileChoix(item);
-                  setUserAdresseChoice(item.value);
-                  setIsFocus1(false);
-                  setStorageDepotChoiceAdresse(item);
-                  setNomNumeroTelephone(item);
-                }}
-              />
-            <TouchableOpacity style={styles.ButtonContainer}
-              onPress={() => {
-                NavigateToUserAddress();
-              }}>
-              <Text style={styles.ButtonText}>{t('(ou) Ajouter une nouvelle adresse')}</Text>
-              <Icon name="plus" size={23} color="#000" />
-            </TouchableOpacity>
-            </View>
-
-           </View>
-
-
-           <View style={{ marginTop: 12, paddingHorizontal: 16}}>
-              <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
-                  <Text style={{fontFamily: "Poppins-Medium", fontSize: 12, color: "#000"}}>
-                   {t('Les coordonnées de destinataire de la commande')}
-                  </Text>
-                
-                <View style={styles.inputCountryCustomContainer}>
-                  <TextInput
-                    layout="first"
-                    placeholder={t('Nom de la personne à contacter')}
-                    textInputProps={{placeholderTextColor: '#BCB8B1'}}
-                    style={{color: "#000"}}
-                    value={NomContact}
-                    onChangeText={text => {
-                      setNomContact(text);
+              <View style={{ marginTop: 30, paddingHorizontal: 16}}>
+                <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
+                    <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000", marginBottom: 10}}>
+                    {t("Adresse d'enlèvement")}
+                    </Text>
+                  
+                  <Dropdown
+                    style={[styles.dropdown]}
+                    placeholderStyle={[styles.placeholderStyle, {color: "#AFAFAF"}]}
+                    selectedTextStyle={styles.selectedTextStyle}
+                    autoScroll
+                    iconStyle={styles.iconStyle}
+                    containerStyle={styles.containerrrrStyle}
+                    data={adresses}
+                    value={userAdresseChoice}
+                    itemTextStyle={{color: "#000"}}
+                    maxHeight={120}
+                    labelField="label"
+                    valueField="value"
+                    placeholder={!isFocus1 ? t('Choisir une adresse existante') : '...'}
+                    showsVerticalScrollIndicator={false}
+                    onFocus={() => setIsFocus1(true)}
+                    onBlur={() => setIsFocus1(false)}
+                    onChange={item => {
+                      setUserDomicileChoix(item);
+                      setUserAdresseChoice(item.value);
+                      setIsFocus1(false);
+                      setStorageDepotChoiceAdresse(item);
+                      setNomNumeroTelephone(item);
                     }}
                   />
+                <TouchableOpacity style={styles.ButtonContainer}
+                  onPress={() => {
+                    NavigateToUserAddress();
+                  }}>
+                  <Text style={styles.ButtonText}>{t('(ou) Ajouter une nouvelle adresse')}</Text>
+                  <Icon name="plus" size={23} color="#000" />
+                </TouchableOpacity>
                 </View>
 
-                <View style={styles.inputCountryCustomContainer}>
-                  <PhoneInput
-                    ref={phoneInput}
-                    defaultValue={TelContact}
-                    defaultCode="FR"
-                    layout="first"
-                    containerStyle={styles.phoneContainer}
-                    textContainerStyle={styles.textInput}
-                    codeTextStyle={styles.codeTextStyle}
-                    countryPickerButtonStyle={styles.countryPickerButtonStyle}
-                    placeholder={t('Téléphone')}
-                    textInputProps={{placeholderTextColor: '#BCB8B1'}}
-                    textInputStyle={styles.textInputStyle}
-                    value={TelContact}
-                    onChangeFormattedText={text => {
-                      setTelContact(text);
-                    }}
-                  />
-                </View>
               </View>
-           </View>
 
-            <TouchableOpacity
-              style={[styles.ButtonStyle, {width: '60%', marginTop: 50}]}
-              onPress={() => {
-                NavigateToRetraitDomicile();
-              }}>
-                <Text style={styles.ButtonStyleText}>
-                      {t('Valider enlèvement à domicile')}
-                </Text>
-            </TouchableOpacity>
-            </>
-          }
 
-          {
-            showMagasin &&
-            <>
-
-             <View style={{ marginTop: 32, paddingHorizontal: 16}}>
-             <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
-                  <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
-                    {t('Liste des magasins de dépot')}
-                  </Text>
-                  <View style={{marginTop: 10}}>
-                      <Dropdown
-                        style={[styles.dropdown]}
-                        placeholderStyle={styles.placeholderStyle}
-                        selectedTextStyle={styles.selectedTextStyle}
-                        autoScroll
-                        iconStyle={styles.iconStyle}
-                        containerStyle={styles.containerrrrStyle}
-                        itemTextStyle={{color: "#000"}}
-                        data={MagasinsDepot}
-                        value={userMagasinChoice}
-                        maxHeight={220}
-                        labelField="label"
-                        valueField="value"
-                        placeholder={MagasinsDepot.length > 0 ? t('Choisir le magasin de dépôt') : 'Pas de magasins disponibles'}
-                        showsVerticalScrollIndicator={false}
-                        onFocus={() => setIsFocus(true)}
-                        onBlur={() => setIsFocus(false)}
-                        onChange={item => {
-                          setIsFocus(false);
-                          OnChangeMagasinValue(item);
+              <View style={{ marginTop: 12, paddingHorizontal: 16}}>
+                  <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
+                      <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#000"}}>
+                      {t('Les coordonnées de destinataire de la commande')}
+                      </Text>
+                    
+                    <View style={styles.inputCountryCustomContainer}>
+                      <TextInput
+                        layout="first"
+                        placeholder={t('Nom de la personne à contacter')}
+                        placeholderTextColor="#AFAFAF"
+                        style={{color: "#000", fontFamily:"Poppins-Regular", width: "100%"}}
+                        value={NomContact}
+                        onChangeText={text => {
+                          setNomContact(text);
                         }}
                       />
-                  </View>
-                  <View style={{marginTop: 8}}>
-                     <Text style={{fontFamily: "Poppins-Regular",color: "#000", fontSize: 10}}>*{t('Livraison 72h aprés la prise en charge')}</Text>
-                  </View>
+                    </View>
+
+                    <View style={styles.inputCountryCustomContainer}>
+                      <PhoneInput
+                        ref={phoneInput}
+                        defaultValue={TelContact}
+                        defaultCode="FR"
+                        layout="first"
+                        containerStyle={styles.phoneContainer}
+                        textContainerStyle={styles.textInput}
+                        codeTextStyle={styles.codeTextStyle}
+                        countryPickerButtonStyle={styles.countryPickerButtonStyle}
+                        placeholder={t('Téléphone')}
+                        textInputProps={{placeholderTextColor: '#BCB8B1'}}
+                        textInputStyle={styles.textInputStyle}
+                        value={TelContact}
+                        onChangeFormattedText={text => {
+                          setTelContact(text);
+                        }}
+                      />
+                    </View>
                   </View>
               </View>
-
-              <View style={{ flex: 1, justifyContent: "flex-end", alignItems: 'center', paddingBottom: 82}}>
+              <View style={{ flex: 1, justifyContent: "flex-end", alignItems: 'center'}}>
                 <TouchableOpacity
-                  style={[styles.ButtonStyle, {width: '60%', marginTop: 50}]}
+                  style={[styles.ButtonStyle, {width: '60%', marginBottom: wp(2), marginTop: 50}]}
                   onPress={() => {
-                    NavigateToDepotMagasin();
+                    NavigateToRetraitDomicile();
                   }}>
                     <Text style={styles.ButtonStyleText}>
-                      {t('Valider dépot au magasin')}
+                          {t('Valider enlèvement à domicile')}
                     </Text>
                 </TouchableOpacity>
-              </View>
-            </>
-          }
-
-
-           <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              setModalVisible(!modalVisible);
-            }}>
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.Heading}>{t("Horaires d'ouverture")}</Text>
-                <Text style={styles.modalText}>{actionTriggered.horaireOuverture}</Text>
-                <Text style={styles.modalText}>
-                  {actionTriggered.adresse + ', ' + (actionTriggered.codePostal ? (actionTriggered.codePostal + ' ') : '' ) + actionTriggered.ville + ' ' + actionTriggered.pays  }
-                </Text>
-                
-                <View style={{flexDirection: "row", justifyContent: "space-between", gap: 15}}>
-                  <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => ResetChoixMagasin()}>
-                    <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Fermer")}</Text>
-                  </Pressable>
-                  <Pressable
-                    style={[styles.button, styles.buttonOpen]}
-                    onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
-                    <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Selectionner le magasin")}</Text>
-                  </Pressable>
                 </View>
-              </View>
-              <View style={{position: "absolute", width: "100%", height: "100%", backgroundColor: "#000", opacity: 0.5, zIndex: -100}}>
+                </>
+              }
 
-              </View>
-            </View>
-          </Modal>
-          
+              {
+                showMagasin &&
+                <>
 
+                <View style={{ marginTop: 32, paddingHorizontal: 16}}>
+                <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
+                      <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
+                        {t('Liste des magasins de dépot')}
+                      </Text>
+                      <View style={{marginTop: 10}}>
+                          <Dropdown
+                            style={[styles.dropdown]}
+                            placeholderStyle={[styles.placeholderStyle, {color: "#AFAFAF"}]}
+                            selectedTextStyle={styles.selectedTextStyle}
+                            autoScroll
+                            iconStyle={styles.iconStyle}
+                            containerStyle={styles.containerrrrStyle}
+                            itemTextStyle={{color: "#000"}}
+                            data={MagasinsDepot}
+                            value={userMagasinChoice}
+                            maxHeight={220}
+                            labelField="label"
+                            valueField="value"
+                            placeholder={MagasinsDepot.length > 0 ? t('Choisir le magasin de dépôt') : 'Pas de magasins disponibles'}
+                            showsVerticalScrollIndicator={false}
+                            onFocus={() => setIsFocus(true)}
+                            onBlur={() => setIsFocus(false)}
+                            onChange={item => {
+                              setIsFocus(false);
+                              OnChangeMagasinValue(item);
+                            }}
+                          />
+                      </View>
+                      <View style={{marginTop: 8}}>
+                        <Text style={{fontFamily: "Poppins-Regular",color: "#000", fontSize: 10}}>*{t('Livraison 72h aprés la prise en charge')}</Text>
+                      </View>
+                      </View>
+                  </View>
+
+                  <View style={{ flex: 1, justifyContent: "flex-end", alignItems: 'center'}}>
+                    <TouchableOpacity
+                      style={[styles.ButtonStyle, {width: '60%', marginTop: wp(40)}]}
+                      onPress={() => {
+                        NavigateToDepotMagasin();
+                      }}>
+                        <Text style={styles.ButtonStyleText}>
+                          {t('Valider dépot au magasin')}
+                        </Text>
+                    </TouchableOpacity>
+                  </View>
+                </>
+              }
+
+
+              <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                  setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <Text style={styles.Heading}>{t("Horaires d'ouverture")}</Text>
+                    <Text style={styles.modalText}>{actionTriggered.horaireOuverture}</Text>
+                    <Text style={styles.modalText}>
+                      {actionTriggered.adresse + ', ' + (actionTriggered.codePostal ? (actionTriggered.codePostal + ' ') : '' ) + actionTriggered.ville + ' ' + actionTriggered.pays  }
+                    </Text>
+                    
+                    <View style={{flexDirection: "row", justifyContent: "space-between", gap: 15}}>
+                      <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => ResetChoixMagasin()}>
+                        <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Fermer")}</Text>
+                      </Pressable>
+                      <Pressable
+                        style={[styles.button, styles.buttonOpen]}
+                        onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
+                        <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Selectionner le magasin")}</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                  <View style={{position: "absolute", width: "100%", height: "100%", backgroundColor: "#000", opacity: 0.5, zIndex: -100}}>
+
+                  </View>
+                </View>
+              </Modal>
+          </View>
           
         </ScrollView>
       )}

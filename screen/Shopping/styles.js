@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: windowHeight * 0.045,
     alignItems: 'center',
-    gap: 10,
+    gap: 2,
     width: windowWidth * 0.25,
     // margin: 5,
   },

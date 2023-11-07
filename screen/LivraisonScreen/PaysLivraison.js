@@ -13,6 +13,7 @@ import { getSelectedService, saveSelectedCountry } from '../../modules/GestionSt
 import styles from './styles';
 import Flag from 'react-native-flags';
 import { useTranslation } from 'react-i18next';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 const PaysLivraison = ({navigation, route}) => {
   var isFocused = useIsFocused();
@@ -188,7 +189,7 @@ const PaysLivraison = ({navigation, route}) => {
       <Text
             style={{
               textAlign: 'center',
-              color: '#000',
+              color: '#0D253C',
               fontFamily: 'Roboto-Medium',
               fontSize: 16,
             }}>
@@ -213,7 +214,7 @@ const PaysLivraison = ({navigation, route}) => {
                               flexDirection: 'row',
                               alignItems: 'center',
                               justifyContent: 'space-between',
-                              gap: 30,
+                              gap: wp(4.5),
                             }} key={item.id}>
                             <View
                               style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
@@ -222,7 +223,7 @@ const PaysLivraison = ({navigation, route}) => {
                               </View>
                               <Text
                                 style={{
-                                  fontSize: 14,
+                                  fontSize: wp(3.4),
                                   color: '#000',
                                   fontFamily: 'Roboto-Medium',
                                 }}>
@@ -237,7 +238,7 @@ const PaysLivraison = ({navigation, route}) => {
                               </View>
                               <Text
                                 style={{
-                                  fontSize: 14,
+                                  fontSize: wp(3.4),
                                   color: '#000',
                                   fontFamily: 'Roboto-Medium',
                                 }}>
@@ -261,12 +262,10 @@ const PaysLivraison = ({navigation, route}) => {
               dropDownContainerStyle={{
                 backgroundColor: '#fff',
                 borderColor: '#2BA6E9',
-                fontSize: 54,
               }}
               style={{
                 backgroundColor: '#fff',
                 borderColor: '#2BA6E9',
-                fontSize: 54,
               }}
               placeholder={t('pay livraison')}
               placeholderStyle={{

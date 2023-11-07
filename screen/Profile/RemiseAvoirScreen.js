@@ -291,7 +291,7 @@ const RemiseAvoirScreen = () => {
             </ScrollView>
              : 
              <View style={{  alignItems: "center",justifyContent: 'center' ,backgroundColor: "#EDEDF3",borderBottomWidth: 1, borderBottomColor: "#E2E2E2" ,paddingVertical: 16, paddingHorizontal: 22, width: "100%"}}>
-                  <Text>Nothing</Text>
+                  <Text style={{color: "#000", fontFamily: "Poppins-Medium", textTransform: "uppercase"}}>Nothing</Text>
                 </View>
             }
           </View>

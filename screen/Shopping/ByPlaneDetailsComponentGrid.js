@@ -338,20 +338,20 @@ const ByPlaneDetailsComponentGrid = (props) => {
       }}>
 
           <View style={{flexDirection: "row", alignItems: "center",justifyContent: "space-between" ,gap: 10, paddingTop: 16, paddingLeft: 6, paddingRight: 6}}>
-          <View style={{maxWidth: 130}}>
+          <View style={{maxWidth: wp(24.5)}}>
               <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 9.3, color: "#000"}}>
                 {'fr' == Language ? Product.name : Product.nameEN}
                 </Text>
           </View>
             <View style={{flexDirection: "column", alignItems: "center", gap: 2}}>
                     <View>
-                      <Text style={{fontSize: 11, fontFamily: "Poppins-Medium",color: "#000"}}>
+                      <Text style={{fontSize: 9, fontFamily: "Poppins-Bold",color: "#000"}}>
                       {productSpecificites ? productSpecificites.prix  : 0}€/{Product.unite ? Product.unite.valeur : ''}
                     </Text>
                         </View>
                     <View>
                     {productSpecificites && productSpecificites.prixAncien ? 
-                      <Text style={{fontSize: 11, fontFamily: "Poppins-Medium",color: "#000", textDecorationLine: "line-through"}}>
+                      <Text style={{fontSize: 9, fontFamily: "Poppins-Medium",color: "#000", textDecorationLine: "line-through"}}>
                       {productSpecificites.prixAncien}€/{Product.unite ? Product.unite.valeur : ''}
                     </Text>
                     :
@@ -400,7 +400,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
                     value={StateValue}
                     setValue={val => setStateValue(val)}
                     placeholder={t('etat')}
-                    placeholderStyle={{fontSize: 12.8, fontWeight: "500"}}
+                    placeholderStyle={{fontSize: wp(3.2), fontWeight: "500"}}
                     maxHeight={100}
                     autoScroll
                     style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
@@ -422,7 +422,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
                           placeholder={t('Quantité')}
                           autoScroll={true}
                           maxHeight={120}
-                          placeholderStyle={{fontSize: 12.8, fontWeight: "500"}}
+                          placeholderStyle={{fontSize: wp(3), fontWeight: "500"}}
                           style={{backgroundColor: "#F5F5F5",borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
                           dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
                         />
@@ -449,7 +449,7 @@ const ByPlaneDetailsComponentGrid = (props) => {
                 style={{ paddingVertical: 8, paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 10, backgroundColor: "transparent",borderWidth: 1,borderColor: "#4E8FDA",color: "#4E8FDA" ,borderRadius: 25, }}
                 onPress={toggleModal}>
                 <View><FontAwesome5 name="camera" size={15} color='#4E8FDA'/></View>
-                <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#4E8FDA"}}>{t('prendre photo')}</Text>
+                <Text style={{fontFamily:"Poppins-Medium", fontSize: wp(2.8), color:"#4E8FDA"}}>{t('prendre photo')}</Text>
                 {
                   <View>
                     <Modal
@@ -617,7 +617,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     zIndex: 1500,
-    bottom: windowHeight * .4,
+    bottom: windowHeight * wp(.02),
     alignSelf: 'center',
     justifyContent: 'space-around',
     // backgroundColor: 'tomato',

@@ -39,8 +39,9 @@ const styles = StyleSheet.create({
   ButtonText: {
     marginLeft: '5%',
     width: '78%',
-    color: '#000',
+    color: "#AFAFAF",
     fontSize: 15,
+    fontFamily: 'Poppins-Regular',
   },
   CountrySelect: {
     width: '80%',
@@ -65,19 +66,19 @@ const styles = StyleSheet.create({
   },
   ButtonStyle: {
     width: '80%',
-    height: 45,
     borderRadius: 60,
     justifyContent: 'center',
-    backgroundColor: '#3292E0',
-    marginTop: 20,
+    backgroundColor: '#4E8FDA',
     alignSelf: 'center',
-    marginBottom: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20
   },
   ButtonStyleText: {
     textAlign: 'center',
     color: 'white',
-    fontSize: 14,
+    fontSize: windowWidth * 0.036,
     fontFamily: 'Roboto-Regular',
+    lineHeight: 20
   },
   TotalContainer: {
     flexDirection: 'row',
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
   },
   countryPickerButtonStyle: {
     // backgroundColor: 'gold',
-    width: 70,
+    width: 50,
   },
   textInputStyle: {
     fontFamily: 'Roboto-Regular',
@@ -191,8 +192,8 @@ const styles = StyleSheet.create({
   },
 
   dropdown: {
-    height: 50,
-    borderRadius: 7,
+    height: 54,
+    borderRadius: 8,
     paddingHorizontal: 17,
     backgroundColor: 'transparent',
     borderWidth: 1,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Poppins-Regular',
     color: '#14213D',
   },
   selectedTextStyle: {

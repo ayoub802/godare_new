@@ -235,9 +235,9 @@ const Signup = props => {
   ]
   return (
     <SafeAreaView  style={{flex: 1}}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
             <HeaderEarth />
-            <View style={{flex: 1, alignItems: "center"}}>
+            <View style={{flex: 1, alignItems: "center", marginBottom: 50}}>
                     <View style={{marginTop: 30, marginBottom: 12}}>
                             <Text
                             style={{
@@ -287,10 +287,12 @@ const Signup = props => {
                                     color: '#000',
                                     width: windowWidth * 0.8,
                                     marginBottom: 12,
+                                    height: 54,
                                     fontSize: 14,
                                     color: '#000',
                                     backgroundColor: '#fff',
                                 }}
+                                placeholderStyle={{color: "#AAB0B7"}}
                                 onSelectItem={item => {
                                 setCivilite(item.value)
                                 }}
@@ -467,13 +469,12 @@ const Signup = props => {
                             return (
                             <>
                                 <View
-                                style={[
-                                    styles.inputCustomContainer,
-                                    {
-                                    borderBottomColor: error ? 'red' : '#E6E6E6',
-                                    borderBottomWidth: 1,
-                                    },
-                                ]}>
+                                style={
+                                  {
+                                  borderBottomColor: error ? 'red' : '#E6E6E6',
+                                  borderBottomWidth: 0,
+                                  position: "relative", zIndex: -100
+                                  }}>
                                 <TextInput
                                     placeholder={t('E-mail')}
                                     placeholderTextColor={'#BCB8B1'}
@@ -511,13 +512,12 @@ const Signup = props => {
                             return (
                             <>
                                 <View
-                                style={[
-                                    styles.inputCustomContainer.alignItems,
-                                    {
-                                    borderBottomColor: error ? 'red' : '#E6E6E6',
-                                    borderBottomWidth: 1,
-                                    },
-                                ]}>
+                                style={
+                                  {
+                                  borderBottomColor: error ? 'red' : '#E6E6E6',
+                                  borderBottomWidth: 0,
+                                  position: "relative", zIndex: -100
+                                  }}>
                                 <TextInput
                                     placeholder={t('Mot de passe')}
                                     placeholderTextColor={'#BCB8B1'}
@@ -602,7 +602,10 @@ const Signup = props => {
                                 justifyContent: 'flex-end',
                                 alignItems: 'center',
                                 }}>
-                                <Button title={t("s'inscrire")} navigation={handleSubmit(handleSignup)} />
+                                {/* <Button title={t("s'inscrire")} navigation={handleSubmit(handleSignup)} /> */}
+                                <TouchableOpacity onPress={handleSubmit(handleSignup)} style={{ paddingVertical: 8,width: windowWidth * 0.5 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}}>
+                                   <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>{t("s'inscrire")}</Text>
+                              </TouchableOpacity>
                             </View>
                             </View>
 

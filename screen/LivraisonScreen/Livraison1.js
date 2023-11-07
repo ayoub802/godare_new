@@ -449,7 +449,7 @@ const Livraison1 = (props) => {
     );
   }
   return (
-    <View style={{flex: 1, marginBottom: 50,position: "relative",}}>
+    <View style={{flex: 1,position: "relative",}}>
       
 
         <ServiceHeader 
@@ -466,6 +466,7 @@ const Livraison1 = (props) => {
         </View>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{flex: 1, marginBottom: 70}}>
               <View>
                 <Stepper position={2}/>
               </View>
@@ -527,7 +528,7 @@ const Livraison1 = (props) => {
               <View style={styles.dropContainerStyle}>
                 <Dropdown
                   style={[styles.dropdown]}
-                  placeholderStyle={styles.placeholderStyle}
+                  placeholderStyle={[styles.placeholderStyle, {color: "#AFAFAF"}]}
                   selectedTextStyle={styles.selectedTextStyle}
                   itemTextStyle={{color: "#000"}}
                   autoScroll
@@ -553,8 +554,7 @@ const Livraison1 = (props) => {
               <TouchableOpacity style={styles.ButtonContainer} onPress={() => {
                 NavigateToUserAddress();
               }}>
-                <Text style={styles.ButtonText}>{t('(ou) Ajouter une nouvelle adresse')}</Text>
-                <Icon name="plus" size={23} color="#000" />
+                <Text style={styles.ButtonText}>{t('Ajouter une nouvelle adresse')}</Text>
               </TouchableOpacity>
 
             </View>
@@ -576,7 +576,7 @@ const Livraison1 = (props) => {
                 <View style={styles.dropContainerStyle}>
                   <Dropdown
                     style={[styles.dropdown]}
-                    placeholderStyle={styles.placeholderStyle}
+                    placeholderStyle={[styles.placeholderStyle, {color: "#AFAFAF"}]}
                     selectedTextStyle={styles.selectedTextStyle}
                     itemTextStyle={{color: "#000"}}
                     autoScroll
@@ -608,7 +608,7 @@ const Livraison1 = (props) => {
             <>
             <View style={{ marginTop: 10, paddingHorizontal: 16}}>
               <View style={{ backgroundColor: '#fff', paddingVertical: 22, paddingHorizontal: 14, borderRadius: 10}}>
-                 <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000"}}>
+                 <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#000", marginBottom: 5}}>
                  {t('Contact details of the person to contact')}
                   </Text>
                
@@ -616,8 +616,8 @@ const Livraison1 = (props) => {
                   <TextInput
                     layout="first"
                     placeholder={t('Nom de la personne qui récupère la commande')}
-                    textInputProps={{placeholderTextColor: '#BCB8B1'}}
-                    style={{color: "#000"}}
+                    placeholderTextColor="#AFAFAF"
+                    style={{color: "#000", fontFamily: "Poppins-Regular",fontSize: 14,width: "100%"}}
                     value={NomContact}
                     onChangeText={text => {
                       setNomContact(text);
@@ -661,7 +661,7 @@ const Livraison1 = (props) => {
                 )
                 :
                 (
-                  <View style={{ marginTop: 28,marginBottom: 16 ,paddingHorizontal: 16, position: "relative", zIndex: -1000}}>
+                  <View style={{ marginTop: 28,marginBottom: 16 ,paddingHorizontal: 16, position: "relative", zIndex: -1000, width: windowWidth * 0.95, alignSelf: "center"}}>
                   <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
                     <Text style={{fontFamily: "Poppins-SemiBold", color: "#000", fontSize: 15}}>{t('Frais livraison')}</Text>
                     <Text style={{fontFamily: "Poppins-SemiBold", color: "#000", fontSize: 15}}>
@@ -673,24 +673,27 @@ const Livraison1 = (props) => {
                 )
 
               }
+              <View style={{flex: 1,justifyContent: "center", alignItems: "center", marginTop: 18}}>
 
               <TouchableOpacity
-                style={[styles.ButtonStyle, {width: '75%', marginTop: 10}]}
-                onPress={() => {
+                  style={{ paddingVertical: 8,width: windowWidth * 0.5 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}}
+                  onPress={() => {
                   NavigateToDomicile();
                 }}>
-                <Text style={styles.ButtonStyleText}>
-                  {t('Valider livraison à domicile')}
+                  <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>
+                  {t('valider')}
                 </Text>
               </TouchableOpacity>
+              </View>
+
             </>
           }
 
           {
             showRelais && (
-              <View style={{flex: 1,justifyContent: "center", alignItems: "center", marginTop: 58}}>
+              <View style={{flex: 1,justifyContent: "center", alignItems: "center", marginTop: 28}}>
                 <TouchableOpacity
-                  style={{ paddingVertical: 8 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}}
+                  style={{ paddingVertical: 8,width: windowWidth * 0.65 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}}
                   onPress={() => {
                     NavigateToMagasin();
                   }}>
@@ -731,6 +734,8 @@ const Livraison1 = (props) => {
                 <View style={{position: "absolute", width: "100%", height: "100%", backgroundColor: "#000", opacity: 0.5, zIndex: -100}}></View>
             </View>
           </Modal>
+
+          </View>
 
 
           
@@ -789,10 +794,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   ButtonText: {
-    marginLeft: '5%',
+    marginLeft: '6%',
     width: '78%',
-    color: '#000',
+    color: "#AFAFAF",
     fontSize: 15,
+    fontFamily: "Poppins-Regular"
   },
   CountrySelect: {
     width: '80%',
@@ -880,7 +886,7 @@ const styles = StyleSheet.create({
   inputCountryCustomContainer: {
     backgroundColor: '#fff',
     width: windowWidth * 0.8,
-    height: 60,
+    height: 48,
     alignSelf: 'center',
     justifyContent: 'flex-start',
     paddingLeft: 10,
@@ -895,7 +901,7 @@ const styles = StyleSheet.create({
   phoneContainer: {
     // width: '75%',
     width: windowWidth * 0.7,
-    height: 50,
+    height: 45,
     backgroundColor: '#fff',
     elevation: 0,
     // backgroundColor: 'tomato',
@@ -916,7 +922,7 @@ const styles = StyleSheet.create({
   },
   countryPickerButtonStyle: {
     // backgroundColor: 'gold',
-    width: 70,
+    width: 50,
   },
   textInputStyle: {
     fontFamily: 'Roboto-Regular',
@@ -933,8 +939,8 @@ const styles = StyleSheet.create({
   },
 
   dropdown: {
-    height: 50,
-    borderRadius: 7,
+    height: 54,
+    borderRadius: 8,
     paddingHorizontal: 17,
     backgroundColor: "transparent",
     borderWidth: 1, 
@@ -948,12 +954,12 @@ const styles = StyleSheet.create({
   },
   placeholderStyle: {
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Poppins-Regular',
     color: '#14213D',
   },
   selectedTextStyle: {
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: 'Poppins-Regular',
     color: '#14213D',
   },
   iconStyle: {

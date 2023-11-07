@@ -95,76 +95,75 @@ const AddCardScreen = (props) => {
     }
   return (
     <SafeAreaView style={{flex: 1}}>
-
-           <View style={{flex: 1}}>
-             
-             <ServiceHeader 
-            navigation={props.navigation}
-            service={Service}
-            paysLivraison={paysLivraisonObject}
-            language={Language}
-            />
-
-
-                <View style={{marginTop: 24, marginBottom: 12}}>
-                    <Text
-                        style={{
-                        fontFamily: 'Poppins-SemiBold',
-                        fontSize: 16,
-                        color: '#000',
-                        textAlign: 'center',
-                        }}>
-                        {t('Mode de paiement')}
-                    </Text>
-                </View>
+          <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+            <View style={{flex: 1}}>
                 
-                <ScrollView  horizontal style={{paddingLeft: 10}} showsHorizontalScrollIndicator={false}>
+                <ServiceHeader 
+                navigation={props.navigation}
+                service={Service}
+                paysLivraison={paysLivraisonObject}
+                language={Language}
+                />
+
+
+                    <View style={{marginTop: 24, marginBottom: 12}}>
+                        <Text
+                            style={{
+                            fontFamily: 'Poppins-SemiBold',
+                            fontSize: 16,
+                            color: '#000',
+                            textAlign: 'center',
+                            }}>
+                            {t('Mode de paiement')}
+                        </Text>
+                    </View>
+                    
+                    <ScrollView  horizontal style={{paddingLeft: 10}} showsHorizontalScrollIndicator={false}>
+                                {
+                                    card_category.map((item, index) => (
+                                        <View key={index} style={{ marginRight: 5, marginBottom: 25}}>
+                                            <TouchableOpacity onPress={() => setActiveCard(index)} style={[activeCard === index ?  styles.backgroundColorActive : styles.backgroundColor, { justifyContent: "center",borderRadius: 20,alignItems: "center" ,paddingHorizontal: item.paddingHorrizontal, height: 56, borderWidth: 1.2, borderColor: "#2196F3"}]}>
+                                                <View style={{display: item.imgDisplay}}>{activeCard === index ? item.imgActive : item.img}</View>
+                                                <Text style={[activeCard === index ? styles.textActive : styles.textColor, {display: item.titledisplay, fontFamily: "Poppins-Medium", fontSize: 16}]}>{item.title}</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    ))
+                                }
+                    </ScrollView>
                             {
-                                card_category.map((item, index) => (
-                                    <View key={index} style={{ marginRight: 15, marginBottom: 15}}>
-                                        <TouchableOpacity onPress={() => setActiveCard(index)} style={[activeCard === index ?  styles.backgroundColorActive : styles.backgroundColor, { justifyContent: "center",borderRadius: 20,alignItems: "center" ,paddingHorizontal: 41, paddingVertical: 16, height: 56, borderWidth: 1.2, borderColor: "#2196F3"}]}>
-                                            <View style={{display: item.imgDisplay}}>{activeCard === index ? item.imgActive : item.img}</View>
-                                            <Text style={[activeCard === index ? styles.textActive : styles.textColor, {display: item.titledisplay, fontFamily: "Poppins-Medium", fontSize: 16}]}>{item.title}</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                ))
+                                activeCard == 0 ?
+                                (
+                                    <PaymentCard />
+                                )
+                                :
+                                null
                             }
-                </ScrollView>
-                <ScrollView>
-                        {
-                            activeCard == 0 ?
-                            (
-                                <PaymentCard />
-                            )
-                            :
-                            null
-                        }
 
-                        {
-                            activeCard == 1 ?
-                            (
-                                <WavePaymen />
-                            )
-                            :
-                            null
-                        }
-                        {
-                            activeCard == 2 ? 
-                            (
-                                <TouchableOpacity
-                                onPress={() => {
-                                    navigateToHomePickup();
-                                }}>
-                                    <Text>{t('Payer au dépôt au magasin')}</Text>
-                                </TouchableOpacity>
-                            )
-                            :
-                            null
-                        }
-                </ScrollView>
+                            {
+                                activeCard == 1 ?
+                                (
+                                    <WavePaymen />
+                                )
+                                :
+                                null
+                            }
+                            {
+                                activeCard == 2 ? 
+                                (
+                                    <TouchableOpacity
+                                    onPress={() => {
+                                        navigateToHomePickup();
+                                    }}>
+                                        <Text>{t('Payer au dépôt au magasin')}</Text>
+                                    </TouchableOpacity>
+                                )
+                                :
+                                null
+                            }
 
 
-           </View>
+            </View>
+          </ScrollView>
     </SafeAreaView>
   )
 }

@@ -18,6 +18,7 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import BuyingDemandDetailComponentGrid from './BuyingDemandDetailComponentGrid'
 import { useIsFocused } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 
 const ShoppingScreen = ({ navigation, route }) => {
@@ -315,16 +316,16 @@ const ShoppingScreen = ({ navigation, route }) => {
                       
                       <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
                       <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
-                        <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
+                        <Text style={{fontFamily: "Poppins-Medium", fontSize: wp(3.2), color: "#376AED" }}>
                           {t('Filtrer')}
                         </Text>
                         <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
                       </TouchableOpacity>
                         <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
-                          <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
+                          <Text style={{fontFamily: "Poppins-Medium", fontSize: wp(3.2), color: "#376AED" }}>
                             {t('Trier')}
                           </Text>
-                          <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
+                          <MaterialIcons name="arrow-drop-down" color="#376AED" size={wp(6)}/>
                         </TouchableOpacity>
                       </View>
 
@@ -333,22 +334,22 @@ const ShoppingScreen = ({ navigation, route }) => {
                                   activeFilter === 0 
                                   ?
                                   <TouchableOpacity onPress={() => setActiveFilter(1)}>
-                                      <Ionicons name="grid-outline" color="#00000033" size={25}/>
+                                      <Ionicons name="grid-outline" color="#00000033" size={wp(6)}/>
                                   </TouchableOpacity> 
                                   :
                                   <TouchableOpacity onPress={() => setActiveFilter(0)}>
-                                      <Ionicons name="grid-outline" color="#376AED" size={25}/>
+                                      <Ionicons name="grid-outline" color="#376AED" size={wp(6)}/>
                                   </TouchableOpacity> 
                                 }
                                 {
                                   activeFilter === 1 
                                   ?
                                   <TouchableOpacity onPress={() => setActiveFilter(0)}>
-                                      <Octicons name="list-unordered" color="#00000033" size={25}/>
+                                      <Octicons name="list-unordered" color="#00000033" size={wp(6)}/>
                                   </TouchableOpacity> 
                                   :
                                   <TouchableOpacity onPress={() => setActiveFilter(1)}>
-                                      <Octicons name="list-unordered" color="#376AED" size={25}/>
+                                      <Octicons name="list-unordered" color="#376AED" size={wp(6)}/>
                                   </TouchableOpacity> 
                                 }
                       </View>

@@ -19,11 +19,13 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.7,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: windowWidth * 0.07
   },
   inputCustomContainer: {
     // backgroundColor: 'tomato',
     width: windowWidth * 0.7,
-    height: windowHeight * 0.07,
+    // height: windowHeight * 0.09,
+    marginBottom: 15,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
@@ -40,6 +42,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'tomato',
     width: windowWidth * 0.7,
     height: windowHeight * 0.07,
+    marginTop: 10,
     alignSelf: 'center',
     justifyContent: 'space-around',
     flexDirection: 'row',
@@ -47,7 +50,7 @@ const styles = StyleSheet.create({
   },
   inputCountryCustomContainer: {
     width: windowWidth * 0.8,
-    marginTop: 10,
+    marginTop: 2,
   },
   inputCustom: {
     // backgroundColor: 'tomato',
@@ -57,6 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     fontFamily: 'Poppins-Regular',
     color: '#000',
+    height: 54,
     width: windowWidth * 0.8,
     marginBottom: 12,
     fontSize: 14,
@@ -113,7 +117,7 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: '#fff',
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 12,
     alignItems: 'center',
     gap: 5,
     color: '#000',
