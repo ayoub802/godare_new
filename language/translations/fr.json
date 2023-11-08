@@ -11,7 +11,7 @@
     "Disconnect": "Déconnexion",
     "conditon": "Condition générales",
     "mention": "Mentions légales",
-    "pay livraison": "Pays de livraison",
+    "pay livraison": "Pays de livraison", 
     "valider" : "Valider",
     "panier": "Panier vide",
     "fais douane" : "Frais de douane",
@@ -97,5 +97,15 @@
     "conditions générales d’utilisation" : "conditions générales d’utilisation",
     "Mes échanges précédents" : "Mes échanges précédents",
     "Voir tous les échanges" : "Voir tous les échanges",
-    "Information produit" : "Information produit"
+    "Information produit" : "Information produit",
+    "History" : "Histoire",
+    "Commande validée" : "Commande validée",
+    "Produits réceptionnés" : "Produits réceptionnés",
+    "Préparée" : "Préparée",
+    "Expédiée" : "Shipped",
+    "Commande livrée" : "Commande livrée",
+    "Colis livré" : "Colis livré",
+    "Suivre le colis" : "Suivre le colis",
+    "Voir le contenu" : "Voir le contenu",
+    "Éditer la facture" : "Éditer la facture"
 }

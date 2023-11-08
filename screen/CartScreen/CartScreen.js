@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  ActivityIndicator, 
+  ActivityIndicator,
+  Dimensions, 
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import styles from './styles';
@@ -36,6 +37,8 @@ import axiosInstance from '../../axiosInstance';
 import Button, { ButtonPrix } from '../../components/Button';
 import Stepper from '../Stepper';
 import { ScrollView } from 'react-native-virtualized-view';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const CartScreen = (props) => {
 
 
@@ -405,8 +408,8 @@ const CartScreen = (props) => {
     let totalPrice = prix * quantite;
 
     return (
-      <View style={{backgroundColor: "#fff", paddingHorizontal: 28 ,paddingVertical: 12, marginBottom: 16, borderRadius: 18}}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 20}}>
+      <View style={{backgroundColor: "#fff",paddingVertical: 12, marginBottom: 16, borderRadius: 18}}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 20, width: windowWidth * 0.85, alignSelf: "center"}}>
 
                 <View>
                  {
@@ -466,7 +469,7 @@ const CartScreen = (props) => {
 
                 </View>
               
-            </View>
+        </View>
    </View>
     );
   };
@@ -479,27 +482,12 @@ const CartScreen = (props) => {
 
     return (
       
-      <View style={{marginTop: 25, justifyContent: "center", alignItems: "center"}}>
+      <View style={{marginTop: 25, justifyContent: "center", alignItems: "center", width: windowWidth * 0.9, alignSelf: "center"}}>
 
         {'demandes-d-achat' != Service.code ?
           (
             <>
             <View style={{paddingHorizontal: 48}}>
-              {/* <View style={styles.secondContainer}>
-                <View style={styles.totalContainer}>
-                  <View>
-                    <TextInput
-                      style={styles.discountCodeInputStyle}
-                      placeholder={t('Code remise')}
-                      defaultValue={RemiseCode}
-                      onEndEditing={(item) => handleChangeRemise(item.nativeEvent.text)}
-                    />
-                  </View>
-                </View>
-                <View>
-                  <Text style={styles.priceText}>-{ prices.remiseTotal }€</Text>
-                </View>
-              </View> */}
 
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
                    <Text style={{color: "#000", fontSize: 15,fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>Sub Total:</Text>
@@ -508,6 +496,7 @@ const CartScreen = (props) => {
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13, backgroundColor: "#fff", borderRadius: 15}}>
                    <TextInput 
                      placeholder='FD248AK268'
+                     placeholderTextColor="#666"
                      style={{padding: 0, paddingLeft: 19, width: 200, color: "#000"}}
                    />
                    <Button title={t('Appliquer Coupon')} navigation={() => setCouponShow(!couponShow)}/>
@@ -539,9 +528,9 @@ const CartScreen = (props) => {
         }
         
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: 13, width: "100%", paddingHorizontal: 40}}>
-            <Text style={{fontSize: 18, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Montant total')} :</Text>
-            <Text style={{fontSize: 16, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: 13, width: windowWidth * 0.8,}}>
+            <Text style={{fontSize: wp(4.1), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Montant total')} :</Text>
+            <Text style={{fontSize: wp(3.8), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
               { prices.totalPrixAvecDouaneRemiseAvoir } €
             </Text>
         </View>

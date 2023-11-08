@@ -55,16 +55,34 @@ import AddStripeUserCard from '../screen/CreaditCard/AddUserStripe';
 import Signup from '../screen/Login/SignUp';
 import ConversationList from '../screen/Conversation/ConversationList';
 import ConversationDetails from '../screen/Conversation/ConversationDetails';
+import Splash from '../screen/Splash';
 
 
 const Home = createNativeStackNavigator();
 const Profile = createNativeStackNavigator();
 const Cart = createNativeStackNavigator();
 const Contact = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
+
 const AppNavigation = (props) => {
 
 
-  CartLenght = props.CartLenght;
+  return (
+    <NavigationContainer>
+    <StatusBar backgroundColor="#2BA6E9"/>
+      <Stack.Navigator initialRouteName='SplashScreen' screenOptions={{headerShown: false}}>
+        <Stack.Screen name='SplashScreen' component={Splash}/>
+        <Stack.Screen name='BottomTab' component={BottomTabNavigate}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+const Tab = createBottomTabNavigator();
+
+
+function BottomTabNavigate() {
+  
   const [user, setUser] = useState(null);
   const [Service, setService] = useState(null);
   const [Loader,setLoader] = useState(false);
@@ -219,205 +237,201 @@ const AppNavigation = (props) => {
 
   }, []);
 
-
+  console.log(CartProducts.length);
   return (
-    <NavigationContainer>
-    <StatusBar backgroundColor="#2BA6E9"/>
-        <Tab.Navigator
-        screenOptions={{
-          headerShown: false,
-          tabBarShowLabel: false,
-          tabBarStyle: {
-            position: 'absolute',
-            bottom: 0,
-            right: 0,
-            left: 0,
-            elevation: 0,
-            height: 53,
-            backgroundColor: '#2BA6E9',
-          },
-        }}
-         initialRouteName='Login'
-        >
-        <Tab.Screen
-        name='Home'
-          options={{
-            tabBarIcon: ({focused}) => {
-              return (
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <MaterialCommunityIcons
-                    name="home-outline"
-                    size={24}
-                    color={focused ? '#fff' : '#ffffffb3'}
-                  />
-                </View>
-              );
-            },
-          }}
-        >
-          {
-            () => (
-              <Home.Navigator screenOptions={{ headerShown: false}}>
-                <Home.Screen name="HomeScreen" component={HomeScreen} />
-                <Home.Screen name="PaysLivraison" component={PaysLivraison} />
-                <Home.Screen name="DepotScreen1" component={DepotScreen1} />
-                <Home.Screen name="DepotScreen2" component={DepotScreen2} />
-                <Home.Screen name="DepotScreen3" component={DepotScreen3} />
-                <Home.Screen name="Livraison1" component={Livraison1} />
-                <Home.Screen name="Livraison2" component={Livraison2} />
-                <Home.Screen name="AddCardScreen" component={AddCardScreen} />
-                <Home.Screen name="VerifyCardScreen" component={VerifyCardScreen} />
-                <Home.Screen name="CommandCours" component={CommandCours} />
-                <Home.Screen name="Login" component={LoginScreen} />
-                <Home.Screen name="SignUpScreen" component={SignUpScreen} />
-                <Home.Screen name="LoginShoppins" component={LoginShoppinScreen} />
-                <Home.Screen name="Signup" component={Signup} />
-                <Home.Screen name="ProductList" component={ProductList} />
-                <Home.Screen name="ShoppingScreen" component={ShoppingScreen} />
-                <Home.Screen name="CartScreen" component={CartScreen} />
-                <Home.Screen name="CheckoutScreen" component={CheckoutScreen} />
-                <Home.Screen name="ColiScreen" component={ColiSuivi} />
-                <Home.Screen name="VerifyCardChckoutScreen" component={VerifyCardChckoutScreen} />
-                <Home.Screen name="AddCardChckoutScreen" component={AddCardChekoutScreen} />
-                <Home.Screen name='AddAdresse' component={AddAdressScreen}/>
-                <Home.Screen name='PaymentMethod' component={PaymentMethods}/>
-                <Home.Screen name='PaymentDetail' component={PaymentDetails}/>
-                <Home.Screen name='PaymentWaveDetails' component={PaymentWaveDetails}/>
-                <Home.Screen name='SuccessFully' component={SuccessFullyRegOrder}/>
-              </Home.Navigator>
-            )
-          }
-        </Tab.Screen>
-        <Tab.Screen
-        name='Search'
-        component={Search}
-          options={{
-            tabBarIcon: ({focused}) => {
-              return (
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <MaterialIcons
-                    name="search"
-                    size={24}
-                    color={focused ? '#fff' : '#ffffffb3'}
-                  />
-                </View>
-              );
-            },
-          }}
-        >
-        </Tab.Screen>
-        <Tab.Screen
-        name='mailscreen'
-          options={{
-            tabBarIcon: ({focused}) => {
-              return (
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <Entypo
-                    name="mail"
-                    size={24}
-                    color={focused ? '#fff' : '#ffffffb3'}
-                  />
-                </View>
-              );
-            },
-          }}
-        >
-                    {
-            () => (
-              <Contact.Navigator screenOptions={{ headerShown: false}}>
 
-                  <Contact.Screen name='mail' component={MessageScreen}/>
-                  <Contact.Screen name='Conversation' component={ConversationList}/>
-                  <Contact.Screen name='ConversationDetails' component={ConversationDetails}/>
-
-              </Contact.Navigator>
-            )
-          }
-        </Tab.Screen>
-        <Tab.Screen
-        name='Cart'
-          options={{
-            tabBarIcon: ({focused}) => {
-              return (
-                <View style={{alignItems: 'center', justifyContent: 'center', position: "relative"}}>
-                  <SimpleLineIcons
-                    name="handbag"
-                    size={24}
-                    color={focused ? '#fff' : '#ffffffb3'}
-                  />
-                  <View style={{ position: "absolute", top: -5, right: -5, backgroundColor: '#F4951A', width: 20, height: 20, justifyContent: "center", alignItems: "center", borderRadius: 50}}>
-                    <Text style={{fontSize: 12, fontFamily: "Poppins-Medium", color: "#fff"}}>{CartLenght}</Text>
-                  </View>
-                </View>
-              );
-            },
-          }}
-        >
-          {
-            () => (
-              <Cart.Navigator screenOptions={{ headerShown: false}}>
+    <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarShowLabel: false,
+      tabBarStyle: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        left: 0,
+        elevation: 0,
+        height: 53,
+        backgroundColor: '#2BA6E9',
+      },
+    }}
+    initialRouteName='SplashScreen'
+    >
+    <Tab.Screen
+    name='Home'
+      options={{
+        tabBarIcon: ({focused}) => {
+          return (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <MaterialCommunityIcons
+                name="home-outline"
+                size={24}
+                color={focused ? '#fff' : '#ffffffb3'}
+              />
+            </View>
+          );
+        },
+      }}
+    >
+      {
+        () => (
+          <Home.Navigator screenOptions={{ headerShown: false}}>
+            <Home.Screen name="HomeScreen" component={HomeScreen} />
+            <Home.Screen name="PaysLivraison" component={PaysLivraison} />
+            <Home.Screen name="DepotScreen1" component={DepotScreen1} />
+            <Home.Screen name="DepotScreen2" component={DepotScreen2} />
+            <Home.Screen name="DepotScreen3" component={DepotScreen3} />
+            <Home.Screen name="Livraison1" component={Livraison1} />
+            <Home.Screen name="Livraison2" component={Livraison2} />
+            <Home.Screen name="AddCardScreen" component={AddCardScreen} />
+            <Home.Screen name="VerifyCardScreen" component={VerifyCardScreen} />
+            <Home.Screen name="CommandCours" component={CommandCours} />
+            <Home.Screen name="Login" component={LoginScreen} />
+            <Home.Screen name="SignUpScreen" component={SignUpScreen} />
+            <Home.Screen name="LoginShoppins" component={LoginShoppinScreen} />
+            <Home.Screen name="Signup" component={Signup} />
+            <Home.Screen name="ProductList" component={ProductList} />
+            <Home.Screen name="ShoppingScreen" component={ShoppingScreen} />
+            <Home.Screen name="CartScreen" component={CartScreen} />
+            <Home.Screen name="CheckoutScreen" component={CheckoutScreen} />
+            <Home.Screen name="ColiScreen" component={ColiSuivi} />
+            <Home.Screen name="VerifyCardChckoutScreen" component={VerifyCardChckoutScreen} />
+            <Home.Screen name="AddCardChckoutScreen" component={AddCardChekoutScreen} />
+            <Home.Screen name='AddAdresse' component={AddAdressScreen}/>
+            <Home.Screen name='PaymentMethod' component={PaymentMethods}/>
+            <Home.Screen name='PaymentDetail' component={PaymentDetails}/>
+            <Home.Screen name='PaymentWaveDetails' component={PaymentWaveDetails}/>
+            <Home.Screen name='SuccessFully' component={SuccessFullyRegOrder}/>
+          </Home.Navigator>
+        )
+      }
+    </Tab.Screen>
+    <Tab.Screen
+    name='Search'
+    component={Search}
+      options={{
+        tabBarIcon: ({focused}) => {
+          return (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <MaterialIcons
+                name="search"
+                size={24}
+                color={focused ? '#fff' : '#ffffffb3'}
+              />
+            </View>
+          );
+        },
+      }}
+    >
+    </Tab.Screen>
+    <Tab.Screen
+    name='mailscreen'
+      options={{
+        tabBarIcon: ({focused}) => {
+          return (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Entypo
+                name="mail"
+                size={24}
+                color={focused ? '#fff' : '#ffffffb3'}
+              />
+            </View>
+          );
+        },
+      }}
+    >
                 {
-                  user 
-                  ?
-                  <Cart.Screen name="CartBag" component={CartScreen}/>
-                  :
-                  <Cart.Screen name="Login" component={LoginScreen}/>
-                }
-              </Cart.Navigator>
-            )
-          }
-        </Tab.Screen>
-        <Tab.Screen
-        name='Profile'
-          options={{
-            tabBarIcon: ({focused}) => {
-              return (
-                <View style={{alignItems: 'center', justifyContent: 'center'}}>
-                  <Feather
-                    name="user"
-                    size={24}
-                    color={focused ? '#fff' : '#ffffffb3'}
-                  />
-                </View>
-              );
-            },
-          }}
-        >
-          {
-            () => (
-              <Profile.Navigator screenOptions={{ headerShown: false}}>
-                {
-                  user ? (
-                    <Profile.Screen name='ProfileScreen' component={ProfileScreen}/>
-                  )
-                  :
-                  (
-                    <Profile.Screen name='LoginScreen' component={LoginScreen}/>
-                  )
-                }
-                <Profile.Screen name='CartBancair' component={CartBancair}/>
-                <Profile.Screen name='EditProfile' component={EditProfile}/>
-                <Profile.Screen name='RemiseAvoir' component={RemiseAvoirScreen}/>
-                <Profile.Screen name='MessageScreen' component={MessageScreen}/>
-                <Profile.Screen name='LanguageScreen' component={LanguageScreen}/>
-                <Profile.Screen name='CommandeScreen' component={CommandScreen}/>
-                <Profile.Screen name='DetailCommandeScreen' component={CommandeDetail}/>
-                <Profile.Screen name='AdresseScreen' component={AdresseScreen}/>
-                <Profile.Screen name='AddAdresseScreen' component={AddAdressScreen}/>
-                <Profile.Screen name='TermsAndConditionsScreen' component={TermsConditions}/>
-                <Profile.Screen name='CreditCard' component={CreditCard}/>
-                <Profile.Screen name='AddStripeUserCard' component={AddStripeUserCard}/>
-                <Profile.Screen name='LegalNotice' component={LegalNotice}/>
-                <Profile.Screen name='Conversation' component={ConversationList}/>
-              </Profile.Navigator>
-            )
-          }
-        </Tab.Screen>
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
-};
+        () => (
+          <Contact.Navigator screenOptions={{ headerShown: false}}>
 
-const Tab = createBottomTabNavigator();
+              <Contact.Screen name='mail' component={MessageScreen}/>
+              <Contact.Screen name='Conversation' component={ConversationList}/>
+              <Contact.Screen name='ConversationDetails' component={ConversationDetails}/>
+
+          </Contact.Navigator>
+        )
+      }
+    </Tab.Screen>
+    <Tab.Screen
+    name='Cart'
+      options={{
+        tabBarIcon: ({focused}) => {
+          return (
+            <View style={{alignItems: 'center', justifyContent: 'center', position: "relative"}}>
+              <SimpleLineIcons
+                name="handbag"
+                size={24}
+                color={focused ? '#fff' : '#ffffffb3'}
+              />
+              <View style={{ position: "absolute", top: -5, right: -5, backgroundColor: '#F4951A', width: 20, height: 20, justifyContent: "center", alignItems: "center", borderRadius: 50}}>
+                <Text style={{fontSize: 12, fontFamily: "Poppins-Medium", color: "#fff"}}>{CartProducts.length}</Text>
+              </View>
+            </View>
+          );
+        },
+      }}
+    >
+      {
+        () => (
+          <Cart.Navigator screenOptions={{ headerShown: false}}>
+            {
+              user 
+              ?
+              <Cart.Screen name="CartBag" component={CartScreen}/>
+              :
+              <Cart.Screen name="Login" component={LoginScreen}/>
+            }
+          </Cart.Navigator>
+        )
+      }
+    </Tab.Screen>
+    <Tab.Screen
+    name='Profile'
+      options={{
+        tabBarIcon: ({focused}) => {
+          return (
+            <View style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Feather
+                name="user"
+                size={24}
+                color={focused ? '#fff' : '#ffffffb3'}
+              />
+            </View>
+          );
+        },
+      }}
+    >
+      {
+        () => (
+          <Profile.Navigator screenOptions={{ headerShown: false}}>
+            {
+              user ? (
+                <Profile.Screen name='ProfileScreen' component={ProfileScreen}/>
+              )
+              :
+              (
+                <Profile.Screen name='LoginScreen' component={LoginScreen}/>
+              )
+            }
+            <Profile.Screen name='CartBancair' component={CartBancair}/>
+            <Profile.Screen name='EditProfile' component={EditProfile}/>
+            <Profile.Screen name='RemiseAvoir' component={RemiseAvoirScreen}/>
+            <Profile.Screen name='MessageScreen' component={MessageScreen}/>
+            <Profile.Screen name='LanguageScreen' component={LanguageScreen}/>
+            <Profile.Screen name='CommandeScreen' component={CommandScreen}/>
+            <Profile.Screen name='DetailCommandeScreen' component={CommandeDetail}/>
+            <Profile.Screen name='AdresseScreen' component={AdresseScreen}/>
+            <Profile.Screen name='AddAdresseScreen' component={AddAdressScreen}/>
+            <Profile.Screen name='TermsAndConditionsScreen' component={TermsConditions}/>
+            <Profile.Screen name='CreditCard' component={CreditCard}/>
+            <Profile.Screen name='AddStripeUserCard' component={AddStripeUserCard}/>
+            <Profile.Screen name='LegalNotice' component={LegalNotice}/>
+            <Profile.Screen name='Conversation' component={ConversationList}/>
+          </Profile.Navigator>
+        )
+      }
+    </Tab.Screen>
+  </Tab.Navigator>
+  )
+}
 
 export default AppNavigation;
