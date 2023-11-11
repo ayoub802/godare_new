@@ -241,7 +241,7 @@ const RemiseAvoirScreen = () => {
             <Text
               style={{
                 fontFamily: 'Poppins-SemiBold',
-                fontSize: 16,
+                fontSize: windowWidth * 0.035,
                 color: '#000',
                 textAlign: 'center',
               }}>
@@ -268,9 +268,9 @@ const RemiseAvoirScreen = () => {
                     style={{
                       textTransform: 'capitalize',
                       color: '#000',
-                      fontSize: 13,
+                      fontSize: windowWidth * 0.028,
                       textAlign: 'center',
-                      fontFamily: 'Poppins-Medium',
+                      fontFamily: 'Poppins-SemiBold',
                     }}>
                     {item.title}
                   </Text>
@@ -300,7 +300,7 @@ const RemiseAvoirScreen = () => {
             <Text
               style={{
                 fontFamily: 'Poppins-SemiBold',
-                fontSize: 16,
+                fontSize: windowWidth * 0.035,
                 color: '#000',
                 textAlign: 'center',
               }}>
@@ -348,10 +348,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#EDEDF3",borderBottomWidth: 1, borderBottomColor: "#E2E2E2", opacity: 1
   },
   tableBodyText :{
-    color: "#000", fontFamily: "Poppins-Regular", fontSize: 12,
+    color: "#000", fontFamily: "Poppins-Regular", fontSize: windowWidth * 0.026,
   },
   tableHeaderTitle:{
-    fontSize: 12,
+    fontSize:  windowWidth * 0.027,
     fontFamily: "Poppins-SemiBold",
     color: "#000",
     textTransform: "capitalize",

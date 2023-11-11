@@ -34,10 +34,17 @@ const CartBancair = () => {
   
           const userEmail = await getAuthentificationData();
           setClientEmail(userEmail);
+          console.log(userEmail);
   
           const userCards = await getClientCards(userEmail);
   
-          setCards(userCards.data);
+          console.log(userCards);
+          if(userCards){
+            setCards(userCards.data);
+          }
+          else{
+            setCards([])
+          }
   
           setLoading(false);
         }
@@ -112,21 +119,45 @@ const CartBancair = () => {
       return (<View style={{justifyContent: 'center', height: '80%'}}><ActivityIndicator size={'large'} color="#3292E0" /></View>);
     }
 
-    console.log(Cards);
-  return (
-    <SafeAreaView style={{flex: 1}}>
-      <ScrollView>
+    if(!Cards){
+      return(
         <View style={{flex: 1}}>
-           <HeaderEarth />
+          <HeaderEarth />
+          <View style={{marginTop: 27}}>
+               <Text style={{fontSize: 16, fontFamily:'Poppins-SemiBold', color: '#000', textAlign: "center"}}>{t('Mes cartes enregistrées')}</Text>
+           </View>
+              <View style={{flex: 1 ,justifyContent: "center", alignItems:"center"}}>
+                <Text>{t("il n'y a pas des cartes enregistrées")}</Text>
+                  <View style={{ marginTop: 22, justifyContent: "center", alignItems: 'center', marginBottom: 30}}>
+                    <Button title={t("Ajouter une nouvelle carte")} navigation={() => navigation.navigate('AddCardScreen')}/>
+                </View>
+              </View>
+        </View>
+      )
+    }
 
+  return (
+    <View style={{flex: 1}}>
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+        <View style={{flex: 1, marginBottom: 50,}}>
+           <HeaderEarth />
+  
            <View style={{marginTop: 27}}>
-               <Text style={{fontSize: 16, fontFamily:'Poppins-SemiBold', color: '#000', textAlign: "center"}}>Mes cartes enregistrées</Text>
+               <Text style={{fontSize: 16, fontFamily:'Poppins-SemiBold', color: '#000', textAlign: "center"}}>{t('Mes cartes enregistrées')}</Text>
            </View>
 
+           {
+            Cards.length == 0 && (
+              <View style={{flex: 1 ,justifyContent: "center", alignItems:"center",marginTop: wp(50)}}>
+                <Text>{t("il n'y a pas des cartes enregistrées")}</Text>
+              </View>
+            )
+           } 
+ 
            {Cards.map((card, index) => (
                 <View style={{paddingHorizontal: 55, marginTop: 30}} key={index}>
                     <View style={{position: "relative"}}>
-                        <Image source={CartViolet} style={{width: wp(75), height: hp(20), objectFit: 'cover', borderRadius: 25}}/>
+                        <Image source={CartViolet} style={{width: wp(75), height: hp(22), objectFit: 'cover', borderRadius: 25}}/>
                         <View style={{ position: "absolute", top: 38, left: 30}}>
                                 <Text style={{color: "#fff", fontSize: 12, fontFamily: 'Poppins-Medium'}}>{card.card.brand}</Text>
                         </View>
@@ -149,40 +180,15 @@ const CartBancair = () => {
                         </View>
                     </View>
                 </View>
-           ))}
-{/* 
-           <View style={{paddingHorizontal: 55, marginTop: 20}}>
-               <View style={{position: "relative"}}>
-                   <Image source={CartGreen} style={{width: wp(75), height: hp(20), objectFit: 'cover', borderRadius: 25}}/>
-                   <View style={{ position: "absolute", top: 38, left: 30}}>
-                        <Text style={{color: "#fff", fontSize: 12, fontFamily: 'Poppins-Medium'}}>Credit Card</Text>
-                   </View>
-                   <View style={{ position: "absolute", top: 15, right: 15}}>
-                        <View style={{alignItems: "center", gap: 8}}>
-                            <TouchableOpacity>
-                                <MaterialCommunityIcons name="pencil-outline" size={18} color="#fff"/>
-                            </TouchableOpacity>
-                            <TouchableOpacity>
-                                <Feather name="trash-2" size={18} color="#fff"/>
-                            </TouchableOpacity>
-                        </View>
-                   </View>
+           ))} 
 
-                   <View style={{ position: "absolute", bottom: 18, left: 30}}>
-                        <Text style={{color: "#fff", fontSize: 14, fontFamily: 'Poppins-Medium'}}>**** **** **** 1234</Text>
-                   </View>
-                   <View style={{ position: "absolute", top: 68, right: 40}}>
-                      <Image source={MasterCard}/>
-                   </View>
-               </View>
-           </View> */}
-
-           <View style={{ marginTop: 22, justifyContent: "center", alignItems: 'center'}}>
-             <Button title="Ajouter une nouvelle carte" navigation={() => navigation.navigate('Login')}/>
+           <View style={{ marginTop: 22, justifyContent: "center", alignItems: 'center', marginBottom: 30}}>
+             <Button title={t("Ajouter une nouvelle carte")} navigation={() => navigation.navigate('AddCardScreen')}/>
            </View>
+
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   )
 }
 

@@ -78,7 +78,7 @@ const LoginScreen = (props) => {
           {
             // Aller sur la page d'accueil
             NavigateToMain();
-          }, 1500);
+          }, 200);
 
         })
         .catch(error => {

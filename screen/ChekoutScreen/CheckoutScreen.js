@@ -749,7 +749,7 @@ const CheckoutScreen = (props) => {
             />
           </View>
 
-          <View style={{marginTop: 13, paddingHorizontal: 12}}>
+          <View style={{marginTop: 1, paddingHorizontal: 12}}>
                   <Text style={{fontSize: 10, color: "#000"}}>*{t('Livraison 72h aprés la prise en charge')}</Text>
                 </View>
 

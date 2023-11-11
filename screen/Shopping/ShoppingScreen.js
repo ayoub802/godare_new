@@ -273,7 +273,7 @@ const ShoppingScreen = ({ navigation, route }) => {
               scrollEnabled
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.subTabbarScrollContainer}>
+              contentContainerStyle={styles.subTabbarScrollContainer}> 
 
               {Categories.map( (row) => (
                 <TouchableOpacity

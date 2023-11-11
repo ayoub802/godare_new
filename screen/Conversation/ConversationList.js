@@ -113,8 +113,8 @@ const ConversationList = ({ navigation }) => {
   return (
     <View style={{flex: 1}}>
         <HeaderEarth />
-                <ScrollView>
-          <View style={{flex: 1, position: "relative", paddingBottom: 10}}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{flex: 1, position: "relative", paddingBottom: windowWidth * 0.02}}>
               <View style={{marginVertical: 29}}>
                   <Text style={{textAlign: "center", fontFamily: "Poppins-SemiBold", fontSize: 16, color:"#000"}}>{t('Mes échanges précédents')}</Text>
               </View>
@@ -138,8 +138,8 @@ const ConversationList = ({ navigation }) => {
                                 <View style={{marginVertical: 29}}>
                                     <Text style={{textAlign: "center", fontFamily: "Poppins-SemiBold", fontSize: 16, color:"#000"}}> {t('Information produit')}</Text>
                                 </View>
-                                <View style={{backgroundColor: "#fff", marginBottom: 50 ,position: "relative" ,height: "100%", flex: 1,paddingTop: 22,borderTopRightRadius: 12, borderTopLeftRadius: 12}}>
-                                    <ScrollView style={{height: "80%",position: "relative", zIndex: -1000, marginBottom: 50}}>
+                                <View style={{backgroundColor: "#fff", marginBottom: windowWidth * 0.13,position: "relative" ,height: "100%", flex: 1,paddingTop: 22,borderTopRightRadius: 12, borderTopLeftRadius: 12}}>
+                                    <ScrollView style={{height: "100%",position: "relative", zIndex: -1000, marginBottom: 50}} showsVerticalScrollIndicator={false}>
                                         {conversation.messages.map(message => (
                                             <View key={message.id} style={{ margin: 10,position: "relative", zIndex: -10 }}>
                                                 <Text style={{fontSize: 12,textAlign: "center" ,fontFamily: "Poppins-Medium", color: "#AAB0B7"}}>{message.createdAt}</Text>
@@ -151,7 +151,7 @@ const ConversationList = ({ navigation }) => {
                                         
                                         ))}
                                     </ScrollView>
-                                        <View style={{flex: 1, justifyContent: "flex-start",alignSelf: "center",backgroundColor: "#fff"}}>
+                                        <View style={{flex: 1, justifyContent: "flex-start",alignSelf: "center",backgroundColor: "#fff",marginBottom: windowWidth * 0.05}}>
                                       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
                                             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                                               <View style={{width: windowWidth * 0.9,flexDirection: "row",alignItems: "center",borderWidth: 1,borderRadius: 8,borderColor: "#AAB0B7", paddingHorizontal: 10}}>
@@ -159,10 +159,11 @@ const ConversationList = ({ navigation }) => {
                                                       value={newMessage}
                                                       onChangeText={setNewMessage}
                                                       placeholder='Entrez votre message'
-                                                      style={{flex:1}}
+                                                      placeholderTextColor="#999"
+                                                      style={{flex:1, color: "#000"}}
                                                     />
                                                     <TouchableOpacity onPress={handleSendMessage}>
-                                                      <Icon name="paper-airplane" size={25}/>
+                                                      <Icon name="paper-airplane" size={25} color="#999"/>
                                                     </TouchableOpacity>
                                               </View>
                                             </TouchableWithoutFeedback>

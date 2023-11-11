@@ -10,7 +10,8 @@ import {
   StatusBar,
   Modal,
   Dimensions,
-  ScrollView
+  ScrollView,
+  ToastAndroid
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import PhoneInput from 'react-native-phone-number-input';
@@ -64,7 +65,7 @@ const Signup = props => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const [text, settext] = useState('12/10/1997');
+  const [text, settext] = useState('');
   const {t, i18n} = useTranslation();
   const {
     control,
@@ -110,27 +111,12 @@ const Signup = props => {
   };
   const NavigateToMain = () => {
     props.navigation.navigate('Login');
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [
-    //     {
-    //       name: 'Tab',
-    //       // params: {someParam: 'Param1'},
-    //     },
-    //   ],
-    // });
   };
   /* when user click on register it will trigger below function */
   const handleSignup = async () => {
     let Array = {Name:Name,FirstName: FirstName, Email:Email,DateOfBirth:date,Password:Password}
     console.log('Done from Handle Signup',phoneNumber,"Array is",Array);
     console.log("handleSignup",)
-   // const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-   // console.log("confirmation",confirmation)
-   // setConfirm(confirmation);
-    //navigateToOtp(phoneNumber,confirmation,Array);
-
-    
 
     try {
       await createUserWithEmailAndPassword(auth,Email, Password).then(() => {
@@ -141,11 +127,8 @@ const Signup = props => {
             console.log('Storage Error from Login Button :', error);
           }
           console.log('User account create & Signed in!');
-          Toast.show({
-            type: 'success',
-            text1: t('Connexion réussie'),
-            text2: t('Compte utilisateur créé et connecté !'),
-          });
+
+          ToastAndroid.show("Compte utilisateur créé et connecté !", ToastAndroid.SHORT)
 
           addDoc(collection(firebase_db, 'users'), {
             name: Name,
@@ -174,7 +157,7 @@ const Signup = props => {
           setTimeout(() => {
             // alert('Register!'),
       NavigateToMain()
-          }, 1500);
+          }, 500);
         })
         .catch(error => {
           if (error.code === 'auth/email-already-in-use') {
@@ -184,6 +167,8 @@ const Signup = props => {
               text1: 'Obtenez déjà',
               text2: t('Cette adresse email est déjà utilisée!'),
             });
+
+            ToastAndroid.show("Cette adresse email est déjà utilisée!", ToastAndroid.SHORT)
           }
           if (error.code === 'auth/invalid-email') {
             console.log('That email address is invalid!');
@@ -192,12 +177,14 @@ const Signup = props => {
               text1: t('Email invalide!'),
               text2: t("L'e-mail fourni n'est pas valide !"),
             });
+            ToastAndroid.show("L'e-mail fourni n'est pas valide !", ToastAndroid.SHORT)
           }
           Toast.show({
             type: 'error',
             text1: 'Caught Error',
             text2: `Error: ${error}`,
           });
+          ToastAndroid.show(`Error: ${error}`, ToastAndroid.SHORT)
         });
     } catch (err) {
       console.log(err);

@@ -40,7 +40,6 @@
     "Selectionner le magasin" : "Sélectionner le magasin",
     "Adresse d'enlèvement": "Adresse d'enlèvement",
     "Choisir une adresse existante" : "Choisir une adresse existante",
-    "(ou) Ajouter une nouvelle adresse" : "(ou) Ajouter une nouvelle adresse",
     "Ajouter une nouvelle adresse" : "Ajouter une nouvelle adresse",
     "Les coordonnées de destinataire de la commande" : "Les coordonnées de destinataire de la commande",
     "Nom de la personne à contacter": "Nom de la personne à contacter",
@@ -82,7 +81,7 @@
     "Créneau d’enlévement" : "Créneau d’enlévement",
     "Mode de paiement" : "Mode de paiement",
     "Enregistrer les détails de la carte" : "Enregistrer les détails de la carte",
-    "Valider le paiement" : "Valider le paiement",
+    "Payer maintenant" : "Payer maintenant",
     "Veuillez créer un compte" : "Veuillez créer un compte",
     "Civilite" : "Civilité",
     "Le nom est requis" : "Le nom est requis",
@@ -107,5 +106,9 @@
     "Colis livré" : "Colis livré",
     "Suivre le colis" : "Suivre le colis",
     "Voir le contenu" : "Voir le contenu",
-    "Éditer la facture" : "Éditer la facture"
+    "Éditer la facture" : "Éditer la facture",
+    "il n'y a pas des cartes enregistrées" : "il n'y a pas des cartes enregistrées",
+    "Ajouter une nouvelle carte" : "Ajouter une nouvelle carte",
+    "Mes cartes enregistrées" : "Mes cartes enregistrées",
+    "Pas de commandes" : "Pas des commandes"
 }

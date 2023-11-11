@@ -1,12 +1,14 @@
-import { View, Text, Touchable, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, Touchable, TouchableOpacity, Dimensions, Alert } from 'react-native'
 import React, { useState } from 'react'
 import StepIndicator from 'react-native-step-indicator';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const labels = ["Panier","Dépot","Livraison","Confirmation"];
+const {t, i18n} = useTranslation();
 
 const customStyles = {
     stepIndicatorSize: 30,
@@ -28,7 +30,7 @@ const customStyles = {
     stepIndicatorLabelFinishedColor: '#000',
     stepIndicatorLabelUnFinishedColor: '#000',
     labelColor: '#999999',
-    labelSize: windowWidth * 0.025,
+    labelSize: windowWidth * 0.024,
     currentStepLabelColor: '#000',
     labelFontFamily: "Poppins-Medium"
     

@@ -38,9 +38,9 @@ const styles = StyleSheet.create({
   },
   ButtonText: {
     marginLeft: '5%',
-    width: '78%',
+    width: '100%',
     color: "#AFAFAF",
-    fontSize: 15,
+    fontSize: windowWidth * 0.035,
     fontFamily: 'Poppins-Regular',
   },
   CountrySelect: {
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: windowWidth * 0.035,
     fontFamily: 'Poppins-Regular',
     color: '#14213D',
   },

@@ -1,4 +1,4 @@
-import { View, Text,ScrollView, Image, ActivityIndicator, Pressable, Modal, TextInput, TouchableOpacity, ToastAndroid } from 'react-native'
+import { View, Text,ScrollView, Image, ActivityIndicator, Pressable, Modal, TextInput, TouchableOpacity, ToastAndroid, Dimensions } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
 import {SafeAreaView} from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
@@ -20,7 +20,8 @@ import { Dropdown } from 'react-native-element-dropdown';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const DepotScreen1 = (props) => {
 
   var isFocused = useIsFocused();
@@ -545,8 +546,7 @@ const DepotScreen1 = (props) => {
                   onPress={() => {
                     NavigateToUserAddress();
                   }}>
-                  <Text style={styles.ButtonText}>{t('(ou) Ajouter une nouvelle adresse')}</Text>
-                  <Icon name="plus" size={23} color="#000" />
+                  <Text style={styles.ButtonText}>{t('Ajouter une nouvelle adresse')}</Text>
                 </TouchableOpacity>
                 </View>
 
@@ -564,7 +564,7 @@ const DepotScreen1 = (props) => {
                         layout="first"
                         placeholder={t('Nom de la personne à contacter')}
                         placeholderTextColor="#AFAFAF"
-                        style={{color: "#000", fontFamily:"Poppins-Regular", width: "100%"}}
+                        style={{color: "#000", fontFamily:"Poppins-Regular", width: "100%", fontSize: windowWidth * 0.031}}
                         value={NomContact}
                         onChangeText={text => {
                           setNomContact(text);

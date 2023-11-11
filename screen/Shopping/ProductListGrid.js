@@ -171,7 +171,7 @@ const ProductList = () => {
           text1: t('Quantité'),
           text2: "La quantité est obligatoire",
         });
-        ToastAndroid.show("La quantité est obligatoire",ToastAndroid.SHORT)
+        ToastAndroid.show("La quantité est obligatoire",ToastAndroid.SHORT) 
         return;
       }
 

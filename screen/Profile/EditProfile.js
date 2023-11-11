@@ -1,4 +1,4 @@
-import { View, Text,TextInput, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text,TextInput, TouchableOpacity, ScrollView, ActivityIndicator, StyleSheet, Dimensions } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { HeaderEarth } from '../../components/Header'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -16,7 +16,12 @@ import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/fire
 import { firebase_db } from '../../modules/FirebaseConfig'
 import { useIsFocused } from '@react-navigation/native'
 import DropDownPicker from 'react-native-dropdown-picker'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
+import { useTranslation } from 'react-i18next'
+import { format } from 'date-fns'
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 
 const EditProfile = ({ navigation }) => {
 
@@ -38,6 +43,7 @@ const EditProfile = ({ navigation }) => {
   const [selectValue, setSelectValue] = useState('');
   const phoneInput = useRef(null);
   const [civilite, setCivilite] = useState('') 
+  const {t, i18n} = useTranslation();
 
   const [RefValue, setRefValue] = useState('');
 
@@ -62,15 +68,30 @@ const EditProfile = ({ navigation }) => {
     setMode(currentMode);
   };
 
+  const onDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+
+    let tempDate = new Date(currentDate);
+    let fDate = `${tempDate.getDate()}/${
+      tempDate.getMonth() + 1
+    }/${tempDate.getFullYear()}`;
+
+    settext(fDate);
+    console.log(fDate);
+  };
+
   useEffect(() => {
     fetchValue();
-  }, []);
+  }, [isFocused]);
   
   async function fetchValue() {
     setInitializing(true)
     try{
       const userEmail = getAuth().currentUser;
-      const q = query(collection(firebase_db, "users"), where('email', '==', "hamid@gmail.com"))
+      console.log(userEmail);
+      const q = query(collection(firebase_db, "users"), where('email', '==', userEmail.email))
       const querySnapshot = await getDocs(q);
   
       querySnapshot.forEach((doc) => {
@@ -93,7 +114,19 @@ const EditProfile = ({ navigation }) => {
     setInitializing(false);
 }
 
+const formatDate = (inputDate) => {
+  // Parse the input date string
+  const parsedDate = new Date(inputDate);
 
+  // Format the date as per your desired output (MM/DD/YYYY)
+  const formattedDate = format(parsedDate, 'MM/dd/yyyy');
+
+  return formattedDate;
+};
+const inputDate = 'Wed Nov 08 2023 18:19:12 GMT+0100';
+const formattedDate = formatDate(inputDate);
+
+console.log("Date : is", formattedDate);
 
 async function updateUser(){
   try{
@@ -219,11 +252,39 @@ return (
                       />
                   </View>
                   <View style={{marginTop: 12}}>
-                      <TextInput 
+                      {/* <TextInput 
                         placeholder="04/10/1981"
                         placeholderTextColor="#000"
                         style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
-                      />
+                      /> */}
+                      <TouchableOpacity
+                                style={styles.inputCustomLogoContainer}
+                                activeOpacity={0.7}
+                                onPress={() => {
+                                    showMode('date');
+                                }}>
+                                <TextInput
+                                    placeholder={formatDate(getData.birthday)}
+                                    placeholderTextColor={'#000'}
+                                    keyboardType={'ascii-capable'}
+                                    style={styles.inputCustom}
+                                    value={text}
+                                    onChange={e => {
+                                    setText(e.nativeEvent.text.toString());
+                                    }}
+                                    onChangeText={onChange}
+                                    editable={false}
+                                />
+                                {show && (
+                                    <DateTimePicker
+                                    testID="DateTimePicker"
+                                    value={date}
+                                    mode={mode}
+                                    display={'default'}
+                                    onChange={onDateChange}
+                                    />
+                                )}
+                                </TouchableOpacity>
                   </View>
     
                   <View style={{marginTop: 50}}>
@@ -240,4 +301,32 @@ return (
       )
 }
 
+
+const styles = StyleSheet.create({
+  inputCustomLogoContainer: {
+    // backgroundColor: 'tomato',
+    width: windowWidth * 0.8,
+    height: windowHeight * 0.07,
+    marginTop: 10,
+    alignSelf: 'center',
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  inputCustom: {
+    // backgroundColor: 'tomato',
+    borderWidth: 1,
+    borderColor: '#AAB0B7',
+    paddingLeft: 15,
+    borderRadius: 8,
+    fontFamily: 'Poppins-Regular',
+    color: '#000',
+    height: 54,
+    width: windowWidth * 0.85,
+    marginBottom: 12,
+    fontSize: 14,
+    color: '#000',
+    backgroundColor: '#fff',
+  },
+})
 export default EditProfile

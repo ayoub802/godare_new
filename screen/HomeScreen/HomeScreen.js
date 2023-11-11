@@ -131,23 +131,23 @@ const HomeScreen = ({navigation}) => {
   if (Activity)
   {
     return (
-      <ScrollView>
+      <View style={{flex : 1}}>
          <HeaderEarth />
-        <View style={{justifyContent: 'center', flex: 1}}>
+        <View style={{justifyContent: 'center', alignItems: "center", flex: 1}}>
           <ActivityIndicator size="large" color="#3292E0" style={{}} />
         </View>
-      </ScrollView>
+      </View>
     );
   }
   if (loadLang == false)
   {
     return (
-      <ScrollView>
+      <View style={{flex : 1}}>
          <HeaderEarth />
-        <View style={{justifyContent: 'center', flex: 1}}>
+        <View style={{justifyContent: 'center', alignItems: "center", flex: 1}}>
           <ActivityIndicator size="large" color="#3292E0" style={{}} />
         </View>
-      </ScrollView>
+      </View>
     );
   }
 

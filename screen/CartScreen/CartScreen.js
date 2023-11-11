@@ -445,7 +445,7 @@ const CartScreen = (props) => {
                   </View>
                   <View style={{flexDirection: "row", alignItems: "center", gap: 12, marginTop: 12}}>
                     <ButtonPrix title={totalPrice}/>
-                      <View style={{flexDirection: "row", alignItems: "center", gap: 25, backgroundColor:"#EFEFEF", borderRadius: 18, paddingHorizontal: 19, paddingVertical: 5}}>
+                      <View style={{flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 25, backgroundColor:"#EFEFEF", borderRadius: 18, width: windowWidth * .35, paddingVertical: 5}}>
                         <TouchableOpacity
                           onPress={() => {
                             func(item, "decrement");
@@ -490,10 +490,10 @@ const CartScreen = (props) => {
             <View style={{paddingHorizontal: 48}}>
 
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                   <Text style={{color: "#000", fontSize: 15,fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>Sub Total:</Text>
-                   <Text style={{color: "#000", fontSize: 16,fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>{ prices.totalPrixAvecDouaneRemiseAvoir } €</Text>
+                   <Text style={{color: "#000", fontSize: wp(3.5),fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>Sub Total:</Text>
+                   <Text style={{color: "#000", fontSize: wp(3.4),fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>{ prices.totalPrixAvecDouaneRemiseAvoir } €</Text>
                 </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13, backgroundColor: "#fff", borderRadius: 15}}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: wp(4.5), backgroundColor: "#fff", borderRadius: 15}}>
                    <TextInput 
                      placeholder='FD248AK268'
                      placeholderTextColor="#666"
@@ -501,9 +501,9 @@ const CartScreen = (props) => {
                    />
                    <Button title={t('Appliquer Coupon')} navigation={() => setCouponShow(!couponShow)}/>
                 </View>
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13}}>
-                    <Text style={{color: "#000", fontSize: 15,fontFamily: "Poppins-Medium", letterSpacing: 0.3}}>{t('fais douane')}:</Text>
-                    <Text style={{color: "#000", fontSize: 16,fontFamily: "Poppins-Regular", letterSpacing: 0.3}}>{'ventes-privees' == Service.code ? t('Offert') : (prices.sommeFraisDouane + '€') }</Text>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: wp(8)}}>
+                    <Text style={{color: "#000", fontSize: wp(4.1),fontFamily: "Poppins-Medium", letterSpacing: 0.3}}>{t('fais douane')}:</Text>
+                    <Text style={{color: "#000", fontSize: wp(3.8),fontFamily: "Poppins-Regular", letterSpacing: 0.3}}>{'ventes-privees' == Service.code ? t('Offert') : (prices.sommeFraisDouane + '€') }</Text>
                 </View>
             </View>
             </>
@@ -528,15 +528,15 @@ const CartScreen = (props) => {
         }
         
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: 13, width: windowWidth * 0.8,}}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: wp(4), width: windowWidth * 0.8,}}>
             <Text style={{fontSize: wp(4.1), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Montant total')} :</Text>
             <Text style={{fontSize: wp(3.8), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
               { prices.totalPrixAvecDouaneRemiseAvoir } €
             </Text>
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center",marginTop: 15}}>
-                   <Button title="checkout" navigation={() => navigateToDepotMethod()} width={150}/>
+        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center",marginTop: wp(5.6)}}>
+                   <Button title="checkout" navigation={() => navigateToDepotMethod()} width={wp(45)}/>
           </View> 
       </View>
     );

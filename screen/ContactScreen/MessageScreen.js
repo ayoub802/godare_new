@@ -309,6 +309,7 @@ const MessageScreen = (props) => {
                       value={Name}
                       onChangeText={newText => setName(newText)} 
                       placeholder="Ehouman"
+                      placeholderTextColor="#AAB0B7"
                       keyboardType="ascii-capable"
                       style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
                       />
@@ -317,6 +318,7 @@ const MessageScreen = (props) => {
                       <TextInput
                       value={Email}
                       onChangeText={newText => setEmail(newText)} 
+                      placeholderTextColor="#AAB0B7"
                       placeholder="Email*"
                       style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
                       />
