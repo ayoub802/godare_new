@@ -1,18 +1,20 @@
-import { View, Text, TextInput, Alert, ToastAndroid, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, Alert, ToastAndroid, ActivityIndicator, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { HeaderEarth } from '../../components/Header'
 import Button from '../../components/Button'
 import DropDownPicker from 'react-native-dropdown-picker'
 import Textarea from 'react-native-textarea';
-import { ScrollView } from 'react-native-virtualized-view';
 import { getAuthUserEmail, getConversationMessagesObject, getPlatformLanguage, saveConversationMessagesObject } from '../../modules/GestionStorage'
 import axiosInstance from '../../axiosInstance'
 import styles from './styles'
 import { useTranslation } from 'react-i18next'
 import PhoneInput from 'react-native-phone-number-input'
-
-const MessageScreen = ({ navigation }) => {
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '../../modules/FirebaseConfig'
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const MessageScreen = (props) => {
     const [isOpen2, setIsOpen2] = useState(false);
     const [current2, setCurrent2] = useState();
     const {t, i18n} = useTranslation();
@@ -27,13 +29,20 @@ const MessageScreen = ({ navigation }) => {
     const [IsClient, setIsClient] = useState(false);
     const [ClientEmail, setClientEmail] = useState(null);
     const [Language, setLanguage] = useState('fr');
+    const [user, setUser] = useState(null);
+    const [conversations, setConversations] = useState([]);
 
     const navigateToConversationScreen = () => {
       // console.log('done');
-      props.navigation.navigate(Navigationstrings.ConversationList);
+      props.navigation.navigate("Conversation");
     };
   
-  
+    useEffect(() => {
+      onAuthStateChanged(auth, (user) => {
+        console.log('user', user);
+        setUser(user)
+      })
+    }, [])
   
     useEffect(() => {
   
@@ -42,15 +51,15 @@ const MessageScreen = ({ navigation }) => {
         setMessageObjectsLoader(true);
   
         const email = await getAuthUserEmail();
-        setClientEmail(email);
+        // setClientEmail(user);
   
   
-      // Language
+      // Language 
       const currentLanguage = await getPlatformLanguage();
       setLanguage(currentLanguage);
 
 
-        setIsClient(null === email ? false : true);
+        setIsClient(null === user ? false : true);
   
         let conversationMessagesObject = await getConversationMessagesObject();
         
@@ -77,7 +86,7 @@ const MessageScreen = ({ navigation }) => {
               });
   
               let messageObjects = [];
-              if (null === email)
+              if (null === user)
               {
                 messageObjects = objectNonClient;
               }
@@ -120,7 +129,7 @@ const MessageScreen = ({ navigation }) => {
           });
   
           let messageObjects = [];
-          if (null === email)
+          if (null === user)
           {
             messageObjects = objectNonClient;
           }
@@ -140,18 +149,30 @@ const MessageScreen = ({ navigation }) => {
       }
   
       fetchData();
+
+      fetchConversations();
   
     }, []);
   
+    const fetchConversations = async () => {
+      try {
+        const email = await getAuthUserEmail();
   
   
+        const response = await axiosInstance.get('conversations/clients/' + email);
+        setConversations(response.data);
+        console.log('response.data', response.data)
+      } catch (error) {
+        console.error('Erreur lors du chargement des conversations :', error);
+      }
+    };
   
     const navigateToCofirmSentScreen = () => {
   
       let conversation = {};
       let url = '/conversations/clients/create';
   
-      if (false === IsClient)
+      if (null === user)
       {
         if (Email === '')
         {
@@ -174,7 +195,7 @@ const MessageScreen = ({ navigation }) => {
       }
       else 
       {
-        conversation.email = ClientEmail;
+        conversation.email = user.email;
       }
   
   
@@ -215,11 +236,16 @@ const MessageScreen = ({ navigation }) => {
           ],
         );
       })
-      .catch(error => console.log('error contact', error.response));
+      .catch(error =>
+        {
+          console.log('error contact', error.response)
+          ToastAndroid.show("error contact sending", ToastAndroid.SHORT)
+        }
+      );
     };
   
    
-    if (true === MessageObjectsLoader)
+    if (true === MessageObjectsLoader )
     {
       return (
         <View style={{justifyContent: 'center', height: '80%'}}><ActivityIndicator size={'large'} color="#3292E0" /></View>
@@ -231,45 +257,96 @@ const MessageScreen = ({ navigation }) => {
       <ScrollView style={{marginBottom: 20, flex: 1}} showsVerticalScrollIndicator={false}>
         <View style={{flex: 1}}>
           <HeaderEarth />
-           <View style={{marginTop: 24, marginBottom: 12}}>
-                <Text
-                    style={{
-                    fontFamily: 'Poppins-SemiBold',
-                    fontSize: 16,
-                    color: '#000',
-                    textAlign: 'center',
-                    }}>
-                    {t('Envoyez un nouveau message')}
-                </Text>
-            </View>
 
             <View style={{paddingHorizontal: 28}}>  
-
-            <View style={{marginTop: 12}}>
-                <TextInput
-                value={Name}
-                onChangeText={newText => setName(newText)} 
-                placeholder="Ehouman"
-                keyboardType="ascii-capable"
-                style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
-                />
-            </View>
-            <View style={{marginTop: 12}}>
-                <TextInput
-                value={Email}
-                onChangeText={newText => setEmail(newText)} 
-                placeholder="Email*"
-                style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
-                />
-            </View>
-            <View style={{marginTop: 12}}>
-                <TextInput
-                value={phoneNumber}
-                onChangeText={newText => setphoneNumber(newText)} 
-                placeholder={t("Téléphone")}
-                style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
-                />
-            </View>
+ 
+                  {null != user ?
+                    (
+                      <>
+                      <View style={{marginTop: 24, marginBottom: 12}}>
+                        <Text
+                            style={{
+                            fontFamily: 'Poppins-SemiBold',
+                            fontSize: 16,
+                            color: '#000',
+                            textAlign: 'center',
+                            }}>
+                            {t('Mes échanges précédents')}
+                        </Text>
+                    </View>
+                    <View style={{backgroundColor: "#fff",borderRadius: 10,width: windowWidth * 0.85, alignSelf: "center"}}>
+                          {conversations.length > 0 && conversations.slice(0, 3).map((conversation) => (
+                              <View key={conversation.id} style={{paddingHorizontal: 15, paddingVertical: 20,borderBottomWidth: 1,borderBottomColor: "#E9E9E9" ,justifyContent: "space-between", flexDirection: "row"}}>
+                                      <Text style={{fontSize: 12,color: "#000", fontFamily: "Poppins-Regular", letterSpacing: 1}}>{conversation.subject}</Text> 
+                                      <Text style={{fontSize: 12,color: "#000", fontFamily: "Poppins-Regular", letterSpacing: 1}}>{conversation.createdAt}</Text>
+                              </View>
+                          ))}
+                      </View>
+                        <TouchableOpacity onPress={() => {navigateToConversationScreen()}} style={{justifyContent: "flex-end", width: "100%", alignItems: "flex-end", paddingTop: 5}}>
+                          <Text style={{fontSize: 14,fontFamily:'Roboto-Regular', color: "#2BA6E9"}}>{t('Voir tous les échanges')}</Text>
+                        </TouchableOpacity>
+                       </>
+                    )
+                    :
+                    <></>
+                 }
+                 <View style={{marginTop: 24, marginBottom: 12}}>
+                    <Text
+                        style={{
+                        fontFamily: 'Poppins-SemiBold',
+                        fontSize: 16,
+                        color: '#000',
+                        textAlign: 'center',
+                        }}>
+                        {t('Envoyez un nouveau message')}
+                    </Text>
+                </View>
+                 {null === user 
+                 ? 
+                 <>
+                  <View style={{marginTop: 12}}>
+                      <TextInput
+                      value={Name}
+                      onChangeText={newText => setName(newText)} 
+                      placeholder="Ehouman"
+                      placeholderTextColor="#AAB0B7"
+                      keyboardType="ascii-capable"
+                      style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{marginTop: 12}}>
+                      <TextInput
+                      value={Email}
+                      onChangeText={newText => setEmail(newText)} 
+                      placeholderTextColor="#AAB0B7"
+                      placeholder="Email*"
+                      style={{borderWidth: 1, borderColor: "#AAB0B7", paddingLeft: 15, borderRadius: 8,fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", backgroundColor: "#fff"}}
+                      />
+                  </View>
+                  <View style={{marginTop: 12}}>
+                      <PhoneInput
+                      defaultValue={phoneNumber}
+                      defaultCode="FR"
+                      layout="first"
+                      containerStyle={styles.phoneContainer}
+                      textContainerStyle={styles.textInput}
+                      codeTextStyle={styles.codeTextStyle}
+                      countryPickerButtonStyle={styles.countryPickerButtonStyle}
+                      textInputProps={{placeholderTextColor: '#BCB8B1'}}
+                      textInputStyle={styles.textInputStyle}
+                      onChangeFormattedText={text => {
+                        setphoneNumber(text);
+                      }}
+                      value={phoneNumber}
+                      placeholder={t("Téléphone")}
+                      style={{borderWidth: 1, borderColor: "#AAB0B7",fontFamily: "Poppins-Regular", fontSize: 14, color: "#000", paddingLeft: 15, borderRadius: 8, backgroundColor: "#fff"}}
+                      />
+                  </View>
+                
+                 </>
+                 :
+                 <></>
+                }
 
             <View style={{marginTop: 12}}>
                  <DropDownPicker
@@ -290,8 +367,8 @@ const MessageScreen = ({ navigation }) => {
 
              <View style={{ marginTop: 12}}>
                 <Textarea
-                containerStyle={{height: 180, backgroundColor: "#fff", borderWidth: 1, borderColor: "#AAB0B7", borderRadius: 8, paddingLeft: 10}}
-                style={{backgroundColor: "#fff",fontSize: 14,fontFamily: "Poppins-Regular"}}
+                containerStyle={{height: 180 ,backgroundColor: "#fff", borderWidth: 1, borderColor: "#AAB0B7", borderRadius: 8, paddingLeft: 10}}
+                style={{backgroundColor: "#fff",fontSize: 14 ,fontFamily: "Poppins-Regular", color: "#000"}}
                     maxLength={120}
                     value={Message}
                     placeholder={'Message'}

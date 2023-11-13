@@ -13,6 +13,7 @@ import { getSelectedService, saveSelectedCountry } from '../../modules/GestionSt
 import styles from './styles';
 import Flag from 'react-native-flags';
 import { useTranslation } from 'react-i18next';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 const PaysLivraison = ({navigation, route}) => {
   var isFocused = useIsFocused();
@@ -180,6 +181,8 @@ const PaysLivraison = ({navigation, route}) => {
       </View>
     )
   }
+
+  let size = 32
   return (
     <View >
       <HeaderEarth />
@@ -188,7 +191,7 @@ const PaysLivraison = ({navigation, route}) => {
       <Text
             style={{
               textAlign: 'center',
-              color: '#000',
+              color: '#0D253C',
               fontFamily: 'Roboto-Medium',
               fontSize: 16,
             }}>
@@ -213,37 +216,37 @@ const PaysLivraison = ({navigation, route}) => {
                               flexDirection: 'row',
                               alignItems: 'center',
                               justifyContent: 'space-between',
-                              gap: 30,
+                              gap: wp(4.5),
                             }} key={item.id}>
                             <View
-                              style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                              style={{flexDirection: 'row', alignItems: 'center', gap: 7}}>
                               <View>
-                                <Flag code={'FR'} size={32}/>
+                                <Flag code={'FR'} size={size}/>
                               </View>
                               <Text
                                 style={{
-                                  fontSize: 14,
+                                  fontSize: wp(3.4),
                                   color: '#000',
                                   fontFamily: 'Roboto-Medium',
                                 }}>
                                 {item.depart}
                               </Text>
-                              <Feather name="arrow-up-right" size={22} color="#000" />
+                              <Feather name="arrow-up-right" size={20} color="#000" />
                             </View>
                             <View
-                              style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
+                              style={{flexDirection: 'row', alignItems: 'center', gap: 7}}>
                               <View>
-                                <Flag code={item.drapeauDestination} size={32}/>
+                                <Flag code={item.drapeauDestination} size={size}/>
                               </View>
                               <Text
                                 style={{
-                                  fontSize: 14,
+                                  fontSize: wp(3.4),
                                   color: '#000',
                                   fontFamily: 'Roboto-Medium',
                                 }}>
                                 {item.destination}
                               </Text>
-                              <Feather name="arrow-down-right" size={22} color="#000" />
+                              <Feather name="arrow-down-right" size={20} color="#000" />
                             </View>
                           </View>
                         </>
@@ -261,12 +264,10 @@ const PaysLivraison = ({navigation, route}) => {
               dropDownContainerStyle={{
                 backgroundColor: '#fff',
                 borderColor: '#2BA6E9',
-                fontSize: 54,
               }}
               style={{
                 backgroundColor: '#fff',
                 borderColor: '#2BA6E9',
-                fontSize: 54,
               }}
               placeholder={t('pay livraison')}
               placeholderStyle={{

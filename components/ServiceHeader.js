@@ -13,7 +13,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nati
 import France from "../assets/images/france.png"
 import Feather from "react-native-vector-icons/Feather"
 import CoteIvoire from "../assets/images/cote_ivoire.png"
-import SmallEarth from "../assets/images/small_earth.png"
+import SmallEarth from "../assets/images/earth.png"
 import Flag from 'react-native-flags';
 
 const windowWidth = Dimensions.get('window').width;
@@ -48,7 +48,7 @@ const ServiceHeader = props => {
                 </View>
 
                 <View style={{ position: "absolute", top: 15, right: 10}}>
-                    <Image source={SmallEarth}/>
+                    <Image source={SmallEarth} style={{width: wp(7), height: wp(7)}}/>
                     <Text style={{ fontSize: 14, color: "#fff", fontFamily: "Roboto-Bold", textAlign: "center", marginTop: 4}}>GS</Text>
                 </View>
             </View>

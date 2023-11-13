@@ -1,6 +1,7 @@
 import {Dimensions, StyleSheet} from 'react-native';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+import { widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 
 const styles = StyleSheet.create({
   // container: {
@@ -39,10 +40,10 @@ const styles = StyleSheet.create({
   },
   serviceContainer: {
     backgroundColor: '#fff',
-    elevation: 1.8,
+    elevation: 1,
     width: windowWidth * 0.44,
     height: windowHeight * 0.28,
-    borderRadius: 12,    
+    borderRadius: 10,    
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingTop: 16,
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   textStylehead: {
-    fontSize: 14,
+    fontSize: wp(3.5),
     fontFamily: "Poppins-SemiBold", 
     textAlign: "center", 
     color: "#000",
@@ -65,10 +66,11 @@ const styles = StyleSheet.create({
   },
   textStyletail: {
     textAlign: "center", 
-    fontSize: 9, 
+    fontSize: wp(2.3), 
     fontFamily: "Poppins-Regular",
     // backgroundColor: 'tomato',
     width: windowWidth * 0.44,
+    color:"#000"
   },
   superContainer: {
     // backgroundColor: 'tomato',

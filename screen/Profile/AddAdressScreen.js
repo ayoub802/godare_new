@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Dimensions,
   StyleSheet,
+  ScrollView,
+  ToastAndroid
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/Feather';
@@ -15,7 +17,6 @@ const windowHeight = Dimensions.get('window').height;
 import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import PhoneInput from 'react-native-phone-number-input';
-import { ScrollView } from 'react-native-virtualized-view';
 import axiosInstance from '../../axiosInstance';
 import { HeaderEarth } from '../../components/Header';
 import Button from '../../components/Button';
@@ -74,6 +75,8 @@ const AddAdressScreen = (props) => {
           text2: t("La ville et l'adresse sont obligatoires !"),
         });
 
+        ToastAndroid.show("La ville et l'adresse sont obligatoires !",ToastAndroid.SHORT)
+
         console.log("La ville et l'adresse sont obligatoires !");
   
         return;
@@ -87,7 +90,7 @@ const AddAdressScreen = (props) => {
           text2: t("Le pays est obligatoire"),
         });
         console.log("Le pays est obligatoire");
-
+        ToastAndroid.show("Le pays est obligatoire",ToastAndroid.SHORT)
         return;
       }
       else 
@@ -99,6 +102,8 @@ const AddAdressScreen = (props) => {
             text1: 'Champs obligatoires',
             text2: t("Le pays est obligatoire !"),
           });
+
+          ToastAndroid.show("Le pays est obligatoire !",ToastAndroid.SHORT)
           console.log("Le pays est obligatoire !");
 
           return;
@@ -120,9 +125,9 @@ const AddAdressScreen = (props) => {
       })
       .then(function (response) {
         console.log('adresse add ', response.data)
+        ToastAndroid.show("Adresse ajoutée",ToastAndroid.SHORT)
   
         console.log("Adresse ajoutée");
-
         setStorageAndBackToPreviousPage(response.data);
       })
       .catch(function (error) {
@@ -139,7 +144,7 @@ const AddAdressScreen = (props) => {
       //     libelle: AdresseLibelle,
       //     nom: AdresseNom,
       //     telephone: AdresseTelephone,
-      //     pays: AdressePays,
+      //     pays: ('carnetAdresse' == pageFrom || 'summary' == pageFrom) ? AdressePays : Pays,
       //     ville: Ville,
       //     codePostal: CodePostal, 
       //     adresse: Adresse, 
@@ -149,6 +154,7 @@ const AddAdressScreen = (props) => {
       //   .then((response) => response.json())
       //   .then((responseData) => {
       //     console.log(JSON.stringify(responseData));
+      //     ToastAndroid.show("Adresse ajoutée",ToastAndroid.SHORT)
       //     console.log("Data Added");
       //     setStorageAndBackToPreviousPage(responseData);
       //   })
@@ -180,176 +186,209 @@ const AddAdressScreen = (props) => {
     <View>
       <HeaderEarth />
 
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{flex: 1,marginBottom: 150}}>
+              <View style={{marginTop: 30, marginBottom: 12}}>
+                    <Text
+                      style={{
+                        fontFamily: 'Poppins-SemiBold',
+                        fontSize: 16,
+                        color: '#000',
+                        textAlign: 'center',
+                      }}>
+                      Veuillez créer un address
+                    </Text>
+                  </View>
+                {('carnetAdresse' == pageFrom || 'summary' == pageFrom) ?
+                  (
+                    <View style={styles.inputContainer}>
+                      <TextInput
+                        placeholder={t('Pays')}
+                        value={AdressePays}
+                        style={{
+                          borderWidth: 1,
+                          borderColor: '#AAB0B7',
+                          fontFamily: 'Poppins-Regular',
+                          fontSize: 14,
+                          color: '#000',
+                          paddingLeft: 15,
+                          borderRadius: 8,
+                          backgroundColor: '#fff',
+                        }}
+                        placeholderTextColor="#B0B0C3"
+                        keyboardType="ascii-capable"
+                        keyboardAppearance={'default'}
+                        onChangeText={newText => setAdressePays(newText)}
+                      />
+                    </View>
+                  )
+                  :
+                  (
+                    <View style={styles.inputPaysContainer}>
+                      <Text>{paysDepartLivraison}</Text>
+                    </View>
+                  )
 
-      <View style={{marginTop: 30, marginBottom: 12}}>
-            <Text
-              style={{
-                fontFamily: 'Poppins-SemiBold',
-                fontSize: 16,
-                color: '#000',
-                textAlign: 'center',
-              }}>
-              Veuillez créer un address
-            </Text>
-          </View>
-        {('carnetAdresse' == pageFrom || 'summary' == pageFrom) ?
-          (
-            <View style={styles.inputContainer}>
-              <TextInput
-                placeholder={t('Pays')}
-                value={AdressePays}
-                style={{
-                  borderWidth: 1,
-                  borderColor: '#AAB0B7',
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: 14,
-                  color: '#000',
-                  paddingLeft: 15,
-                  borderRadius: 8,
-                  backgroundColor: '#fff',
-                }}
-                placeholderTextColor="#B0B0C3"
-                keyboardType="ascii-capable"
-                keyboardAppearance={'default'}
-                onChangeText={newText => setAdressePays(newText)}
-              />
-            </View>
-          )
-          :
-          (
-            <View style={styles.inputPaysContainer}>
-              <Text>{paysDepartLivraison}</Text>
-            </View>
-          )
+                }
+              
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    placeholder={t('Libellé')}
+                    value={AdresseLibelle}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: '#AAB0B7',
+                        fontFamily: 'Poppins-Regular',
+                        fontSize: 14,
+                        color: '#000',
+                        paddingLeft: 15,
+                        borderRadius: 8,
+                        backgroundColor: '#fff',
+                      }}
+                    placeholderTextColor="#B0B0C3"
+                    keyboardType="ascii-capable"
+                    keyboardAppearance={'default'}
+                    onChangeText={newText => setAdresseLibelle(newText)}
+                  />
+                </View>
 
-        }
-      
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder={t('Libellé')}
-            value={AdresseLibelle}
-            style={{
-                borderWidth: 1,
-                borderColor: '#AAB0B7',
-                fontFamily: 'Poppins-Regular',
-                fontSize: 14,
-                color: '#000',
-                paddingLeft: 15,
-                borderRadius: 8,
-                backgroundColor: '#fff',
-              }}
-            placeholderTextColor="#B0B0C3"
-            keyboardType="ascii-capable"
-            keyboardAppearance={'default'}
-            onChangeText={newText => setAdresseLibelle(newText)}
-          />
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    placeholder={t('Prénom Nom')}
+                    value={AdresseNom}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: '#AAB0B7',
+                        fontFamily: 'Poppins-Regular',
+                        fontSize: 14,
+                        color: '#000',
+                        paddingLeft: 15,
+                        borderRadius: 8,
+                        backgroundColor: '#fff',
+                      }}
+                    placeholderTextColor="#B0B0C3"
+                    keyboardType="ascii-capable"
+                    keyboardAppearance={'default'}
+                    onChangeText={newText => setAdresseNom(newText)}
+                  />
+                </View>
+
+                <View style={styles.inputContainer}>
+                <PhoneInput
+                    defaultValue={AdresseTelephone}
+                    defaultCode="FR"
+                    layout="first"
+                    placeholder={t('Téléphone')}
+                    containerStyle={{
+                      borderWidth: 1,
+                      borderColor: '#AAB0B7',
+                      flexDirection: 'row',
+                      borderRadius: 8,
+                      alignItems: 'center',
+                      color: '#000',
+                      backgroundColor: '#fff',
+                      height: 55
+                    }}
+                    textContainerStyle={{
+                      backgroundColor: 'transparent',
+                      padding: 0,
+                      color: '#000',
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: 14,
+                    }}
+                    countryPickerButtonStyle={styles.countryPickerButtonStyle}
+                    textInputProps={{placeholderTextColor: '#BCB8B1'}}
+                    textInputStyle={
+                      {
+                      height: 50,
+                      paddingLeft: 16,
+                      borderColor: '#AAB0B7',
+                      color: '#000',
+                      borderRadius: 8,
+                      backgroundColor: '#fff',
+                    }}
+                    flagButtonStyle={{
+                      backgroundColor: '#fff',
+                    }}
+                    value={AdresseTelephone}
+                    onChangeFormattedText={text => {
+                      setAdresseTelephone(text);
+                    }}
+                  />
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    placeholder={t('Code postal')}
+                    value={CodePostal}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: '#AAB0B7',
+                        fontFamily: 'Poppins-Regular',
+                        fontSize: 14,
+                        color: '#000',
+                        paddingLeft: 15,
+                        borderRadius: 8,
+                        backgroundColor: '#fff',
+                      }}
+                    placeholderTextColor="#B0B0C3"
+                    keyboardType="ascii-capable"
+                    keyboardAppearance={'default'}
+                    onChangeText={newText => setCodePostal(newText)}
+                  />
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    placeholder={t('Ville *')}
+                    value={Ville}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: '#AAB0B7',
+                        fontFamily: 'Poppins-Regular',
+                        fontSize: 14,
+                        color: '#000',
+                        paddingLeft: 15,
+                        borderRadius: 8,
+                        backgroundColor: '#fff',
+                      }}
+                    placeholderTextColor="#B0B0C3"
+                    keyboardType="ascii-capable"
+                    keyboardAppearance={'default'}
+                    onChangeText={newText => setVille(newText)}
+                  />
+                </View>
+
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    placeholder={t('Adresse *')}
+                    value={Adresse}
+                    style={{
+                        borderWidth: 1,
+                        borderColor: '#AAB0B7',
+                        fontFamily: 'Poppins-Regular',
+                        fontSize: 14,
+                        color: '#000',
+                        paddingLeft: 15,
+                        borderRadius: 8,
+                        backgroundColor: '#fff',
+                      }}
+                    placeholderTextColor="#B0B0C3"
+                    keyboardType="ascii-capable"
+                    keyboardAppearance={'default'}
+                    onChangeText={newText => setAdresse(newText)}
+                  />
+                </View>
+
+                <View style={{marginTop: 50, flex: 1, justifyContent: "center", alignItems: "center",}}>
+                    {/* <Button title={t("Ajouter l'adresse")} onPress={AddNewAddress}/> */}
+                    <TouchableOpacity style={{ paddingVertical: 8 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}} onPress={AddNewAddress}>
+                      <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>Ajouter Address</Text>
+                    </TouchableOpacity>
+                </View>
+
         </View>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder={t('Prénom Nom')}
-            value={AdresseNom}
-            style={{
-                borderWidth: 1,
-                borderColor: '#AAB0B7',
-                fontFamily: 'Poppins-Regular',
-                fontSize: 14,
-                color: '#000',
-                paddingLeft: 15,
-                borderRadius: 8,
-                backgroundColor: '#fff',
-              }}
-            placeholderTextColor="#B0B0C3"
-            keyboardType="ascii-capable"
-            keyboardAppearance={'default'}
-            onChangeText={newText => setAdresseNom(newText)}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-        <PhoneInput
-            defaultValue={AdresseTelephone}
-            defaultCode="FR"
-            layout="first"
-            placeholder={t('Téléphone')}
-            textInputProps={{placeholderTextColor: '#BCB8B1'}}
-            value={AdresseTelephone}
-            onChangeFormattedText={text => {
-              setAdresseTelephone(text);
-            }}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder={t('Code postal')}
-            value={CodePostal}
-            style={{
-                borderWidth: 1,
-                borderColor: '#AAB0B7',
-                fontFamily: 'Poppins-Regular',
-                fontSize: 14,
-                color: '#000',
-                paddingLeft: 15,
-                borderRadius: 8,
-                backgroundColor: '#fff',
-              }}
-            placeholderTextColor="#B0B0C3"
-            keyboardType="ascii-capable"
-            keyboardAppearance={'default'}
-            onChangeText={newText => setCodePostal(newText)}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder={t('Ville *')}
-            value={Ville}
-            style={{
-                borderWidth: 1,
-                borderColor: '#AAB0B7',
-                fontFamily: 'Poppins-Regular',
-                fontSize: 14,
-                color: '#000',
-                paddingLeft: 15,
-                borderRadius: 8,
-                backgroundColor: '#fff',
-              }}
-            placeholderTextColor="#B0B0C3"
-            keyboardType="ascii-capable"
-            keyboardAppearance={'default'}
-            onChangeText={newText => setVille(newText)}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            placeholder={t('Adresse *')}
-            value={Adresse}
-            style={{
-                borderWidth: 1,
-                borderColor: '#AAB0B7',
-                fontFamily: 'Poppins-Regular',
-                fontSize: 14,
-                color: '#000',
-                paddingLeft: 15,
-                borderRadius: 8,
-                backgroundColor: '#fff',
-              }}
-            placeholderTextColor="#B0B0C3"
-            keyboardType="ascii-capable"
-            keyboardAppearance={'default'}
-            onChangeText={newText => setAdresse(newText)}
-          />
-        </View>
-
-        <View style={{marginTop: 50, flex: 1, justifyContent: "center", alignItems: "center",}}>
-            {/* <Button title={t("Ajouter l'adresse")} onPress={AddNewAddress}/> */}
-            <TouchableOpacity style={{ paddingVertical: 8 ,paddingHorizontal: 22,flexDirection: "row", alignItems: "center",justifyContent: "center", backgroundColor: "#4E8FDA", borderRadius: 25}} onPress={AddNewAddress}>
-              <Text style={{fontFamily:"Poppins-Medium", fontSize: 12, color:"#fff"}}>Ajouter Address</Text>
-            </TouchableOpacity>
-        </View>
       </ScrollView>
 
       

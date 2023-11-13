@@ -18,6 +18,7 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import BuyingDemandDetailComponentGrid from './BuyingDemandDetailComponentGrid'
 import { useIsFocused } from '@react-navigation/native'
 import { useTranslation } from 'react-i18next'
+import { widthPercentageToDP as wp } from 'react-native-responsive-screen'
 
 
 const ShoppingScreen = ({ navigation, route }) => {
@@ -230,199 +231,175 @@ const ShoppingScreen = ({ navigation, route }) => {
       return (<View style={{justifyContent: 'center', height: '80%'}}><ActivityIndicator size={'large'} color="#3292E0" /></View>);
     }
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={{marginBottom: 85}}>
+    <View style={{flex: 1}}>
         <ServiceHeader 
           navigation={navigation}
           service={Service}
           paysLivraison={PaysLivraison}
           Language={Language}
         />
+        <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={false}>
+          <View style={{marginBottom: 85}}>
+          {/* {
+            Categories.length > 0 ? (
+              <View style={{marginTop: 20}}>
+                <ScrollView
+                  scrollEnabled
+                  horizontal={false}>
 
-        {/* {
-          Categories.length > 0 ? (
-            <View style={{marginTop: 20}}>
+                            <FlatList 
+                            horizontal
+                            style={{paddingLeft: 10}}
+                            showsHorizontalScrollIndicator={false}
+                            data={Categories}
+                            keyExtractor={item => item.id}
+                            renderItem={({item}) => (
+                              <TouchableOpacity onPress={() => setSelectedCategorieId(item.id)}  style={{ flexDirection: "row", alignItems: "center", gap: 12, width: 140}}>
+                                      <View>
+                                          <Image source={{ uri: item.image}} style={{width: 22, height: 22, objectFit: "cover"}}/>
+                                      </View>
+                                      <Text style={[SelectedCategorieId === item.id ? styles.textActive : styles.text, {fontFamily: "Poppins-Medium", fontSize: 12}]}>{item.name}</Text>
+                                  </TouchableOpacity>
+                                )}
+                            />
+                </ScrollView>
+              </View>
+            ) : (<></>)
+          } */}
+          
+          {Categories.length > 0 ? (
+            <View style={styles.subTabbarContainer}>
               <ScrollView
                 scrollEnabled
-                horizontal={false}>
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.subTabbarScrollContainer}> 
 
-                          <FlatList 
-                          horizontal
-                          style={{paddingLeft: 10}}
-                          showsHorizontalScrollIndicator={false}
-                          data={Categories}
-                          keyExtractor={item => item.id}
-                          renderItem={({item}) => (
-                            <TouchableOpacity onPress={() => setSelectedCategorieId(item.id)}  style={{ flexDirection: "row", alignItems: "center", gap: 12, width: 140}}>
-                                    <View>
-                                        <Image source={{ uri: item.image}} style={{width: 22, height: 22, objectFit: "cover"}}/>
-                                    </View>
-                                    <Text style={[SelectedCategorieId === item.id ? styles.textActive : styles.text, {fontFamily: "Poppins-Medium", fontSize: 12}]}>{item.name}</Text>
-                                </TouchableOpacity>
-                              )}
-                          />
+                {Categories.map( (row) => (
+                  <TouchableOpacity
+                      key={row.id}
+                      style={[
+                        styles.imageTextContainer
+                      ]}
+                      activeOpacity={0.5}
+                      onPress={() => {
+                        setSelectedCategorieId(row.id);
+                      }}>
+                      <View>
+                        <Image
+                          style={styles.iconStyler}
+                          source={{uri: row.image}}
+                          resizeMode="center"
+                        />
+                      </View>
+                      <Text style={[styles.subtabarTextStyle, SelectedCategorieId == row.id ? {color: "#376AED"} : {color: "#000"}]}>
+                        {'fr' == Language ? row.name : row.nameEn}
+                      </Text>
+                </TouchableOpacity>
+                ))}
+
               </ScrollView>
             </View>
           ) : (<></>)
-        } */}
-        
-        {Categories.length > 0 ? (
-          <View style={styles.subTabbarContainer}>
-            <ScrollView
-              scrollEnabled
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={styles.subTabbarScrollContainer}>
+        }
 
-              {Categories.map( (row) => (
-                <TouchableOpacity
-                    key={row.id}
-                    style={[
-                      styles.imageTextContainer
-                    ]}
-                    activeOpacity={0.5}
-                    onPress={() => {
-                      setSelectedCategorieId(row.id);
-                    }}>
-                    <View>
-                      <Image
-                        style={styles.iconStyler}
-                        source={{uri: row.image}}
-                        resizeMode="center"
-                      />
-                    </View>
-                    <Text style={[styles.subtabarTextStyle, SelectedCategorieId == row.id ? {color: "#376AED"} : {color: "#000"}]}>
-                      {'fr' == Language ? row.name : row.nameEn}
-                    </Text>
-              </TouchableOpacity>
-              ))}
+          {
+            <>
 
-            </ScrollView>
-          </View>
-        ) : (<></>)
-      }
-
-        {
-          <>
-
-            {true === ActivityIndicatorProduct ?
-              <ActivityIndicator size={'large'} color={'#000'} />
-              :
-              (
-                <>
-                  <View style={{marginTop: 10, paddingHorizontal: 5}}>
-                    <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center",borderTopLeftRadius: 28, borderTopRightRadius: 28 ,backgroundColor: "#fff", paddingVertical: 27, paddingLeft: 15, paddingRight: 23}}>
-                      
-                      <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
-                      <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
-                        <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
-                          {t('Filtrer')}
-                        </Text>
-                        <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
-                      </TouchableOpacity>
+              {true === ActivityIndicatorProduct ?
+                <ActivityIndicator size={'large'} color={'#000'} />
+                :
+                (
+                  <>
+                    <View style={{marginTop: 10, paddingHorizontal: 5}}>
+                      <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center",borderTopLeftRadius: 28, borderTopRightRadius: 28 ,backgroundColor: "#fff", paddingVertical: 27, paddingLeft: 15, paddingRight: 23}}>
+                        
+                        <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
                         <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
-                          <Text style={{fontFamily: "Poppins-Medium", fontSize: 13, color: "#376AED" }}>
-                            {t('Trier')}
+                          <Text style={{fontFamily: "Poppins-Medium", fontSize: wp(3.2), color: "#376AED" }}>
+                            {t('Filtrer')}
                           </Text>
                           <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
                         </TouchableOpacity>
-                      </View>
+                          <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
+                            <Text style={{fontFamily: "Poppins-Medium", fontSize: wp(3.2), color: "#376AED" }}>
+                              {t('Trier')}
+                            </Text>
+                            <MaterialIcons name="arrow-drop-down" color="#376AED" size={wp(6)}/>
+                          </TouchableOpacity>
+                        </View>
 
-                      <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
-                      {
-                                  activeFilter === 0 
-                                  ?
-                                  <TouchableOpacity onPress={() => setActiveFilter(1)}>
-                                      <Ionicons name="grid-outline" color="#00000033" size={25}/>
-                                  </TouchableOpacity> 
-                                  :
-                                  <TouchableOpacity onPress={() => setActiveFilter(0)}>
-                                      <Ionicons name="grid-outline" color="#376AED" size={25}/>
-                                  </TouchableOpacity> 
-                                }
-                                {
-                                  activeFilter === 1 
-                                  ?
-                                  <TouchableOpacity onPress={() => setActiveFilter(0)}>
-                                      <Octicons name="list-unordered" color="#00000033" size={25}/>
-                                  </TouchableOpacity> 
-                                  :
-                                  <TouchableOpacity onPress={() => setActiveFilter(1)}>
-                                      <Octicons name="list-unordered" color="#376AED" size={25}/>
-                                  </TouchableOpacity> 
-                                }
-                      </View>
+                        <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
+                        {
+                                    activeFilter === 0 
+                                    ?
+                                    <TouchableOpacity onPress={() => setActiveFilter(1)}>
+                                        <Ionicons name="grid-outline" color="#00000033" size={wp(6)}/>
+                                    </TouchableOpacity> 
+                                    :
+                                    <TouchableOpacity onPress={() => setActiveFilter(0)}>
+                                        <Ionicons name="grid-outline" color="#376AED" size={wp(6)}/>
+                                    </TouchableOpacity> 
+                                  }
+                                  {
+                                    activeFilter === 1 
+                                    ?
+                                    <TouchableOpacity onPress={() => setActiveFilter(0)}>
+                                        <Octicons name="list-unordered" color="#00000033" size={wp(6)}/>
+                                    </TouchableOpacity> 
+                                    :
+                                    <TouchableOpacity onPress={() => setActiveFilter(1)}>
+                                        <Octicons name="list-unordered" color="#376AED" size={wp(6)}/>
+                                    </TouchableOpacity> 
+                                  }
+                        </View>
 
-                      
+                        
+                      </View>
                     </View>
-                  </View>
 
-                  {'fret-par-avion' == Service.code ? (
-                    <>
-                    {
-                      activeFilter === 0 
-                      ?
-                    <FlatList
-                      showsVerticalScrollIndicator={false}
+                    {'fret-par-avion' == Service.code ? (
+                      <>
+                      {
+                        activeFilter === 0 
+                        ?
+                      <FlatList
+                        showsVerticalScrollIndicator={false}
+                        data={products}
+                        renderItem={renderByPlaneItem}
+                        keyExtractor={item => item.id}
+                      />
+                      :
+                    //   <FlatList
+                    //   key={'#'}
+                    //   showsVerticalScrollIndicator={false}
+                    //   data={products}
+                    //   renderItem={renderByPlaneGridItem}
+                    //   keyExtractor={item => "#" + item.id}
+                    //   numColumns={2}
+                    // />
+                    <MasonryList
                       data={products}
-                      renderItem={renderByPlaneItem}
-                      keyExtractor={item => item.id}
+                      keyExtractor={(item)=> item.id}
+                      numColumns={2}
+                      showsVerticalScrollIndicator={false}
+                      renderItem={renderByPlaneGridItem}
+                      onEndReachedThreshold={0.1}
                     />
-                    :
-                  //   <FlatList
-                  //   key={'#'}
-                  //   showsVerticalScrollIndicator={false}
-                  //   data={products}
-                  //   renderItem={renderByPlaneGridItem}
-                  //   keyExtractor={item => "#" + item.id}
-                  //   numColumns={2}
-                  // />
-                  <MasonryList
-                    data={products}
-                    keyExtractor={(item)=> item.id}
-                    numColumns={2}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={renderByPlaneGridItem}
-                    onEndReachedThreshold={0.1}
-                  />
-                    }
+                      }
 
-                    </>
-                  ) : null}
+                      </>
+                    ) : null}
 
-                  {'fret-par-bateau' == Service.code  ? (
-                    <>
-                     {
-                       activeFilter === 0 
-                       ?
-                       <FlatList
-                         showsVerticalScrollIndicator={false}
-                         data={products}
-                         renderItem={renderByPlaneItem}
-                         keyExtractor={item => item.id}
-                       />
-                       :
-                       <MasonryList
-                       data={products}
-                       keyExtractor={(item)=> item.id}
-                       numColumns={2}
-                       showsVerticalScrollIndicator={false}
-                       renderItem={renderByPlaneGridItem}
-                       onEndReachedThreshold={0.1}
-                     />
-                     }
-                    </>
-                  ) : null}
-
-                  {'demandes-d-achat' == Service.code   ? (
-                    <>
-                    {
+                    {'fret-par-bateau' == Service.code  ? (
+                      <>
+                      {
                         activeFilter === 0 
                         ?
                         <FlatList
                           showsVerticalScrollIndicator={false}
                           data={products}
-                          renderItem={renderDemandItem}
+                          renderItem={renderByPlaneItem}
                           keyExtractor={item => item.id}
                         />
                         :
@@ -431,33 +408,58 @@ const ShoppingScreen = ({ navigation, route }) => {
                         keyExtractor={(item)=> item.id}
                         numColumns={2}
                         showsVerticalScrollIndicator={false}
-                        renderItem={renderDemandItemGrid}
+                        renderItem={renderByPlaneGridItem}
                         onEndReachedThreshold={0.1}
                       />
-                    }
-                    </>
-                  ) : null}
+                      }
+                      </>
+                    ) : null}
 
-                  {'ventes-privees' == Service.code  ? (
-                    <FlatList
-                    showsVerticalScrollIndicator={false}
-                    data={CategoriesProducts}
-                    renderItem={renderPrivateSaleItem}
-                    keyExtractor={item => item.id}
-                  />
-                  ) 
-                  
-                  : null}
-                </>
-              )
-            }
+                    {'demandes-d-achat' == Service.code   ? (
+                      <>
+                      {
+                          activeFilter === 0 
+                          ?
+                          <FlatList
+                            showsVerticalScrollIndicator={false}
+                            data={products}
+                            renderItem={renderDemandItem}
+                            keyExtractor={item => item.id}
+                          />
+                          :
+                          <MasonryList
+                          data={products}
+                          keyExtractor={(item)=> item.id}
+                          numColumns={2}
+                          showsVerticalScrollIndicator={false}
+                          renderItem={renderDemandItemGrid}
+                          onEndReachedThreshold={0.1}
+                        />
+                      }
+                      </>
+                    ) : null}
 
-            
+                    {'ventes-privees' == Service.code  ? (
+                      <FlatList
+                      showsVerticalScrollIndicator={false}
+                      data={CategoriesProducts}
+                      renderItem={renderPrivateSaleItem}
+                      keyExtractor={item => item.id}
+                    />
+                    ) 
+                    
+                    : null}
+                  </>
+                )
+              }
 
-          </>
-        }
-      </View>
-    </ScrollView>
+              
+
+            </>
+          }
+          </View>
+        </ScrollView>
+    </View>
   )
 }
 

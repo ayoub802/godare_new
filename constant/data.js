@@ -249,8 +249,9 @@ export const card_category = [
         id: 1,
         title: "",
         titledisplay: "none",
-        img: <Octicons name="credit-card" size={25} color="#000"/>,
-        imgActive: <Octicons name="credit-card" size={25} color="#fff"/>
+        img: <Octicons name="credit-card" size={35} color="#000"/>,
+        imgActive: <Octicons name="credit-card" size={35} color="#fff"/>,
+        paddingHorrizontal: 40
     },
     {
         id: 2,
@@ -258,7 +259,8 @@ export const card_category = [
         titledisplay: "none",
         imgDisplay: "flex",
         img: <Image source={Waveimg}/>,
-        imgActive: <Image source={Waveimg}/>
+        imgActive: <Image source={Waveimg}/>,
+        paddingHorrizontal: 18
 
     },
     {
@@ -267,7 +269,17 @@ export const card_category = [
         titledisplay: "flex",
         imgDisplay: "none",
         img: <Image source={Waveimg}/>,
-        imgActive: <Image source={Waveimg}/>
+        imgActive: <Image source={Waveimg}/>,
+        paddingHorrizontal: 22
+    },
+    {
+        id: 3,
+        title: "Payer au Livraison",
+        titledisplay: "flex",
+        imgDisplay: "none",
+        img: <Image source={Waveimg}/>,
+        imgActive: <Image source={Waveimg}/>,
+        paddingHorrizontal: 22
     },
 ] 
 

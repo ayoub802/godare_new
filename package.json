@@ -26,6 +26,7 @@
     "@stripe/stripe-react-native": "^0.33.0",
     "axios": "^1.5.1",
     "calendars": "^0.0.1-alpha",
+    "date-fns": "^2.30.0",
     "expo-checkbox": "^2.5.0",
     "firebase": "^10.5.0",
     "i18next": "^23.6.0",

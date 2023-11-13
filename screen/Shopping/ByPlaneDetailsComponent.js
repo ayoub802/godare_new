@@ -153,6 +153,8 @@ const ByPlaneDetailsComponent = (props) => {
     });
   };
 
+  console.log("Image picker :", userImage);
+
 
     openModal = () => {
       setModalVisiblePhoto(true);;

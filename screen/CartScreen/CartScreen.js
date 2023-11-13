@@ -7,7 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
-  ActivityIndicator, 
+  ActivityIndicator,
+  Dimensions, 
+  ScrollView
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import styles from './styles';
@@ -35,7 +37,8 @@ import { HeaderEarth } from '../../components/Header';
 import axiosInstance from '../../axiosInstance';
 import Button, { ButtonPrix } from '../../components/Button';
 import Stepper from '../Stepper';
-import { ScrollView } from 'react-native-virtualized-view';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 const CartScreen = (props) => {
 
 
@@ -405,8 +408,8 @@ const CartScreen = (props) => {
     let totalPrice = prix * quantite;
 
     return (
-      <View style={{backgroundColor: "#fff", paddingHorizontal: 28 ,paddingVertical: 12, marginBottom: 16, borderRadius: 18}}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 20}}>
+      <View style={{backgroundColor: "#fff",paddingVertical: 12, marginBottom: 16, borderRadius: 18}}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 20, width: windowWidth * 0.85, alignSelf: "center"}}>
 
                 <View>
                  {
@@ -442,7 +445,7 @@ const CartScreen = (props) => {
                   </View>
                   <View style={{flexDirection: "row", alignItems: "center", gap: 12, marginTop: 12}}>
                     <ButtonPrix title={totalPrice}/>
-                      <View style={{flexDirection: "row", alignItems: "center", gap: 25, backgroundColor:"#EFEFEF", borderRadius: 18, paddingHorizontal: 19, paddingVertical: 5}}>
+                      <View style={{flexDirection: "row", alignItems: "center",justifyContent: "center" ,gap: 25, backgroundColor:"#EFEFEF", borderRadius: 18, width: windowWidth * .35, paddingVertical: 5}}>
                         <TouchableOpacity
                           onPress={() => {
                             func(item, "decrement");
@@ -466,7 +469,7 @@ const CartScreen = (props) => {
 
                 </View>
               
-            </View>
+        </View>
    </View>
     );
   };
@@ -476,46 +479,72 @@ const CartScreen = (props) => {
   const RenderTotal = ({data, type}) => {
 
     let prices = calculProductPrices(data, RemiseValue, RemiseProduct);
+    console.log("Prices :", prices);
 
     return (
       
-      <View style={{marginTop: 25, justifyContent: "center", alignItems: "center"}}>
+      <View style={{marginTop: 25, justifyContent: "center", alignItems: "center", width: windowWidth * 0.9, alignSelf: "center"}}>
 
         {'demandes-d-achat' != Service.code ?
           (
             <>
             <View style={{paddingHorizontal: 48}}>
-              {/* <View style={styles.secondContainer}>
-                <View style={styles.totalContainer}>
-                  <View>
-                    <TextInput
-                      style={styles.discountCodeInputStyle}
-                      placeholder={t('Code remise')}
-                      defaultValue={RemiseCode}
-                      onEndEditing={(item) => handleChangeRemise(item.nativeEvent.text)}
-                    />
-                  </View>
-                </View>
-                <View>
-                  <Text style={styles.priceText}>-{ prices.remiseTotal }€</Text>
-                </View>
-              </View> */}
 
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
-                   <Text style={{color: "#000", fontSize: 15,fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>Sub Total:</Text>
-                   <Text style={{color: "#000", fontSize: 16,fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>{ prices.totalPrixAvecDouaneRemiseAvoir } €</Text>
+                   <Text style={{color: "#000", fontSize: wp(3.5),fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>Sub Total:</Text>
+                   <Text style={{color: "#000", fontSize: wp(3.4),fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>{ prices.totalPrix.toFixed(2) } €</Text>
                 </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13, backgroundColor: "#fff", borderRadius: 15}}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: wp(1)}}>
+                    <Text style={{color: "#000", fontSize: wp(3.5),fontFamily: "Poppins-Medium", letterSpacing: 0.3}}>{t('fais douane')}:</Text>
+                    <Text style={{color: "#000", fontSize: wp(3.4),fontFamily: "Poppins-Regular", letterSpacing: 0.3}}>{'ventes-privees' == Service.code ? t('Offert') : (prices.sommeFraisDouane + '€') }</Text>
+                </View>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: wp(4.5), backgroundColor: "#fff", borderRadius: 15}}>
                    <TextInput 
-                     placeholder='FD248AK268'
+                     placeholder={t('Saisir le code')}
+                     placeholderTextColor="#666"
+                     value={RemiseCode}
+                     onChangeText={remisetext => setRemiseCode(remisetext)}
+                    // defaultValue={RemiseCode}
+                    // onEndEditing={(item) => handleChangeRemise(item.nativeEvent.text)}
                      style={{padding: 0, paddingLeft: 19, width: 200, color: "#000"}}
                    />
-                   <Button title={t('Appliquer Coupon')} navigation={() => setCouponShow(!couponShow)}/>
+                   <Button title={t('Appliquer remise')} navigation={() => {handleChangeRemise(RemiseCode); setCouponShow(!couponShow)}}/>
                 </View>
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 13}}>
-                    <Text style={{color: "#000", fontSize: 15,fontFamily: "Poppins-Medium", letterSpacing: 0.3}}>{t('fais douane')}:</Text>
-                    <Text style={{color: "#000", fontSize: 16,fontFamily: "Poppins-Regular", letterSpacing: 0.3}}>{'ventes-privees' == Service.code ? t('Offert') : (prices.sommeFraisDouane + '€') }</Text>
-                </View>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: wp(4), width: windowWidth * 0.8,}}>
+                  <Text style={{fontSize: wp(4.1), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Montant total')} :</Text>
+                  <Text style={{fontSize: wp(3.8), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
+                    { prices.totalPrix.toFixed(2) } €
+                  </Text>
+              </View>
+                <View style={!couponShow ? {display: "none"} : {display: "flex"} }>
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",paddingHorizontal: 10, paddingVertical: 4 ,marginTop: 13, backgroundColor: "#fff", borderRadius: 15}}>
+                      <View style={{flexDirection: "row", alignItems: "center", gap: 13}}>
+                          <Text style={{fontSize: 12, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
+                            {RemiseCode}
+                          </Text>
+                          {/* <TouchableOpacity>
+                            <Feather name="edit" color='#000' size={15}/>
+                          </TouchableOpacity>
+                          <TouchableOpacity>
+                            <Feather name="trash-2" color='#E10303' size={15}/>
+                          </TouchableOpacity> */}
+                      </View>
+
+                      <Text style={{fontSize: 12, fontFamily: "Poppins-Regular", color: "#01962A", letterSpacing: 0.3}}>
+                        coupon appliqué
+                      </Text>
+                    </View>
+
+                    <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: 5}}>
+                          <Text style={{fontSize: 12, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>
+                            coupon appliqué
+                          </Text>
+
+                      <Text style={{fontSize: 12, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
+                          {prices.remiseTotal}€
+                      </Text>
+                    </View>
+                 </View>
             </View>
             </>
           )
@@ -539,15 +568,15 @@ const CartScreen = (props) => {
         }
         
 
-        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: 13, width: "100%", paddingHorizontal: 40}}>
-            <Text style={{fontSize: 18, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Montant total')} :</Text>
-            <Text style={{fontSize: 16, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: wp(4), width: windowWidth * 0.8,}}>
+            <Text style={{fontSize: wp(4.1), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Total')} :</Text>
+            <Text style={{fontSize: wp(3.8), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
               { prices.totalPrixAvecDouaneRemiseAvoir } €
             </Text>
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center",marginTop: 15}}>
-                   <Button title="checkout" navigation={() => navigateToDepotMethod()} width={150}/>
+        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center",marginTop: wp(5.6)}}>
+                   <Button title={t("Valider")} navigation={() => navigateToDepotMethod()} width={wp(45)}/>
           </View> 
       </View>
     );

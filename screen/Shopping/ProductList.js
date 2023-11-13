@@ -65,6 +65,7 @@ const ProductList = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [activeFilter, setActiveFilter] = useState(0)
     const [open, setOpen] = useState(false);
+    const [open1, setOpen1] = useState(false);
     const [user, setUser] = useState([]);
 
     useEffect(() => {
@@ -516,20 +517,83 @@ const ProductList = () => {
       return (
         <View style={styles.safeContainerStyle} key={'quantite' + productId}>
           <DropDownPicker
-            style={{backgroundColor: "#F5F5F5", borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
-            dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54,}}
+            style={{backgroundColor: "#F5F5F5",borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000}}
+            dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54}}
             placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
             open={open}
             setOpen={() => setOpen(!open)}
             autoScroll={true}
-            containerStyle={styles.containerStyle}
             maxHeight={120}
             value={choosQuantity}
             setValue={val => setChoosQuantity(val)}
             placeholder={t('quantité')}
-            searchPlaceholder="Search..."
             showsVerticalScrollIndicator={true}
+            items={sweeterArray}
+            onSelectItem={item => {
+              handleQuantiteChange(product, item.value);
+            }} 
+          />
+        </View>
+      );
+    }
+
+    // Afficher la quantité
+    const RenderQuantiteGrid = props => {
+
+      let product = props.product;
+      let productId = props.product.id;
+
+      let minQuantite = minQuantities[productId] ?? null;
+
+      let quantite = Quantities[productId];
+
+      let attributeCount = product.attributs.length;
+
+      if (attributeCount > 0)
+      {
+        if (!minQuantite && !quantite)
+        {
+          return (
+            <View style={styles.safeContainerStyle}>
+              <Text style={{ color: 'red' }}>Rupture de stock</Text>
+            </View>
+          );
+        }
+      }
+
+      if (!minQuantite)
+      {
+        return (
+          <View style={styles.safeContainerStyle}>
+            <Text style={{ color: 'red' }}>Rupture de stock</Text>
+          </View>
+        );
+      }
+
+      let quantiteMax = quantite ? parseInt(quantite) : parseInt(minQuantite);
+
+      let sweeterArray = [];
+      for (let i = 1; i < (quantiteMax + 1); i++)
+      {
+        sweeterArray.push({label: i, value: i})
+      }
+
+      const choosQuantity = selectedProductValues[productId] ? selectedProductValues[productId]['quantite'] : null;
+      
+  
+      return (
+        <View style={[styles.safeContainerStyle,{width: windowWidth * 0.25}]} key={'quantite' + productId}>
+          <DropDownPicker
+            style={{backgroundColor: "#F5F5F5",borderColor: "transparent", padding: 0, position: "relative", zIndex: 1000,}}
+            dropDownContainerStyle={{backgroundColor: "#F5F5F5", borderColor: 'transparent',fontSize: 54}}
+            placeholderStyle={[styles.placeholderStyle, {fontSize: wp(3)}]}
+            open={open1}
+            setOpen={() => setOpen1(!open1)}
+            autoScroll={true}
+            maxHeight={120}
+            value={choosQuantity}
+            setValue={val => setChoosQuantity(val)}
+            placeholder={t('quantité')}
             items={sweeterArray}
             onSelectItem={item => {
               handleQuantiteChange(product, item.value);
@@ -693,7 +757,7 @@ const ProductList = () => {
       
                               <View style={styles.safeContainerStyle} key={attribute.id}>
                               <Dropdown
-                                  style={[styles.dropdown]}
+                                  style={styles.dropdown}
                                   placeholderStyle={styles.placeholderStyle}
                                   selectedTextStyle={styles.selectedTextStyle}
                                   autoScroll
@@ -734,32 +798,33 @@ const ProductList = () => {
       const product = props.data
       return(
           <>
-            <View style={{ backgroundColor: "#fff", margin: 5, borderRadius: 10, }} key={product.id}>
+            <View style={{ backgroundColor: "#fff", margin: 4.5, borderRadius: 10, }} key={product.id}>
                 <View style={{flexDirection: "row", alignItems: "center",justifyContent: "space-between" ,gap: 10, paddingTop: 16, paddingLeft: 6, paddingRight: 6}}>
-                    <View style={{maxWidth: 100}}> 
+                    <View style={{maxWidth: wp(24.5)}}> 
                       <Text style={{fontFamily: "Poppins-SemiBold",textAlign: "left" ,fontSize: 8.3, color: "#000"}}>
                       {'fr' == Language ? product.name : product.nameEN}
                       </Text>
                     </View>
-                    <View style={{flexDirection: "column", alignItems: "center", gap: 2, maxWidth: 100}}>
-                        <Text style={{fontSize: 9.5, fontFamily: "Poppins-Medium",color: "#000",  marginTop: 8}}>
+                    <View style={{flexDirection: "column", alignItems: "center", gap: 2, maxWidth: wp(15.5)}}>
+                        <Text style={{fontSize: 9, fontFamily: "Poppins-Medium",color: "#000",  marginTop: 8}}>
                                 <RenderPrices product={product} />
                           </Text>
                     </View>
                   </View>
-                  <View style={{flexDirection: "column", alignItems: "center", paddingBottom: 8, paddingLeft: 6}}>
+                  <View style={{flexDirection: "row", alignItems: "center", paddingBottom: 8, paddingLeft: 6}}>
+                    <View>
                         <ScrollView
                             pagingEnabled
                             horizontal
                             onScroll={({nativeEvent}) => Change(nativeEvent)}
                             showsHorizontalScrollIndicator={false}
     
-                            style={styles.imageSwiper}>
+                            style={[styles.imageSwiper, {width: windowWidth * 0.2,height: windowHeight * 0.01,borderRadius: 10,}]}>
                             {product.productImages.map((image, index) => (
-                                <PhotoZoomer key={index} image={image} windowWidth={wp(39)} windowHeight={hp(32)} />
+                                <PhotoZoomer key={index} image={image} windowWidth={wp(21)} windowHeight={hp(21)} />
                             ))}
                         </ScrollView>
-                        <View style={styles.dotStyleGrid}>
+                        <View style={[styles.dotStyleGrid, {}]}>
                             {product.productImages.map((i, k) => (
                             <Text
                                 key={k}
@@ -770,7 +835,9 @@ const ProductList = () => {
                             </Text>
                             ))}
                         </View>
-                    <View style={{flexDirection: "column", justifyContent: "center", alignItems: "flex-start"}}>
+
+                    </View>
+                    <View style={{flexDirection: "column", justifyContent: "center", alignItems: "flex-start", paddingRight: 6}}>
     
                         {product.attributs.map((attribute) => {
                         const prevChoice = selectedProductValues[product.id] ? selectedProductValues[product.id]['attributes'] : null;
@@ -783,10 +850,10 @@ const ProductList = () => {
                         
                         return (
     
-                            <View style={styles.safeContainerStyle} key={attribute.id}>
+                            <View style={[styles.safeContainerStyle,{width: windowWidth * 0.25,}]} key={attribute.id}>
                             <Dropdown
-                                style={[styles.dropdown]}
-                                placeholderStyle={styles.placeholderStyle}
+                                style={[styles.dropdown, {height: 50}]}
+                                placeholderStyle={[styles.placeholderStyle, {fontSize: wp(3)}]}
                                 selectedTextStyle={styles.selectedTextStyle}
                                 autoScroll
                                 iconStyle={styles.iconStyle}
@@ -805,7 +872,7 @@ const ProductList = () => {
                             </View>
                         );
                         })}
-                        <RenderQuantite product={product} />
+                        <RenderQuantiteGrid product={product} />
     
                         <View style={{marginTop: 10, width: "100%", position: "relative", zIndex: -10}}>
                         <Button title={t('ajouter au panier')} navigation={() =>  handleCartLogin(product)}/>
@@ -1000,7 +1067,7 @@ const ProductList = () => {
      
     },
     containerMarginBottom: {
-      marginBottom: windowHeight * 0.3
+      marginBottom: windowHeight * 0.1
     },
     upperRow: {
       // backgroundColor: 'green',
@@ -1093,9 +1160,9 @@ const ProductList = () => {
       flexDirection: 'row',
       position: 'absolute',
       zIndex: 1500,
-      bottom: windowHeight * .28,
+      bottom: windowHeight * wp(.005),
       alignSelf: 'center',
-      gap: 2,
+      justifyContent: 'space-around',
       // backgroundColor: 'tomato',
       width: windowWidth * 0.1,
       color: '#000',
@@ -1154,7 +1221,7 @@ const ProductList = () => {
     dropdown: {
       height: 50,
       borderRadius: 8,
-      paddingHorizontal: 17,
+      paddingHorizontal: 12,
       backgroundColor: '#F5F5F5',
       marginBottom: 5
     },

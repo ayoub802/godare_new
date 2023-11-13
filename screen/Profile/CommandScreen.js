@@ -174,7 +174,7 @@ const CommandScreen = (props) => {
                                 )
                                 :
                                 <View style={{paddingVertical: 20}}>
-                                   <Text style={{textAlign: "center"}}>Pas de commandes</Text>
+                                   <Text style={{textAlign: "center", color: "#999"}}>{t('Pas de commandes')}</Text>
                                 </View>
                                 }
                         </View>
@@ -203,7 +203,7 @@ const CommandScreen = (props) => {
                             )
                             :
                             <View style={{paddingVertical: 20}}>
-                              <Text style={{textAlign: "center"}}>Pas de commandes</Text>
+                              <Text style={{textAlign: "center", color: "#999"}}>{t('Pas de commandes')}</Text>
                             </View>
                             }
                       </View>

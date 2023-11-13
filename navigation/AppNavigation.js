@@ -52,11 +52,15 @@ import { auth } from '../modules/FirebaseConfig';
 import { getAuthUserEmail, getPanier, getSelectedCountry, getSelectedService, getServices, saveSelectedCountry, saveSelectedService } from '../modules/GestionStorage';
 import CreditCard from '../screen/CreaditCard';
 import AddStripeUserCard from '../screen/CreaditCard/AddUserStripe';
-
+import Signup from '../screen/Login/SignUp';
+import ConversationList from '../screen/Conversation/ConversationList';
+import ConversationDetails from '../screen/Conversation/ConversationDetails';
 
 const Home = createNativeStackNavigator();
 const Profile = createNativeStackNavigator();
 const Cart = createNativeStackNavigator();
+const Contact = createNativeStackNavigator();
+
 const AppNavigation = (props) => {
 
 
@@ -267,6 +271,7 @@ const AppNavigation = (props) => {
                 <Home.Screen name="Login" component={LoginScreen} />
                 <Home.Screen name="SignUpScreen" component={SignUpScreen} />
                 <Home.Screen name="LoginShoppins" component={LoginShoppinScreen} />
+                <Home.Screen name="Signup" component={Signup} />
                 <Home.Screen name="ProductList" component={ProductList} />
                 <Home.Screen name="ShoppingScreen" component={ShoppingScreen} />
                 <Home.Screen name="CartScreen" component={CartScreen} />
@@ -302,8 +307,7 @@ const AppNavigation = (props) => {
         >
         </Tab.Screen>
         <Tab.Screen
-        name='mail'
-        component={MessageScreen}
+        name='mailscreen'
           options={{
             tabBarIcon: ({focused}) => {
               return (
@@ -318,6 +322,17 @@ const AppNavigation = (props) => {
             },
           }}
         >
+          {
+          () => (
+            <Contact.Navigator screenOptions={{ headerShown: false}}>
+
+                <Contact.Screen name='mail' component={MessageScreen}/>
+                <Contact.Screen name='Conversation' component={ConversationList}/>
+                <Contact.Screen name='ConversationDetails' component={ConversationDetails}/>
+
+            </Contact.Navigator>
+          )
+        }
         </Tab.Screen>
         <Tab.Screen
         name='Cart'
@@ -393,6 +408,7 @@ const AppNavigation = (props) => {
                 <Profile.Screen name='CreditCard' component={CreditCard}/>
                 <Profile.Screen name='AddStripeUserCard' component={AddStripeUserCard}/>
                 <Profile.Screen name='LegalNotice' component={LegalNotice}/>
+                <Profile.Screen name='Conversation' component={ConversationList}/>
               </Profile.Navigator>
             )
           }

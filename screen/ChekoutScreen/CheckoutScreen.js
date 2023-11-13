@@ -570,7 +570,7 @@ const CheckoutScreen = (props) => {
                        </View>
                         <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingBottom: 15, paddingTop: 19,borderBottomWidth: 1, borderColor: "#E9E9E9"}}>
                               <Text style={{fontFamily: "Poppins-Regular", fontSize: 12, color: "#ACB2B2", letterSpacing: .8}}>
-                              {t('Avez-vous un code remise ?')}
+                              {t('Montant remise')}
                               </Text>
                               <Text style={{fontFamily: "Poppins-Medium", fontSize: 14, color: "#262A2B", letterSpacing: .8}}>
                                 -{ remiseTotal }%
@@ -624,7 +624,7 @@ const CheckoutScreen = (props) => {
                         </View>
                         <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingBottom: 15, paddingTop: 19,borderBottomWidth: 1, borderColor: "#E9E9E9"}}>
                               <Text style={{fontFamily: "Poppins-Regular", fontSize: 12, color: "#000", letterSpacing: .8}}>
-                              {t('Avez-vous un avoir?')}
+                              {t('Montant avoir')}
                               </Text>
                               <View style={{flexDirection: "row", alignItems: "center", gap: 10}}>
                                 <Entypo name="check" color="#01962A" size={15}/>
@@ -749,7 +749,7 @@ const CheckoutScreen = (props) => {
             />
           </View>
 
-          <View style={{marginTop: 13, paddingHorizontal: 12}}>
+          <View style={{marginTop: 1, paddingHorizontal: 12}}>
                   <Text style={{fontSize: 10, color: "#000"}}>*{t('Livraison 72h aprés la prise en charge')}</Text>
                 </View>
 

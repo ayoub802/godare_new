@@ -38,9 +38,10 @@ const styles = StyleSheet.create({
   },
   ButtonText: {
     marginLeft: '5%',
-    width: '78%',
-    color: '#000',
-    fontSize: 15,
+    width: '100%',
+    color: "#AFAFAF",
+    fontSize: windowWidth * 0.035,
+    fontFamily: 'Poppins-Regular',
   },
   CountrySelect: {
     width: '80%',
@@ -65,19 +66,19 @@ const styles = StyleSheet.create({
   },
   ButtonStyle: {
     width: '80%',
-    height: 45,
     borderRadius: 60,
     justifyContent: 'center',
-    backgroundColor: '#3292E0',
-    marginTop: 20,
+    backgroundColor: '#4E8FDA',
     alignSelf: 'center',
-    marginBottom: 20,
+    paddingVertical: 8,
+    paddingHorizontal: 20
   },
   ButtonStyleText: {
     textAlign: 'center',
     color: 'white',
-    fontSize: 14,
+    fontSize: windowWidth * 0.036,
     fontFamily: 'Roboto-Regular',
+    lineHeight: 20
   },
   TotalContainer: {
     flexDirection: 'row',
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
   },
   countryPickerButtonStyle: {
     // backgroundColor: 'gold',
-    width: 70,
+    width: 50,
   },
   textInputStyle: {
     fontFamily: 'Roboto-Regular',
@@ -191,8 +192,8 @@ const styles = StyleSheet.create({
   },
 
   dropdown: {
-    height: 50,
-    borderRadius: 7,
+    height: 54,
+    borderRadius: 8,
     paddingHorizontal: 17,
     backgroundColor: 'transparent',
     borderWidth: 1,
@@ -204,8 +205,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   placeholderStyle: {
-    fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontSize: windowWidth * 0.035,
+    fontFamily: 'Poppins-Regular',
     color: '#14213D',
   },
   selectedTextStyle: {
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   containerrrrStyle: {
-    marginTop: 10,
+    marginTop: 0,
     backgroundColor: '#fff',
     borderRadius: 8,
     maxHeight: 180,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
   containerDepotStyle: {
     backgroundColor: '#fff',
     borderRadius: 8,
-    maxHeight: 150,
+    maxHeight: 250,
     elevation: 10,
   },
 
@@ -282,6 +283,7 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+    color: "#000"
   },
 });
 

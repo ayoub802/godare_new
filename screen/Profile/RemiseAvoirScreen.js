@@ -4,10 +4,12 @@ import {HeaderEarth} from '../../components/Header';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RenderItem, RenderItemCode} from '../../components/RenderItem';
 import {DataTable} from 'react-native-paper';
-import { getAuthUserEmail } from '../../modules/GestionStorage';
+import { getAuthUserEmail, getAuthentificationData } from '../../modules/GestionStorage';
 import axiosInstance from '../../axiosInstance';
 import { ScrollView } from 'react-native-virtualized-view';
 import { useTranslation } from 'react-i18next';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../modules/FirebaseConfig';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const RemiseAvoirScreen = () => {
@@ -35,7 +37,7 @@ const RemiseAvoirScreen = () => {
     },
     {
       title: '%',
-      width: 36
+      width: 35
     },
     {
       title: 'Service',
@@ -50,7 +52,7 @@ const RemiseAvoirScreen = () => {
       width: 100
     },
     {
-      title: 'in validité',
+      title: 'Fin validité',
       width: 100
     },
   ];
@@ -120,6 +122,8 @@ const RemiseAvoirScreen = () => {
   const [Avoirs, setAvoirs] = useState([]);
   const [AvoirTotal, setAvoirTotal] = useState(0);
   const [Remises, setRemises] = useState([]);
+  const [user, setUser] = useState(null);
+
 
   useEffect(() => {
 
@@ -127,11 +131,10 @@ const RemiseAvoirScreen = () => {
     {
       setLoader(true);
 
-      const userEmail = await getAuthUserEmail();
 
       try 
       {
-        const response = await axiosInstance.get('/avoirs/active/all/' + userEmail);
+        const response = await axiosInstance.get('/avoirs/active/all/' + user);
 
         let total = 0;
         response.data.forEach(function (avoir)
@@ -148,6 +151,7 @@ const RemiseAvoirScreen = () => {
         setAvoirTotal(total);
 
         setAvoirs(response.data);
+        console.log("Avoirs :", Avoirs);
       }
       catch (erreur)
       {
@@ -156,7 +160,9 @@ const RemiseAvoirScreen = () => {
 
       try 
       {
-        const response = await axiosInstance.get('/remises/all/' + userEmail);
+        const userEmail = await getAuthentificationData();
+        console.log("Admin :", userEmail);
+        const response = await axiosInstance.get('/remises/all/'+ userEmail);
 
         console.log('response remises', response.data)
 
@@ -170,9 +176,25 @@ const RemiseAvoirScreen = () => {
       setLoader(false);
     }
 
+    async function fectUser(){
+      setLoader(true);
+      try{
+        onAuthStateChanged(auth, (user) => {
+          console.log('user', user);
+          setUser(user.email)
+        })
+      }
+      catch(error){
+        console.log("Erreur :", error);
+      }
+      setLoader(false);
+    }
+
+    fectUser();
     fetchValue();
 
   }, []);
+
 
   const FlatListView = ({item, index}) => {
     return (
@@ -220,7 +242,7 @@ const RemiseAvoirScreen = () => {
             <Text
               style={{
                 fontFamily: 'Poppins-SemiBold',
-                fontSize: 16,
+                fontSize: windowWidth * 0.035,
                 color: '#000',
                 textAlign: 'center',
               }}>
@@ -247,9 +269,9 @@ const RemiseAvoirScreen = () => {
                     style={{
                       textTransform: 'capitalize',
                       color: '#000',
-                      fontSize: 13,
+                      fontSize: windowWidth * 0.028,
                       textAlign: 'center',
-                      fontFamily: 'Poppins-Medium',
+                      fontFamily: 'Poppins-SemiBold',
                     }}>
                     {item.title}
                   </Text>
@@ -270,7 +292,7 @@ const RemiseAvoirScreen = () => {
             </ScrollView>
              : 
              <View style={{  alignItems: "center",justifyContent: 'center' ,backgroundColor: "#EDEDF3",borderBottomWidth: 1, borderBottomColor: "#E2E2E2" ,paddingVertical: 16, paddingHorizontal: 22, width: "100%"}}>
-                  <Text>Nothing</Text>
+                  <Text style={{color: "#000", fontFamily: "Poppins-Medium", textTransform: "uppercase"}}>Nothing</Text>
                 </View>
             }
           </View>
@@ -279,7 +301,7 @@ const RemiseAvoirScreen = () => {
             <Text
               style={{
                 fontFamily: 'Poppins-SemiBold',
-                fontSize: 16,
+                fontSize: windowWidth * 0.035,
                 color: '#000',
                 textAlign: 'center',
               }}>
@@ -327,10 +349,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#EDEDF3",borderBottomWidth: 1, borderBottomColor: "#E2E2E2", opacity: 1
   },
   tableBodyText :{
-    color: "#000", fontFamily: "Poppins-Regular", fontSize: 12,
+    color: "#000", fontFamily: "Poppins-Regular", fontSize: windowWidth * 0.026,
   },
   tableHeaderTitle:{
-    fontSize: 12,
+    fontSize:  windowWidth * 0.027,
     fontFamily: "Poppins-SemiBold",
     color: "#000",
     textTransform: "capitalize",

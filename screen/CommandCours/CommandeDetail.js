@@ -61,10 +61,10 @@ const CommandeDetail = ({ navigation, route }) => {
         <View style={{flex: 1}}>
               <HeaderEarth />
   
-              <ScrollView>
+              <ScrollView style={{flex: 1}}>
   
   
-                <View> 
+                <View style={{flex: 1, marginBottom: 50}}> 
                 <View style={{marginTop: 24, paddingHorizontal: 16}}>
                      <Text style={{fontSize: 14, color: "#C3BCBC", fontFamily: "Poppins-Regular", letterSpacing: 1}}>Order ID</Text>
                      <View>
@@ -72,7 +72,7 @@ const CommandeDetail = ({ navigation, route }) => {
                      </View>
                 </View>
                 <View style={{marginTop: 14, paddingHorizontal: 16}}>
-                     <Text style={{fontSize: 16, color: "#292625", fontFamily: "Poppins-Medium", letterSpacing: 1}}>History</Text>
+                     <Text style={{fontSize: 16, color: "#292625", fontFamily: "Poppins-Medium", letterSpacing: 1}}>{t("History")}</Text>
                     <View style={{backgroundColor: "#fff",padding: 14,borderRadius: 10}}>
                       <View style={{flexDirection: "row", alignItems: "flex-start", gap: 20}}>
                            <View style={{flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
@@ -80,7 +80,7 @@ const CommandeDetail = ({ navigation, route }) => {
                               <View style={{ width: 1, height: 70,justifyContent: "center",alignItems: "center" ,borderWidth: 1, borderStyle: "dashed", borderColor: "#EF5448"}}></View>
                            </View>
                            <View>
-                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Commande validée</Text>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>{t("Commande validée")}</Text>
                               <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>{ Commande.createdAt }</Text>
                            </View>
                       </View>
@@ -90,7 +90,7 @@ const CommandeDetail = ({ navigation, route }) => {
                               <View style={{ width: 1, height: 70,justifyContent: "center",alignItems: "center" ,borderWidth: 1, borderStyle: "dashed", borderColor: "#EF5448"}}></View>
                            </View>
                            <View>
-                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Produits réceptionnés</Text>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>{t('Produits réceptionnés')}</Text>
                               <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>{ Commande.createdAt }</Text>
                            </View>
                       </View>
@@ -100,7 +100,7 @@ const CommandeDetail = ({ navigation, route }) => {
                               <View style={{ width: 1, height: 70,justifyContent: "center",alignItems: "center" ,borderWidth: 1, borderStyle: "dashed", borderColor: "#EF5448"}}></View>
                            </View>
                            <View>
-                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Préparée</Text>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>{("Préparée")}</Text>
                               <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>{ Commande.createdAt }</Text>
                            </View>
                       </View>
@@ -110,7 +110,7 @@ const CommandeDetail = ({ navigation, route }) => {
                               <View style={{ width: 1, height: 70,justifyContent: "center",alignItems: "center" ,borderWidth: 1, borderStyle: "dashed", borderColor: "#EF5448"}}></View>
                            </View>
                            <View>
-                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Expédiée</Text>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>{t('Expédiée')}</Text>
                               <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>{ Commande.createdAt }</Text>
                            </View>
                       </View>
@@ -119,7 +119,7 @@ const CommandeDetail = ({ navigation, route }) => {
                               <View style={{width: 12, height: 12, borderRadius: 50, backgroundColor: "#fff", borderWidth: 4, borderColor: "#498BF0"}}></View>
                            </View>
                            <View>
-                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>Commande livrée</Text>
+                              <Text style={{color: "#292625", fontFamily: "Poppins-Medium", fontSize: 14, letterSpacing: 1}}>{t('Commande livrée')}</Text>
                               <Text style={{color: "#C3BCBC", fontFamily: "Poppins-Regular", fontSize: 12, letterSpacing: 1}}>Colis N° { Commande.uuid ? Commande.uuid : 222222 }</Text>
                            </View>
                       </View>
@@ -132,20 +132,20 @@ const CommandeDetail = ({ navigation, route }) => {
                          <Image source={Truck}/>
                        </View>
                        <View>
-                          <Text style={{color: "#292625", fontSize: 14, fontFamily: "Poppins-Medium", letterSpacing: 1}}>Colis livré</Text>
+                          <Text style={{color: "#292625", fontSize: 14, fontFamily: "Poppins-Medium", letterSpacing: 1}}>{t('Colis livré')}</Text>
                           <Text style={{color: "#C3BCBC", fontSize: 13, fontFamily: "Poppins-Regular", letterSpacing: 1}}>
                              Colis N° { Commande.uuid ? Commande.uuid : 222222 }
                           </Text>
                        </View>
                        <View>
                          <TouchableOpacity>
-                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium", textAlign: "center"}}>Suivre le colis</Text>
+                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium", textAlign: "center"}}>{t('Suivre le colis')}</Text>
                          </TouchableOpacity>
                          <TouchableOpacity>
-                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium", textAlign: "center"}}>Voir le contenu</Text>
+                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium", textAlign: "center"}}>{t('Voir le contenu')}</Text>
                          </TouchableOpacity>
                          <TouchableOpacity onPress={() => imprimerFacture()}>
-                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium",textAlign: "center"}}>Éditer la facture</Text>
+                           <Text style={{fontSize: 12, color: "#498BF0", textDecorationLine: "underline", fontFamily: "Poppins-Medium",textAlign: "center"}}>{t('Éditer la facture')}</Text>
                          </TouchableOpacity>
                        </View>
                     </View>

@@ -44,7 +44,7 @@ const LoginScreen = (props) => {
 
   // Page d'inscription
   const navigateToSignup = () => {
-    props.navigation.navigate("SignUpScreen");
+    props.navigation.navigate("Signup");
   };
 
   // Retourner la page d'accueil ou le panier
@@ -78,7 +78,7 @@ const LoginScreen = (props) => {
           {
             // Aller sur la page d'accueil
             NavigateToMain();
-          }, 1500);
+          }, 200);
 
         })
         .catch(error => {
