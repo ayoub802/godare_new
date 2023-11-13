@@ -301,11 +301,24 @@ const ShoppingScreen = ({ navigation, route }) => {
               </ScrollView>
             </View>
           ) : (<></>)
+<<<<<<< HEAD
         }
+=======
+        } */}
+        
+        {Categories.length > 0 ? (
+          <View style={styles.subTabbarContainer}>
+            <ScrollView
+              scrollEnabled
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.subTabbarScrollContainer}> 
+>>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
 
           {
             <>
 
+<<<<<<< HEAD
               {true === ActivityIndicatorProduct ?
                 <ActivityIndicator size={'large'} color={'#000'} />
                 :
@@ -318,8 +331,36 @@ const ShoppingScreen = ({ navigation, route }) => {
                         <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
                           <Text style={{fontFamily: "Poppins-Medium", fontSize: wp(3.2), color: "#376AED" }}>
                             {t('Filtrer')}
+=======
+            </ScrollView>
+          </View>
+        ) : (<></>)
+      }
+
+        {
+          <>
+
+            {true === ActivityIndicatorProduct ?
+              <ActivityIndicator size={'large'} color={'#000'} />
+              :
+              (
+                <>
+                  <View style={{marginTop: 10, paddingHorizontal: 5}}>
+                    <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center",borderTopLeftRadius: 28, borderTopRightRadius: 28 ,backgroundColor: "#fff", paddingVertical: 27, paddingLeft: 15, paddingRight: 23}}>
+                      
+                      <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
+                      <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
+                        <Text style={{fontFamily: "Poppins-Medium", fontSize: wp(3.2), color: "#376AED" }}>
+                          {t('Filtrer')}
+                        </Text>
+                        <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
+                      </TouchableOpacity>
+                        <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
+                          <Text style={{fontFamily: "Poppins-Medium", fontSize: wp(3.2), color: "#376AED" }}>
+                            {t('Trier')}
+>>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
                           </Text>
-                          <MaterialIcons name="arrow-drop-down" color="#376AED" size={25}/>
+                          <MaterialIcons name="arrow-drop-down" color="#376AED" size={wp(6)}/>
                         </TouchableOpacity>
                           <TouchableOpacity style={{flexDirection:"row", alignItems: "center", gap: 8}} activeOpacity={0.5}>
                             <Text style={{fontFamily: "Poppins-Medium", fontSize: wp(3.2), color: "#376AED" }}>
@@ -329,6 +370,7 @@ const ShoppingScreen = ({ navigation, route }) => {
                           </TouchableOpacity>
                         </View>
 
+<<<<<<< HEAD
                         <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
                         {
                                     activeFilter === 0 
@@ -353,6 +395,32 @@ const ShoppingScreen = ({ navigation, route }) => {
                                     </TouchableOpacity> 
                                   }
                         </View>
+=======
+                      <View style={{flexDirection:"row", alignItems: "center", gap: 10}}>
+                      {
+                                  activeFilter === 0 
+                                  ?
+                                  <TouchableOpacity onPress={() => setActiveFilter(1)}>
+                                      <Ionicons name="grid-outline" color="#00000033" size={wp(6)}/>
+                                  </TouchableOpacity> 
+                                  :
+                                  <TouchableOpacity onPress={() => setActiveFilter(0)}>
+                                      <Ionicons name="grid-outline" color="#376AED" size={wp(6)}/>
+                                  </TouchableOpacity> 
+                                }
+                                {
+                                  activeFilter === 1 
+                                  ?
+                                  <TouchableOpacity onPress={() => setActiveFilter(0)}>
+                                      <Octicons name="list-unordered" color="#00000033" size={wp(6)}/>
+                                  </TouchableOpacity> 
+                                  :
+                                  <TouchableOpacity onPress={() => setActiveFilter(1)}>
+                                      <Octicons name="list-unordered" color="#376AED" size={wp(6)}/>
+                                  </TouchableOpacity> 
+                                }
+                      </View>
+>>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
 
                         
                       </View>

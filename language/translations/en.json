@@ -110,9 +110,13 @@
     "il n'y a pas des cartes enregistrées" : "there are no saved cards",
     "Ajouter une nouvelle carte" : "Add a new card",
     "Mes cartes enregistrées" : "My saved cards",
+<<<<<<< HEAD
     "Pas de commandes" : "No orders",
     "Montant remise" : "Discount amount",
     "Montant avoir" : "Amount to have",
     "Valider" : "Validate",
     "Saisir le code" :"Enter the code"
+=======
+    "Pas de commandes" : "No orders"
+>>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
 }

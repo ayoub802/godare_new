@@ -110,9 +110,13 @@
     "il n'y a pas des cartes enregistrées" : "il n'y a pas des cartes enregistrées",
     "Ajouter une nouvelle carte" : "Ajouter une nouvelle carte",
     "Mes cartes enregistrées" : "Mes cartes enregistrées",
+<<<<<<< HEAD
     "Pas de commandes" : "Pas des commandes",
     "Montant remise" : "Montant remise",
     "Montant avoir" : "Montant avoir",
     "Valider" : "Valider",
     "Saisir le code" :"Saisir le code"
+=======
+    "Pas de commandes" : "Pas des commandes"
+>>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
 }

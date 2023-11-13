@@ -30,7 +30,7 @@ const DepotScreen3 = (props) => {
   const [Service, setService] = useState(null);
   const [paysLivraisonObject, setPaysLivraisonObject] = useState(null);
   const [Language, setLanguage] = useState('fr');
-
+  const [Loading, setLoading] = useState(false)
    
   async function navigateToDelivery()
   {
@@ -108,28 +108,68 @@ const DepotScreen3 = (props) => {
       setActivity(false);
     }
 
+    // async function getHoraires(){
+    //   Creneaux.forEach((obj) => {
+    //     console.log("Date:",obj.date);
+        
+    //     if (obj.date == "2023-11-13")
+    //     {
+    //       Horaires.push(obj); 
+    //     }
+    //   });
+    // }
     setActivity(true);
-
+    fetchHoraires();
     getCreneauxValues();
+
 
   }, [isFocused]);
 
-  // let horairesTimes = [];
-  const handleDayPress = (date) => {
-    // setSelectedDate(moment(date).format("YYYY/MM/DD"));
-    
-    let dateString = moment(date).format("YYYY-MM-DD");
-    Creneaux.forEach((obj) => {
-      console.log("Date:",obj.date);
-      
-      if (obj.date == "2023-12-18")
-      {
-        Horaires.push(obj); 
-      }
-    });
+  console.log("Creneux",Creneaux);
 
-    console.log("Horaires Times:", Horaires);
+  // // let horairesTimes = [];
+  // const handleDayPress = (date) => {
+  //   // setSelectedDate(moment(date).format("YYYY/MM/DD"));
+  //   setActivity(true);
+  //   try{
+  //     let dateString = moment(date).format("YYYY-MM-DD");
+  //     Creneaux.forEach((obj) => {
+  //       console.log("Date:",obj.date);
+        
+  //       if (obj.date == "2023-11-13")
+  //       {
+  //         Horaires.push(obj); 
+  //       }
+  //     });
+  //   }
+  //   catch(error)
+  //   {
+  //     console.log("Error");
+  //   }
+
+  //   setActivity(false);
+  //   console.log("Horaires Times:", Horaires);
+  // }
+
+  const fetchHoraires = ()=> 
+  {
+    setLoading(true)
+    try{
+      Creneaux.forEach((obj) => {      
+        if (obj.date == "2023-11-13")
+        {
+          setHoraires(obj); 
+        }
+      });
+    }
+    catch(error){
+      console.log("Erreur :", error);
+      setLoading(true)
+    }
+    setLoading(false)
   }
+
+  console.log('New Horaire', Horaires);
 
 
   async function handleTimeSelect (obj) {
@@ -161,12 +201,22 @@ const DepotScreen3 = (props) => {
     },
   ]
 
-  if (Activity || !Service)
+  if (Activity === true|| !Service)
   {
     return (
 
       <View style={{justifyContent: 'center', height: '80%'}}>
         <ActivityIndicator size="large" color="#3292E0" style={{}} />
+      </View>
+   
+    );
+  }
+
+  if(Loading === true || !Horaires){
+    return (
+
+      <View style={{justifyContent: 'center', height: '80%'}}>
+          <ActivityIndicator size="large" color="#3292E0" style={{}} />
       </View>
    
     );
@@ -200,33 +250,29 @@ const DepotScreen3 = (props) => {
                     selectedDate={now}
                     onSelectedChange={(selected) => {
                       // handleDayPress(moment(selected).format("YYYY/MM/DD"))
-                      handleDayPress(selected)
+                      // handleDayPress(selected)
                       // setSelectedDate(moment(selected).format("YYYY/MM/DD"))
                       dateCreneau = moment(selected).format("YYYY/MM/DD");
-                      console.log("Time :",dateCreneau);
                     }}
-                  style={{height: 400, paddingTop: 12, borderWidth: 1,borderRadius: 4 ,borderColor: "#E5E5E5"}}
+                  style={{height: 350, paddingTop: 12, borderWidth: 1,borderRadius: 4 ,borderColor: "#E5E5E5"}}
                   options={{ borderColor: "transparent", mainColor: "#2196F3", textSecondaryColor: "#999"}}
                   onMonthYearChange={(month) => {
                     console.log("month: ", month);
                   }}
                 />
                 </View>
-                <View style={{ marginTop: 10, marginBottom: 20}}>
+                <View style={{ marginTop: 30, marginBottom: 20}}>
                       <ScrollView
                       horizontal={true}
                       showsHorizontalScrollIndicator={false}
                       style={{paddingLeft: 26}}
                       >
                     <View style={{ flexDirection: "row", alignItems: "center", gap: 4}}>
-                          {
-                            Horaires.map((item, index) => (
-                              
-                              <TouchableOpacity onPress={() => {setActiveHour(index); handleTimeSelect(item.id)}} style={ activeHour === index ? styles.hourActiveContaianer : styles.hourContaianer } key={index}>
-                                <Text style={ activeHour === index ? styles.hourContaianerText : styles.hourContaianerActiveText}>{ item.horaireDebut + ' - ' + item.horaireFin }</Text>
+                              {/* <TouchableOpacity onPress={() => {setActiveHour(index); handleTimeSelect(item.id)}} style={ activeHour === index ? styles.hourActiveContaianer : styles.hourContaianer }> */}
+                              <TouchableOpacity  style={styles.hourActiveContaianer} onPress={() => {setActiveHour(Horaires.id); handleTimeSelect(Horaires.id)}}>
+                                {/* <Text style={styles.hourContaianerActiveText}>Test</Text> */}
+                                <Text style={styles.hourContaianerText}>{ Horaires.horaireDebut + ' - ' + Horaires.horaireFin }</Text>
                               </TouchableOpacity>
-                            ))
-                          }
                     </View>
                       </ScrollView>
                 </View>

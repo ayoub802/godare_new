@@ -229,7 +229,7 @@ const SignUpScreen = (props) => {
 
           <View style={{marginTop: 30, marginBottom: 12}}>
             <Text
-              style={{
+              style={{ 
                 fontFamily: 'Poppins-SemiBold',
                 fontSize: 16,
                 color: '#000',
@@ -266,6 +266,7 @@ const SignUpScreen = (props) => {
                         value={civilite}
                         setValue={val => setCivilite(val)}
                         placeholder='Civilite'
+                        placeholderStyle={{color: "#AAB0B7"}}
                         style={{position: "relative", zIndex: 100}}
                         onSelectItem={item => {
                           setCivilite(item.value)
@@ -490,7 +491,9 @@ const SignUpScreen = (props) => {
                           fontFamily: 'Poppins-Regular',
                           fontSize: 14,
                           color: '#000',
-                          backgroundColor: '#fff',}
+                          backgroundColor: '#fff',
+                          height: 70
+                        }
                       }
                         value={value}
                         onChange={valueInput => {

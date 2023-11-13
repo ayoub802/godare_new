@@ -275,7 +275,11 @@ const MessageScreen = (props) => {
                         </Text>
                     </View>
                     <View style={{backgroundColor: "#fff",borderRadius: 10,width: windowWidth * 0.85, alignSelf: "center"}}>
+<<<<<<< HEAD
                           {conversations.length > 0 && conversations.slice(0, 3).map((conversation) => (
+=======
+                          {conversations.map((conversation) => (
+>>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
                               <View key={conversation.id} style={{paddingHorizontal: 15, paddingVertical: 20,borderBottomWidth: 1,borderBottomColor: "#E9E9E9" ,justifyContent: "space-between", flexDirection: "row"}}>
                                       <Text style={{fontSize: 12,color: "#000", fontFamily: "Poppins-Regular", letterSpacing: 1}}>{conversation.subject}</Text> 
                                       <Text style={{fontSize: 12,color: "#000", fontFamily: "Poppins-Regular", letterSpacing: 1}}>{conversation.createdAt}</Text>

@@ -1,13 +1,20 @@
-import { View, Text, Touchable, TouchableOpacity } from 'react-native'
+import { View, Text, Touchable, TouchableOpacity, Dimensions, Alert } from 'react-native'
 import React, { useState } from 'react'
 import StepIndicator from 'react-native-step-indicator';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
 const labels = ["Panier","Dépot","Livraison","Confirmation"];
+const {t, i18n} = useTranslation();
 
 const customStyles = {
-    stepIndicatorSize: 25,
+    stepIndicatorSize: 30,
     currentStepIndicatorSize: 30,
-    separatorStrokeWidth: 1.5,
-    currentStepStrokeWidth: 5.5,
+    separatorStrokeWidth: 1,
+    currentStepStrokeWidth: 4.5,
     stepStrokeCurrentColor: '#2BA6E9',
     stepStrokeWidth: 5,
     stepStrokeFinishedColor: '#2BA6E9',
@@ -23,20 +30,85 @@ const customStyles = {
     stepIndicatorLabelFinishedColor: '#000',
     stepIndicatorLabelUnFinishedColor: '#000',
     labelColor: '#999999',
-    labelSize: 11,
+    labelSize: windowWidth * 0.024,
     currentStepLabelColor: '#000',
     labelFontFamily: "Poppins-Medium"
     
 }
 const Stepper = ({ position}) => {
 
+    const navigation = useNavigation();
     const [currentPosition, setCurrentPosition] = useState(position)
-    const onStepPress = (position) => {
+    const onStepPress = async (position) => {
         setCurrentPosition(position);
+        if(position === 0){
+            navigation.navigate('Cart', {screen: 'WeightCal'});
+        }
+        if(position === 1){
+            let cartValidation = await AsyncStorage.getItem('cart_validation');
+            
+            if (!cartValidation)
+            {
+                return Alert.alert(
+                    t('Information'),
+                    t('Vous devez valider le panier afin de pouvoir accéder à cette section'),
+                    [
+                      {
+                        text: 'OK',
+                        style: 'cancel',
+                      }
+                    ],
+                  );
+            }
+
+		    navigation.navigate("DepotScreen1");
+        }
+        if(position === 2){
+            let depotValidation = await AsyncStorage.getItem('cart_depotValidation');
+
+
+              if (!depotValidation)
+              {
+                  return Alert.alert(
+                      t('Information'),
+                      t('Vous devez completer les informations de dépôt afin de pouvoir accéder à cette section'),
+                      [
+                        {
+                          text: 'OK',
+                          style: 'cancel',
+                        }
+                      ],
+                    );
+            }
+
+		    navigation.navigate("Livraison1");
+        }
+        if(position === 3){
+            let deliveryValidation = await AsyncStorage.getItem('cart_deliveryValidation');
+
+            if (!deliveryValidation)
+            {
+                return Alert.alert(
+                    t('Information'),
+                    t('Vous devez completer les informations de livraison afin de pouvoir accéder à cette section'),
+                    [
+                      {
+                        text: 'OK',
+                        style: 'cancel',
+                      }
+                    ],
+                  );
+            }
+
+		    navigation.navigate("CheckoutScreen");
+        }
+        if(position === 4){
+            console.log("Number 4");
+        }
       };
   return (
     <View style={{ marginTop: 10}}>
-        <View style={{ marginHorizontal: 45}}>
+        <View style={{ width: windowWidth * 0.77, alignSelf: "center"}}>
             <StepIndicator
                 customStyles={customStyles}
                 currentPosition={currentPosition}
