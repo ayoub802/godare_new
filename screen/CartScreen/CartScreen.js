@@ -9,10 +9,7 @@ import {
   TextInput,
   ActivityIndicator,
   Dimensions, 
-<<<<<<< HEAD
   ScrollView
-=======
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
 } from 'react-native';
 import {useTranslation} from 'react-i18next';
 import styles from './styles';
@@ -40,10 +37,6 @@ import { HeaderEarth } from '../../components/Header';
 import axiosInstance from '../../axiosInstance';
 import Button, { ButtonPrix } from '../../components/Button';
 import Stepper from '../Stepper';
-<<<<<<< HEAD
-=======
-import { ScrollView } from 'react-native-virtualized-view';
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const CartScreen = (props) => {
@@ -499,7 +492,6 @@ const CartScreen = (props) => {
 
               <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center"}}>
                    <Text style={{color: "#000", fontSize: wp(3.5),fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>Sub Total:</Text>
-<<<<<<< HEAD
                    <Text style={{color: "#000", fontSize: wp(3.4),fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>{ prices.totalPrix.toFixed(2) } €</Text>
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: wp(1)}}>
@@ -517,21 +509,6 @@ const CartScreen = (props) => {
                      style={{padding: 0, paddingLeft: 19, width: 200, color: "#000"}}
                    />
                    <Button title={t('Appliquer remise')} navigation={() => {handleChangeRemise(RemiseCode); setCouponShow(!couponShow)}}/>
-=======
-                   <Text style={{color: "#000", fontSize: wp(3.4),fontFamily: "Poppins-SemiBold", letterSpacing: 0.3}}>{ prices.totalPrixAvecDouaneRemiseAvoir } €</Text>
-                </View>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: wp(4.5), backgroundColor: "#fff", borderRadius: 15}}>
-                   <TextInput 
-                     placeholder='FD248AK268'
-                     placeholderTextColor="#666"
-                     style={{padding: 0, paddingLeft: 19, width: 200, color: "#000"}}
-                   />
-                   <Button title={t('Appliquer Coupon')} navigation={() => setCouponShow(!couponShow)}/>
-                </View>
-              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: wp(8)}}>
-                    <Text style={{color: "#000", fontSize: wp(4.1),fontFamily: "Poppins-Medium", letterSpacing: 0.3}}>{t('fais douane')}:</Text>
-                    <Text style={{color: "#000", fontSize: wp(3.8),fontFamily: "Poppins-Regular", letterSpacing: 0.3}}>{'ventes-privees' == Service.code ? t('Offert') : (prices.sommeFraisDouane + '€') }</Text>
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: wp(4), width: windowWidth * 0.8,}}>
                   <Text style={{fontSize: wp(4.1), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Montant total')} :</Text>
@@ -564,7 +541,7 @@ const CartScreen = (props) => {
                           </Text>
 
                       <Text style={{fontSize: 12, fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
-                          {prices.remiseTotal}€
+                          {prices}€
                       </Text>
                     </View>
                  </View>
@@ -592,22 +569,14 @@ const CartScreen = (props) => {
         
 
         <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",marginTop: wp(4), width: windowWidth * 0.8,}}>
-<<<<<<< HEAD
             <Text style={{fontSize: wp(4.1), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Total')} :</Text>
-=======
-            <Text style={{fontSize: wp(4.1), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.4}}>{t('Montant total')} :</Text>
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
             <Text style={{fontSize: wp(3.8), fontFamily: "Poppins-Regular", color: "#000", letterSpacing: 0.3}}>
               { prices.totalPrixAvecDouaneRemiseAvoir } €
             </Text>
         </View>
 
         <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center",marginTop: wp(5.6)}}>
-<<<<<<< HEAD
                    <Button title={t("Valider")} navigation={() => navigateToDepotMethod()} width={wp(45)}/>
-=======
-                   <Button title="checkout" navigation={() => navigateToDepotMethod()} width={wp(45)}/>
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
           </View> 
       </View>
     );

@@ -61,13 +61,8 @@ const ConversationList = ({ navigation }) => {
 
           const response = await axiosInstance.get('/conversations/'+ conversation +'/messages');
   
-<<<<<<< HEAD
           setConversation(response.data);
           console.log("Conversation Data:", response.data);
-=======
-  
-          setConversation(response.data);
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
 
         }
         catch (erreur)
@@ -149,11 +144,7 @@ const ConversationList = ({ navigation }) => {
                                             <View key={message.id} style={{ margin: 10,position: "relative", zIndex: -10 }}>
                                                 <Text style={{fontSize: 12,textAlign: "center" ,fontFamily: "Poppins-Medium", color: "#AAB0B7"}}>{message.createdAt}</Text>
                                                 <View style={{alignSelf: "flex-end", paddingRight: 25, marginVertical: 10,backgroundColor: "#F7F7F9", paddingHorizontal: 15, paddingVertical: 12, borderRadius: 12}}>
-<<<<<<< HEAD
                                                     {/* <Text style={{color: "#243443", textAlign: "left", fontSize: 16,fontFamily: "Poppins-Medium"}}> De {message.sender ? (message.sender.nom + ' ' + message.sender.prenom) : 'GS' }</Text> */}
-=======
-                                                    <Text style={{color: "#243443", textAlign: "left", fontSize: 16,fontFamily: "Poppins-Medium"}}> De {message.sender ? (message.sender.nom + ' ' + message.sender.prenom) : 'GS' }</Text>
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
                                                     <Text style={{color: "#243443", textAlign: "left", fontSize: 16,fontFamily: "Poppins-Medium"}}>{message.message}</Text>
                                                 </View>
                                             </View>

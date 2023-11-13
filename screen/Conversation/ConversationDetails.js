@@ -53,10 +53,7 @@ const ConversationDetails = ({ navigation, route }) => {
           const response = await axiosInstance.post('/conversations/' + conversationId + '/messages/reply/' + ClientEmail, {message: newMessage});
 
           setConversation(response.data);
-<<<<<<< HEAD
           console.log("Conversation Data:",conversation);
-=======
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
 
           setNewMessage('');
         }

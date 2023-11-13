@@ -679,7 +679,6 @@ const DepotScreen1 = (props) => {
                     <View style={{flexDirection: "row", justifyContent: "space-between", gap: 15}}>
                       <Pressable
                         style={[styles.button, styles.buttonClose]}
-<<<<<<< HEAD
                         onPress={() => ConfirmationChoixMagasin(actionTriggered)}>
                         <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Fermer")}</Text>
                       </Pressable>
@@ -688,16 +687,6 @@ const DepotScreen1 = (props) => {
                         onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
                         <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Selectionner le magasin")}</Text>
                       </Pressable> */}
-=======
-                        onPress={() => ResetChoixMagasin()}>
-                        <Text style={{ color: '#fff' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Fermer")}</Text>
-                      </Pressable>
-                      <Pressable
-                        style={[styles.button, styles.buttonOpen]}
-                        onPress={() => ConfirmationChoixMagasin(actionTriggered) }>
-                        <Text style={{ color: '#4E8FDA' , fontFamily:"Poppins-Medium", fontSize: 12, }}>{t("Selectionner le magasin")}</Text>
-                      </Pressable>
->>>>>>> 795ac6a480649a7e3d043d53d80f07c23883605a
                     </View>
                   </View>
                   <View style={{position: "absolute", width: "100%", height: "100%", backgroundColor: "#000", opacity: 0.5, zIndex: -100}}>
